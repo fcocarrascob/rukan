@@ -17,7 +17,7 @@ un test de regresión **y** un post de blog en struct_pad.
 
 ### Escalera de verificación
 1. [x] Columna en voladizo (1 GDL) — vs fórmula a mano
-2. [ ] Pórtico de corte 2 GDL — vs fórmula a mano
+2. [x] Pórtico de corte 2 GDL — vs fórmula a mano (razón áurea, masas 94.7/5.3%)
 3. [ ] Reticulado simple — vs mano / SAP2000
 4. [ ] Pórtico plano gravitacional — vs SAP2000
 5. [ ] **Modal espectral 2D (NCh2369)** — vs SAP2000 · *riesgo: RSA + CQC manual*
