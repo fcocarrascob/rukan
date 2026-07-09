@@ -166,3 +166,114 @@ def modal_displacement(
         Sd = (m.sa_over_g * G) / (m.omega**2)
         responses.append(m.gamma * phi_d * Sd)
     return _combine(responses, result.omegas, result.damping, rule)
+
+
+# --- Respuesta espectral general (fuerzas estáticas equivalentes modo a modo) ---
+#
+# Para una respuesta cualquiera (reacción, fuerza de barra, desplazamiento) el
+# corte basal no basta: hay que resolver la estructura bajo las fuerzas
+# inerciales de cada modo. Para el modo i y la dirección sísmica d, el vector de
+# fuerzas equivalentes es  s_i = Γ_{i,d} · A_i · M · φ_i  (Chopra ec. 13.2.5),
+# es decir, en cada GDL con masa:  F_c = Γ_{i,d} · A_i · m_c · φ_{i,c}. Se aplican
+# como carga estática, se resuelve, y se guarda la respuesta modal r_i; luego se
+# combinan las r_i (con signo) por CQC/SRSS.
+
+
+class DirectionalResponse:
+    """Respuestas modales (con signo) de varias cantidades en una dirección."""
+
+    def __init__(self, per_mode: dict[str, list[float]], omegas: list[float],
+                 periods: list[float], damping: float):
+        self.per_mode = per_mode
+        self.omegas = omegas
+        self.periods = periods
+        self.damping = damping
+
+    def combined(self, name: str, rule: str = "CQC") -> float:
+        return _combine(self.per_mode[name], self.omegas, self.damping, rule)
+
+
+def _static_setup() -> None:
+    ops.system("BandGeneral")
+    ops.numberer("RCM")
+    ops.constraints("Transformation")
+    ops.integrator("LoadControl", 1.0)
+    ops.algorithm("Linear")
+    ops.analysis("Static")
+
+
+def run_directional_spectral(
+    model: Model,
+    spectrum: Spectrum,
+    direction: str,
+    extractors: dict,
+    damping: float = 0.03,
+    n_modes: int = 6,
+) -> DirectionalResponse:
+    """Respuesta espectral en ``direction`` para cantidades arbitrarias.
+
+    ``extractors`` es un dict ``{nombre: callable() -> float}``; cada callable se
+    invoca tras resolver la estructura bajo las fuerzas equivalentes de cada
+    modo (con ``ops.reactions()`` ya calculado) y debe devolver la respuesta de
+    interés (una reacción, una fuerza de barra, un desplazamiento…). Devuelve un
+    ``DirectionalResponse`` para combinar por CQC o SRSS.
+
+    Requiere ``engine.build(model)`` previo. La masa se toma del ``Model`` (todas
+    las direcciones), coherente con masas concentradas.
+    """
+    dof_d = _DIR_DOF[direction]
+    # (node, (mx,my,mz)) para todas las masas activas.
+    masses = [(nm.node, nm.values[:3]) for nm in model.masses if any(nm.values[:3])]
+
+    eigenvalues = ops.eigen("-fullGenLapack", n_modes)
+    omegas = [math.sqrt(lam) for lam in eigenvalues]
+    periods = [2.0 * math.pi / w for w in omegas]
+
+    per_mode: dict[str, list[float]] = {name: [] for name in extractors}
+
+    for k, T in enumerate(periods, start=1):
+        # Masa modal generalizada (todas las direcciones) y participación en d.
+        M_gen, L_d = 0.0, 0.0
+        for node, mvals in masses:
+            for c, mc in enumerate(mvals):
+                if mc:
+                    phi_c = ops.nodeEigenvector(node, k, c + 1)
+                    M_gen += mc * phi_c * phi_c
+                    if c + 1 == dof_d:
+                        L_d += mc * phi_c
+        gamma = L_d / M_gen
+        A = spectrum.sa_over_g(T) * G
+
+        # Fuerzas estáticas equivalentes del modo k para el sismo en 'direction'.
+        ops.reset()
+        ops.timeSeries("Constant", 900 + k)
+        ops.pattern("Plain", 900 + k, 900 + k)
+        for node, mvals in masses:
+            fx = [0.0] * 6
+            for c, mc in enumerate(mvals):
+                if mc:
+                    phi_c = ops.nodeEigenvector(node, k, c + 1)
+                    fx[c] = gamma * A * mc * phi_c
+            ops.load(node, *fx)
+
+        _static_setup()
+        ops.analyze(1)
+        ops.reactions()
+        for name, fn in extractors.items():
+            per_mode[name].append(fn())
+
+        ops.remove("loadPattern", 900 + k)
+        ops.remove("timeSeries", 900 + k)
+        ops.wipeAnalysis()
+
+    return DirectionalResponse(per_mode, omegas, periods, damping)
+
+
+def directional_combination(rx: float, ry: float, factor: float = 0.3) -> float:
+    """Combinación direccional tipo 100/30 (NCh2369 / ASCE): valor de diseño.
+
+    Devuelve ``max(|rx| + f·|ry|, f·|rx| + |ry|)`` — el mayor entre 100 % de una
+    dirección más 30 % de la ortogonal, y viceversa.
+    """
+    a, b = abs(rx), abs(ry)
+    return max(a + factor * b, factor * a + b)

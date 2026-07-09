@@ -31,13 +31,15 @@ estructuras simples/cotidianas (análisis modal, espectral, pushover).
 ## Estado actual y próximo paso
 
 Verificados los casos 1–3 (voladizo, edificio de corte, reticulado), el **Caso 5**
-(modal espectral NCh2369) y el **Caso 6** (arriostramiento con liberación de
-momentos), todos con error ~0% vs SAP2000. El ensamblador `engine.py` (Model 3D →
-OpenSees, con liberación de momentos en extremos), el análisis espectral propio
-(`modal.py`: CQC/SRSS a mano, `spectra.py`: espectro NCh2369) están verificados
-contra SAP2000. **Próximo paso: galpón 3D (combinación direccional 100/30) o el
-pórtico gravitacional pendiente** — ver `ROADMAP.md`. Los casos contra SAP2000
-requieren el notebook del trabajo (con el MCP de SAP2000).
+(modal espectral NCh2369), el **Caso 6** (arriostramiento con liberación de
+momentos) y el **Caso 7** (galpón 3D completo: 2 direcciones + CQC + 100/30),
+todos con error ~0% vs SAP2000. El ensamblador `engine.py` (Model 3D → OpenSees,
+con liberación de momentos en extremos) y el análisis espectral propio (`modal.py`:
+CQC/SRSS + respuesta espectral general `run_directional_spectral` + combinación
+`directional_combination` 100/30; `spectra.py`: espectro NCh2369) están
+verificados contra SAP2000. La escalera del MVP quedó cerrada. **Próximo paso:
+espectro vertical NCh2369, o Fase 1 (chequeo de código AISC/NCh427)** — ver
+`ROADMAP.md`. Los casos contra SAP2000 requieren el notebook del trabajo (MCP SAP2000).
 
 ## Principios de arquitectura
 
@@ -80,7 +82,7 @@ de regresión y un post de blog. La escalera (ver `ROADMAP.md`):
 4. Pórtico plano gravitacional — vs SAP
 5. Modal espectral 2D (NCh2369) — vs SAP ✅ error ~0% (RSA + CQC/SRSS propio)
 6. Arriostramiento / liberación de momentos — vs SAP ✅ error ~0% (biela = Truss)
-7. Galpón 3D completo — vs SAP
+7. Galpón 3D completo — vs SAP ✅ error ~0% (2 direcciones + CQC + 100/30)
 
 Regla de contenido: teoría + cálculo a mano donde ilumina (casos 1-3); a partir
 del caso 4-5 el cálculo a mano deja de ser tractable y SAP2000 pasa a ser el

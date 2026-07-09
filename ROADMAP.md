@@ -46,20 +46,32 @@ liberar **M2 y M3** en ambos extremos (rótula completa a flexión). Convención
 momento de extremo j: OpenSees da el momento nodal, el diagrama interno (SAP)
 invierte el signo → `M3_diag = (Mz_i, -Mz_j)`.
 
+## ✅ Caso 7 CERRADO — galpón 3D completo vs SAP2000 (error ~0%)
+
+Cierra la escalera de verificación del MVP. Galpón rectangular (10×6×5 m) con
+arriostramiento en cruz (diagonales **partidas en el cruce**, liberadas solo en
+el extremo de columna — práctica real; una X-brace sin nodo de intersección en
+SAP queda "desconectada"), sismo espectral NCh2369 en X e Y, y combinación
+direccional **100/30**. Todo contra SAP2000 con error **< 0.01 %**.
+
+- Respuesta espectral **general** en `modal.py` (`run_directional_spectral`):
+  fuerzas estáticas equivalentes modo a modo → cualquier reacción/fuerza de
+  barra combinada por CQC. Más `directional_combination` (100/30).
+- Caso: `verification/case07_galpon3d_nch2369.py`. Build SAP:
+  `case7_galpon3d_build` + `case7_galpon3d_rs` (`case7_galpon3d.sdb`).
+
 ## ▶ PRÓXIMA SESIÓN — candidatos
 
-1. **Galpón 3D completo vs SAP2000**: subir a 3D real (dos direcciones,
-   combinación direccional **100/30**, espectro vertical). Reúne el modal
-   espectral (caso 5) + las diagonales liberadas (caso 6). Cierra la escalera.
-2. **Pórtico plano gravitacional vs SAP2000** (pendiente; estática de marcos con
-   vigas cargadas, momentos y cortes).
-3. **Fase 1 — Chequeo de código** (AISC 360 / NCh427 por elemento): el valor que
-   se paga. Empezar por tracción/compresión+pandeo (con esbeltez KL/r de la
-   diagonal, que ahora ya se modela bien).
-
-**Riesgo técnico próximo:** la combinación **direccional (100/30)** aún no se
-implementa; el espectro **vertical** NCh2369 ya está portado en `spectra.py`
-(struct_pad lo tiene como `computeVerticalSpectrum`, factor 0.7 y período 1.7·T).
+1. **Espectro vertical NCh2369**: falta para el galpón "completo"; necesita
+   flexibilidad vertical real (nudos a media luz de vigas largas con masa, o
+   arriostramiento de techo). `computeVerticalSpectrum` (factor 0.7, período
+   1.7·T) ya está en struct_pad; portar a `spectra.py`.
+2. **Fase 1 — Chequeo de código** (AISC 360 / NCh427 por elemento): el valor que
+   se paga. Empezar por tracción/compresión+pandeo (esbeltez KL/r de la diagonal,
+   que ya se modela bien, ahora con la longitud de pandeo partida en el cruce).
+3. **Pórtico plano gravitacional vs SAP2000** (pendiente; estática de marcos con
+   vigas cargadas).
+4. **Base de perfiles chilenos** (catálogo ICHA) para dejar de teclear A/I/J.
 
 ---
 
@@ -81,7 +93,7 @@ implementa; el espectro **vertical** NCh2369 ya está portado en `spectra.py`
 4. [ ] Pórtico plano gravitacional — vs SAP2000
 5. [x] **Modal espectral 2D (NCh2369)** — vs SAP2000, error ~0% (RSA + CQC/SRSS propio)
 6. [x] **Arriostramiento / liberación de momentos** — vs SAP2000, error ~0% (biela axial = Truss)
-7. [ ] Galpón 3D completo — vs SAP2000
+7. [x] **Galpón 3D completo** — vs SAP2000, error ~0% (2 direcciones + CQC + 100/30; falta vertical)
 
 ### Fase 1 — Chequeo de código (el valor que se paga)
 - [ ] Verificación AISC 360 / NCh427 por elemento (tracción, compresión+pandeo, flexión, interacción H1)
