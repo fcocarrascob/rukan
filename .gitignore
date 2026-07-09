@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Entornos
+.venv/
+venv/
+env/
+
+# Herramientas
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OpenSees genera archivos de salida en el cwd
+*.out
+Data*/
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

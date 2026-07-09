@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rukan"
+version = "0.0.1"
+description = "Análisis estructural opensource sobre OpenSeesPy — alternativa a SAP2000 para ingeniería chilena (NCh2369, NCh433)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Francisco Carrasco" }]
+dependencies = [
+    "openseespy>=3.5",
+    "pint>=0.23",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
