@@ -28,6 +28,15 @@ estructuras simples/cotidianas (análisis modal, espectral, pushover).
 - El sitio [struct_pad](https://github.com/fcocarrascob/fcocarrascob.github.io)
   es el canal de publicación de los casos de verificación (blog).
 
+## Estado actual y próximo paso
+
+Verificados los casos 1–3 (voladizo, edificio de corte, reticulado, todos error
+0%) y el ensamblador `engine.py` (Model 3D → OpenSees). **El próximo paso es el
+Caso 5: modal espectral NCh2369 contra SAP2000** — ver el bloque destacado al
+inicio de `ROADMAP.md`. Requiere SAP2000, que **solo está en el notebook del
+trabajo** (con un MCP de SAP2000); iniciar ese caso en esa máquina tras
+`git pull`.
+
 ## Principios de arquitectura
 
 1. **Motor separado de la GUI.** El núcleo (`src/rukan/`) es puro Python, sin

@@ -4,6 +4,36 @@ App opensource de análisis estructural sobre OpenSeesPy, alternativa a SAP2000
 para ingeniería chilena. Desarrollo dirigido por verificación: cada peldaño es
 un test de regresión **y** un post de blog en struct_pad.
 
+---
+
+## ▶ PRÓXIMA SESIÓN — Caso 5: modal espectral NCh2369 vs SAP2000
+
+Es el peldaño decisivo: donde el cálculo a mano ya no alcanza y el patrón de
+referencia pasa a ser **SAP2000**.
+
+**Dónde correrlo:** en el **notebook del trabajo**, que tiene SAP2000 y un
+**MCP de SAP2000** disponible. Esta sesión (equipo personal) no tiene acceso a
+SAP2000. → Empezar el Caso 5 en la sesión del notebook del trabajo, tras
+`git pull` de este repo.
+
+**Plan:**
+1. Elegir un modelo simple y regular (un pórtico plano o un galpón de un vano)
+   para tener modos limpios y comparables.
+2. Armarlo en **SAP2000 vía el MCP** con el espectro **NCh2369**, y extraer la
+   tabla de referencia: períodos, masas modales efectivas, y sobre todo el
+   **corte basal por modo** y el **combinado (SRSS y CQC)**.
+3. Armar el **mismo** modelo en Rukan con `engine.build(model)` y correr:
+   `eigen` → modos → aplicar espectro NCh2369 modo a modo → **combinar CQC/SRSS
+   a mano** (OpenSees no lo hace de un botón; ver `modalProperties`).
+4. Verificar Rukan contra SAP2000 y documentar como post (serie parte 3+).
+
+**Riesgo técnico:** la combinación modal (CQC/SRSS) y la combinación
+direccional (100/30) se implementan y validan explícitamente. Reutilizar el
+espectro NCh2369 ya portado en struct_pad (`nch2369-spectrum.ts`) como
+referencia de la curva; en Rukan se implementa en Python.
+
+---
+
 ## Wedge 1 — Acero industrial NCh2369 (MVP)
 
 ### Fase 0 — Núcleo headless (sin GUI)
