@@ -30,12 +30,13 @@ estructuras simples/cotidianas (análisis modal, espectral, pushover).
 
 ## Estado actual y próximo paso
 
-Verificados los casos 1–3 (voladizo, edificio de corte, reticulado, todos error
-0%) y el ensamblador `engine.py` (Model 3D → OpenSees). **El próximo paso es el
-Caso 5: modal espectral NCh2369 contra SAP2000** — ver el bloque destacado al
-inicio de `ROADMAP.md`. Requiere SAP2000, que **solo está en el notebook del
-trabajo** (con un MCP de SAP2000); iniciar ese caso en esa máquina tras
-`git pull`.
+Verificados los casos 1–3 (voladizo, edificio de corte, reticulado) y el
+**Caso 5** (modal espectral NCh2369 vs SAP2000), todos con error ~0%. El
+ensamblador `engine.py` (Model 3D → OpenSees) y el análisis espectral propio
+(`modal.py`: CQC/SRSS a mano, `spectra.py`: espectro NCh2369) están verificados
+contra SAP2000. **Próximo paso: Caso 6 (galpón 3D, combinación direccional
+100/30) o Caso 4 (pórtico gravitacional)** — ver `ROADMAP.md`. Los casos contra
+SAP2000 requieren el notebook del trabajo (con el MCP de SAP2000).
 
 ## Principios de arquitectura
 
@@ -76,7 +77,7 @@ de regresión y un post de blog. La escalera (ver `ROADMAP.md`):
 2. Pórtico de corte 2 GDL — vs fórmula a mano
 3. Reticulado simple — vs mano / SAP
 4. Pórtico plano gravitacional — vs SAP
-5. Modal espectral 2D (NCh2369) — vs SAP  ← riesgo técnico: RSA + CQC es manual
+5. Modal espectral 2D (NCh2369) — vs SAP ✅ error ~0% (RSA + CQC/SRSS propio)
 6. Galpón 3D completo — vs SAP
 
 Regla de contenido: teoría + cálculo a mano donde ilumina (casos 1-3); a partir

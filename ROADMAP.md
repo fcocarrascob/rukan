@@ -6,31 +6,40 @@ un test de regresión **y** un post de blog en struct_pad.
 
 ---
 
-## ▶ PRÓXIMA SESIÓN — Caso 5: modal espectral NCh2369 vs SAP2000
+## ✅ Caso 5 CERRADO — modal espectral NCh2369 vs SAP2000 (error ~0%)
 
-Es el peldaño decisivo: donde el cálculo a mano ya no alcanza y el patrón de
-referencia pasa a ser **SAP2000**.
+El peldaño decisivo pasó. Pórtico plano de momento (1 vano, 2 pisos) armado con
+`engine.build` y contrastado contra SAP2000 v25 (vía MCP): períodos, masas
+modales efectivas, corte basal combinado (CQC y SRSS) y desplazamiento de techo,
+todos con error **< 0.01 %**. La combinación modal CQC/SRSS **propia** de Rukan
+(`src/rukan/modal.py`) reproduce SAP2000 a 4+ cifras.
 
-**Dónde correrlo:** en el **notebook del trabajo**, que tiene SAP2000 y un
-**MCP de SAP2000** disponible. Esta sesión (equipo personal) no tiene acceso a
-SAP2000. → Empezar el Caso 5 en la sesión del notebook del trabajo, tras
-`git pull` de este repo.
+- Espectro NCh2369 portado a Python: `src/rukan/spectra.py` (misma tabla `(T,
+  Sa/g)` que se alimenta a ambos motores → verificación limpia).
+- Caso: `verification/case05_modal_spectral_nch2369.py`.
+- Modelo SAP + extracción: scripts MCP `case5_portico2p_build_run`,
+  `case5_extract_results` (`case5_portico2p.sdb`).
 
-**Plan:**
-1. Elegir un modelo simple y regular (un pórtico plano o un galpón de un vano)
-   para tener modos limpios y comparables.
-2. Armarlo en **SAP2000 vía el MCP** con el espectro **NCh2369**, y extraer la
-   tabla de referencia: períodos, masas modales efectivas, y sobre todo el
-   **corte basal por modo** y el **combinado (SRSS y CQC)**.
-3. Armar el **mismo** modelo en Rukan con `engine.build(model)` y correr:
-   `eigen` → modos → aplicar espectro NCh2369 modo a modo → **combinar CQC/SRSS
-   a mano** (OpenSees no lo hace de un botón; ver `modalProperties`).
-4. Verificar Rukan contra SAP2000 y documentar como post (serie parte 3+).
+**Claves aprendidas (SAP OAPI):** secciones con `PropFrame.SetGeneral` y **área
+de corte = 0** desactivan la deformación por corte → igualan exactamente el
+`elasticBeamColumn` (Euler-Bernoulli) de OpenSees. `ResponseSpectrum.SetLoads`
+devuelve una **lista** `[...,0]` (no int); `SetModalComb_1` exige **F1 = 1.0**
+(F1 = 0 → error). Factor de escala del caso RS = **9.80665** (g en m/s², modelo
+en metros).
 
-**Riesgo técnico:** la combinación modal (CQC/SRSS) y la combinación
-direccional (100/30) se implementan y validan explícitamente. Reutilizar el
-espectro NCh2369 ya portado en struct_pad (`nch2369-spectrum.ts`) como
-referencia de la curva; en Rukan se implementa en Python.
+## ▶ PRÓXIMA SESIÓN — candidatos
+
+1. **Caso 6 — Galpón 3D completo vs SAP2000**: subir de 2D a 3D real (dos
+   direcciones, combinación direccional **100/30**, espectro vertical). Cierra
+   la escalera de verificación del MVP.
+2. **Caso 4 — Pórtico plano gravitacional vs SAP2000** (quedó pendiente; estática
+   de marcos con vigas cargadas, momentos y cortes).
+3. **Fase 1 — Chequeo de código** (AISC 360 / NCh427 por elemento): el valor que
+   se paga. Empezar por tracción/compresión+pandeo.
+
+**Riesgo técnico próximo:** la combinación **direccional (100/30)** aún no se
+implementa; el espectro **vertical** NCh2369 ya está portado en `spectra.py`
+(struct_pad lo tiene como `computeVerticalSpectrum`, factor 0.7 y período 1.7·T).
 
 ---
 
@@ -41,8 +50,8 @@ referencia de la curva; en Rukan se implementa en Python.
 - [x] Modelo de datos 3D (dataclasses)
 - [x] Constructor OpenSees desde el modelo (`engine.py`) — 3D, verificado vs voladizo analítico
 - [ ] Base de perfiles chilenos (catálogo ICHA: IN, HN, cajón, tubos, ángulos, XL)
-- [ ] Análisis estático y modal
-- [ ] Espectro NCh2369 + análisis espectral (combinación CQC/SRSS propia)
+- [x] Análisis estático y modal
+- [x] Espectro NCh2369 + análisis espectral (combinación CQC/SRSS propia) — vs SAP2000, error ~0%
 - [ ] Combinaciones de carga (NCh3171 / NCh2369)
 
 ### Escalera de verificación
@@ -50,7 +59,7 @@ referencia de la curva; en Rukan se implementa en Python.
 2. [x] Pórtico de corte 2 GDL — vs fórmula a mano (razón áurea, masas 94.7/5.3%)
 3. [x] Reticulado triangular isostático — vs mano (método de los nudos)
 4. [ ] Pórtico plano gravitacional — vs SAP2000
-5. [ ] **Modal espectral 2D (NCh2369)** — vs SAP2000 · *riesgo: RSA + CQC manual*
+5. [x] **Modal espectral 2D (NCh2369)** — vs SAP2000, error ~0% (RSA + CQC/SRSS propio)
 6. [ ] Galpón 3D completo — vs SAP2000
 
 ### Fase 1 — Chequeo de código (el valor que se paga)
