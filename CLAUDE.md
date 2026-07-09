@@ -30,13 +30,14 @@ estructuras simples/cotidianas (análisis modal, espectral, pushover).
 
 ## Estado actual y próximo paso
 
-Verificados los casos 1–3 (voladizo, edificio de corte, reticulado) y el
-**Caso 5** (modal espectral NCh2369 vs SAP2000), todos con error ~0%. El
-ensamblador `engine.py` (Model 3D → OpenSees) y el análisis espectral propio
+Verificados los casos 1–3 (voladizo, edificio de corte, reticulado), el **Caso 5**
+(modal espectral NCh2369) y el **Caso 6** (arriostramiento con liberación de
+momentos), todos con error ~0% vs SAP2000. El ensamblador `engine.py` (Model 3D →
+OpenSees, con liberación de momentos en extremos), el análisis espectral propio
 (`modal.py`: CQC/SRSS a mano, `spectra.py`: espectro NCh2369) están verificados
-contra SAP2000. **Próximo paso: Caso 6 (galpón 3D, combinación direccional
-100/30) o Caso 4 (pórtico gravitacional)** — ver `ROADMAP.md`. Los casos contra
-SAP2000 requieren el notebook del trabajo (con el MCP de SAP2000).
+contra SAP2000. **Próximo paso: galpón 3D (combinación direccional 100/30) o el
+pórtico gravitacional pendiente** — ver `ROADMAP.md`. Los casos contra SAP2000
+requieren el notebook del trabajo (con el MCP de SAP2000).
 
 ## Principios de arquitectura
 
@@ -78,7 +79,8 @@ de regresión y un post de blog. La escalera (ver `ROADMAP.md`):
 3. Reticulado simple — vs mano / SAP
 4. Pórtico plano gravitacional — vs SAP
 5. Modal espectral 2D (NCh2369) — vs SAP ✅ error ~0% (RSA + CQC/SRSS propio)
-6. Galpón 3D completo — vs SAP
+6. Arriostramiento / liberación de momentos — vs SAP ✅ error ~0% (biela = Truss)
+7. Galpón 3D completo — vs SAP
 
 Regla de contenido: teoría + cálculo a mano donde ilumina (casos 1-3); a partir
 del caso 4-5 el cálculo a mano deja de ser tractable y SAP2000 pasa a ser el

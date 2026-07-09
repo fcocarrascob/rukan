@@ -27,15 +27,35 @@ devuelve una **lista** `[...,0]` (no int); `SetModalComb_1` exige **F1 = 1.0**
 (F1 = 0 → error). Factor de escala del caso RS = **9.80665** (g en m/s², modelo
 en metros).
 
+## ✅ Caso 6 CERRADO — arriostramiento y liberación de momentos vs SAP2000 (error ~0%)
+
+Se agregó la **liberación de momentos en extremos** (`FrameElement.release_z_i/j`,
+`release_y_i/j`) — la técnica con que se modelan las diagonales de
+arriostramiento (conexión a corte/axial, sin transmitir momento). Pórtico de un
+vano arriostrado bajo carga lateral, contrastado contra SAP2000: diagonal rígida
+vs liberada, desplazamiento, axial y momentos, todos con error **< 0.01 %**. La
+diagonal liberada coincide además con un elemento `Truss` puro.
+
+- Caso: `verification/case06_braced_releases.py`.
+- Modelo SAP: script MCP `case6_braced_bay_build` (`case6_braced_bay.sdb`,
+  `FrameObj.SetReleases` con M2 y M3 liberados).
+
+**Claves aprendidas:** en 3D OpenSees usa `-releasez` / `-releasey` (¡`-release`
+a secas **se ignora en 3D**!; sí funciona en 2D). En SAP2000 la práctica 3D es
+liberar **M2 y M3** en ambos extremos (rótula completa a flexión). Convención de
+momento de extremo j: OpenSees da el momento nodal, el diagrama interno (SAP)
+invierte el signo → `M3_diag = (Mz_i, -Mz_j)`.
+
 ## ▶ PRÓXIMA SESIÓN — candidatos
 
-1. **Caso 6 — Galpón 3D completo vs SAP2000**: subir de 2D a 3D real (dos
-   direcciones, combinación direccional **100/30**, espectro vertical). Cierra
-   la escalera de verificación del MVP.
-2. **Caso 4 — Pórtico plano gravitacional vs SAP2000** (quedó pendiente; estática
-   de marcos con vigas cargadas, momentos y cortes).
+1. **Galpón 3D completo vs SAP2000**: subir a 3D real (dos direcciones,
+   combinación direccional **100/30**, espectro vertical). Reúne el modal
+   espectral (caso 5) + las diagonales liberadas (caso 6). Cierra la escalera.
+2. **Pórtico plano gravitacional vs SAP2000** (pendiente; estática de marcos con
+   vigas cargadas, momentos y cortes).
 3. **Fase 1 — Chequeo de código** (AISC 360 / NCh427 por elemento): el valor que
-   se paga. Empezar por tracción/compresión+pandeo.
+   se paga. Empezar por tracción/compresión+pandeo (con esbeltez KL/r de la
+   diagonal, que ahora ya se modela bien).
 
 **Riesgo técnico próximo:** la combinación **direccional (100/30)** aún no se
 implementa; el espectro **vertical** NCh2369 ya está portado en `spectra.py`
@@ -60,7 +80,8 @@ implementa; el espectro **vertical** NCh2369 ya está portado en `spectra.py`
 3. [x] Reticulado triangular isostático — vs mano (método de los nudos)
 4. [ ] Pórtico plano gravitacional — vs SAP2000
 5. [x] **Modal espectral 2D (NCh2369)** — vs SAP2000, error ~0% (RSA + CQC/SRSS propio)
-6. [ ] Galpón 3D completo — vs SAP2000
+6. [x] **Arriostramiento / liberación de momentos** — vs SAP2000, error ~0% (biela axial = Truss)
+7. [ ] Galpón 3D completo — vs SAP2000
 
 ### Fase 1 — Chequeo de código (el valor que se paga)
 - [ ] Verificación AISC 360 / NCh427 por elemento (tracción, compresión+pandeo, flexión, interacción H1)

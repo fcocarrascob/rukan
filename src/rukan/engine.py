@@ -42,6 +42,18 @@ def build(model: Model) -> None:
         mat = mats[e.material]
         sec = secs[e.section]
         ops.geomTransf("Linear", transf_tag, *e.vecxz)
+
+        # Liberación de momentos en extremos. En 3D OpenSees usa ``-releasez`` /
+        # ``-releasey`` (¡``-release`` a secas se ignora en 3D!). Código por eje:
+        # 0=ninguno, 1=extremo i, 2=extremo j, 3=ambos.
+        release_args: list = []
+        code_z = (1 if e.release_z_i else 0) + (2 if e.release_z_j else 0)
+        code_y = (1 if e.release_y_i else 0) + (2 if e.release_y_j else 0)
+        if code_z:
+            release_args += ["-releasez", code_z]
+        if code_y:
+            release_args += ["-releasey", code_y]
+
         ops.element(
             "elasticBeamColumn",
             e.id,
@@ -54,6 +66,7 @@ def build(model: Model) -> None:
             sec.Iy,
             sec.Iz,
             transf_tag,
+            *release_args,
         )
 
     # Masas concentradas por nodo (6 componentes, orden de GDL).

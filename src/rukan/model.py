@@ -67,6 +67,14 @@ class FrameElement:
     # Vector que define el plano local x-z (geomTransf de OpenSees). El default
     # sirve para columnas verticales; se ajusta por elemento en el ensamble.
     vecxz: tuple[float, float, float] = (1.0, 0.0, 0.0)
+    # Liberación de momento flector en los extremos (rótulas / conexiones a
+    # corte). ``z`` = flexión en el plano local x-y (eje fuerte Iz); ``y`` =
+    # fuera de ese plano (Iy). Liberar ambos extremos en z convierte la barra en
+    # una biela axial en su plano — así se modela una diagonal de arriostramiento.
+    release_z_i: bool = False
+    release_z_j: bool = False
+    release_y_i: bool = False
+    release_y_j: bool = False
 
 
 @dataclass
