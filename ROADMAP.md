@@ -9,7 +9,7 @@ un test de regresión **y** un post de blog en struct_pad.
 ### Fase 0 — Núcleo headless (sin GUI)
 - [x] Capa de unidades (Pint en la frontera + sistema interno consistente)
 - [x] Modelo de datos 3D (dataclasses)
-- [ ] Constructor OpenSees desde el modelo (`engine.py`) — cuando el caso 2 lo justifique
+- [x] Constructor OpenSees desde el modelo (`engine.py`) — 3D, verificado vs voladizo analítico
 - [ ] Base de perfiles chilenos (catálogo ICHA: IN, HN, cajón, tubos, ángulos, XL)
 - [ ] Análisis estático y modal
 - [ ] Espectro NCh2369 + análisis espectral (combinación CQC/SRSS propia)
@@ -18,7 +18,7 @@ un test de regresión **y** un post de blog en struct_pad.
 ### Escalera de verificación
 1. [x] Columna en voladizo (1 GDL) — vs fórmula a mano
 2. [x] Pórtico de corte 2 GDL — vs fórmula a mano (razón áurea, masas 94.7/5.3%)
-3. [ ] Reticulado simple — vs mano / SAP2000
+3. [x] Reticulado triangular isostático — vs mano (método de los nudos)
 4. [ ] Pórtico plano gravitacional — vs SAP2000
 5. [ ] **Modal espectral 2D (NCh2369)** — vs SAP2000 · *riesgo: RSA + CQC manual*
 6. [ ] Galpón 3D completo — vs SAP2000

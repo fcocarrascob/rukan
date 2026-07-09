@@ -19,7 +19,7 @@ python verification/case01_cantilever_column.py
 |---|------|----------|--------|--------|
 | 1 | Columna en voladizo (1 GDL) | período, rigidez lateral | mano | ✅ |
 | 2 | Pórtico de corte 2 GDL | períodos, modos, participación | mano | ✅ |
-| 3 | Reticulado simple | fuerzas axiales | mano / SAP | ⬜ |
+| 3 | Reticulado triangular | fuerzas axiales | mano | ✅ |
 | 4 | Pórtico plano gravitacional | deflexiones, momentos | SAP | ⬜ |
 | 5 | Modal espectral 2D (NCh2369) | Sa, CQC/SRSS, corte basal | SAP | ⬜ |
 | 6 | Galpón 3D completo | derivas, esfuerzos, límites | SAP | ⬜ |
