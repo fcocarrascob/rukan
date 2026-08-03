@@ -37,6 +37,8 @@ U_MASS = ureg.tonne             # kN·s²/m
 U_STRESS = ureg.kN / ureg.m**2  # = kPa
 U_INERTIA = ureg.m**4
 U_AREA = ureg.m**2
+U_LINE_LOAD = ureg.kN / ureg.m  # carga distribuida sobre una barra
+U_MOMENT = ureg.kN * ureg.m
 
 
 def _mag(q, unit):
@@ -79,3 +81,13 @@ def inertia(q):
 
 def area(q):
     return _mag(q, U_AREA)
+
+
+def line_load(q):
+    """Carga distribuida sobre una barra [kN/m]."""
+    return _mag(q, U_LINE_LOAD)
+
+
+def moment(q):
+    """Momento [kN·m]."""
+    return _mag(q, U_MOMENT)

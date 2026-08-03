@@ -20,8 +20,20 @@ python verification/case01_cantilever_column.py
 | 1 | Columna en voladizo (1 GDL) | período, rigidez lateral | mano | ✅ |
 | 2 | Pórtico de corte 2 GDL | períodos, modos, participación | mano | ✅ |
 | 3 | Reticulado triangular | fuerzas axiales | mano | ✅ |
-| 4 | Pórtico plano gravitacional | deflexiones, momentos | SAP | ⬜ |
-| 5 | Modal espectral 2D (NCh2369) | Sa, CQC/SRSS, corte basal | SAP | ⬜ |
-| 6 | Galpón 3D completo | derivas, esfuerzos, límites | SAP | ⬜ |
+| 4 | Pórtico plano gravitacional | deflexiones, momentos | SAP | ⬜ (absorbido por el 8) |
+| 5 | Modal espectral 2D (NCh2369) | Sa, CQC/SRSS, corte basal | SAP | ✅ |
+| 6 | Arriostramiento / liberación de momentos | axial, momentos, biela = Truss | SAP | ✅ |
+| 7 | Galpón 3D completo | 2 direcciones, CQC, 100/30 | SAP | ✅ |
+| 8 | Peso propio, casos y combinaciones | peso distribuido/concentrado, combinaciones | SAP | ✅ |
+
+Los casos contra SAP2000 se armaron en el **notebook del trabajo** (vía MCP de
+SAP2000); acá quedan con los valores de referencia ya extraídos, así que corren
+en cualquier máquina.
 
 Ver el detalle y las fases en [`../ROADMAP.md`](../ROADMAP.md).
+
+## La otra línea: `lab/`
+
+`verification/` valida **el motor**. Las notas de [`../lab/`](../lab/) exploran
+**fenómenos de análisis** —cada una con una referencia independiente en numpy o
+a mano— y no dependen de SAP2000. Ver [`../LAB.md`](../LAB.md).

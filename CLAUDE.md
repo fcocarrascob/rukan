@@ -89,12 +89,40 @@ Regla de contenido: teoría + cálculo a mano donde ilumina (casos 1-3); a parti
 del caso 4-5 el cálculo a mano deja de ser tractable y SAP2000 pasa a ser el
 patrón de referencia. No forzar cálculo manual donde no aporta.
 
+## Las dos líneas de contenido
+
+El repo alimenta **dos** líneas de posts en struct_pad, con reglas distintas:
+
+| | `verification/` | `lab/` |
+|---|---|---|
+| Qué valida | **el motor** de Rukan | **un fenómeno** de análisis |
+| Patrón de referencia | SAP2000 (y mano en los primeros) | fórmula cerrada o numpy puro |
+| Necesita SAP2000 | sí (notebook del trabajo) | **no** — se escribe en cualquier máquina |
+| En el blog | `section: "Rukan"`, serie numerada | `section: "Laboratorio"`, notas sueltas |
+
+El backlog de notas está en [`LAB.md`](LAB.md) y la convención en
+[`lab/README.md`](lab/README.md). Tres reglas que no se negocian:
+
+1. **Dos caminos independientes por nota.** Una referencia (cerrada o numpy) y
+   OpenSeesPy. Sin patrón contra el cual medir, la nota no entra.
+2. **`lab/_lib/ref.py` no importa `rukan` ni `openseespy`.** Si la referencia
+   compartiera código con lo verificado, ambas se equivocarían igual y la tabla
+   daría error 0 % sin decir nada.
+3. **La tabla del post es la salida literal del script.** `lab/_lib/report.py`
+   la imprime en markdown y hace `assert`; `tests/test_lab.py` corre cada nota
+   como test de regresión, así un post publicado no puede quedar mintiendo.
+
+Los scripts viven acá; el MDX y los SVG, en struct_pad. Las figuras las genera
+el mismo script que calcula (`lab/_lib/svg.py`) y se copian con
+`python -m lab._lib.publish notaNN --slug lab-<tema>`.
+
 ## Comandos
 
 ```bash
 pip install -e ".[dev]"                       # instala Rukan editable + pytest
-pytest                                        # tests unitarios (units, modelo)
+pytest                                        # tests unitarios + notas del laboratorio
 python verification/case01_cantilever_column.py   # corre un caso de verificación
+python -m lab.nota01_eleload_empotramiento        # corre una nota del laboratorio
 ```
 
 ## Estructura
@@ -103,6 +131,13 @@ python verification/case01_cantilever_column.py   # corre un caso de verificaci�
 src/rukan/
   units.py    # capa de unidades Pint + sistema interno
   model.py    # dataclasses del modelo (3D desde día 1)
-verification/ # escalera de casos: test + artefacto de blog
-tests/        # tests unitarios del núcleo
+  engine.py   # ensamblador Model 3D → dominio OpenSees
+  loads.py    # peso propio, casos de carga y combinaciones
+  modal.py    # análisis espectral propio: CQC/SRSS + direccional 100/30
+  spectra.py  # espectro NCh2369
+verification/ # escalera de casos: test + artefacto de blog (vs SAP2000)
+lab/          # notas de análisis verificable (vs fórmula cerrada / numpy)
+  _lib/       # report (tabla + assert), ref (numpy puro), svg, publish
+  figs/       # SVG generados, se copian al blog
+tests/        # tests unitarios del núcleo + corrida de cada nota
 ```

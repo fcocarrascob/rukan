@@ -163,7 +163,56 @@ no tiene y que son la base de todo: **casos de carga** y **combinaciones**.
 76.98 kN/m³ para acero) pero **masa = 0** (opción 2), para que el peso propio
 cargue pero el modal siga usando solo las masas explícitas de nudo (como caso 7).
 
+## ✅ Laboratorio ABIERTO — la segunda línea de contenido (nota 01 publicada)
+
+El repo ahora alimenta **dos** líneas de posts. `verification/` valida el motor
+contra SAP2000 y necesita el notebook del trabajo; `lab/` explora **fenómenos de
+análisis** contra una referencia independiente (fórmula cerrada o numpy puro) y
+**no necesita SAP2000** — se escribe desde cualquier máquina. Ese es el punto:
+la serie puede avanzar en el equipo personal.
+
+- Convención y molde del post: [`lab/README.md`](lab/README.md).
+- Backlog priorizado (17 notas en 4 familias) e índice: [`LAB.md`](LAB.md).
+- Andamiaje: `lab/_lib/report.py` (tabla markdown + `assert`), `ref.py` (rigidez
+  directa en numpy, **sin importar `rukan` ni `openseespy`**), `svg.py` (figuras
+  en la paleta del blog), `publish.py` (copia a struct_pad).
+- `tests/test_lab.py` corre cada nota como test de regresión: un post publicado
+  no puede quedar mintiendo si el motor cambia.
+
+**Nota 01 cerrada** — *«El momento del vano no está en la salida del elemento»*
+(`lab/nota01_eleload_empotramiento.py`, post `lab-eleload-empotramiento`). Viga
+apuntalada con carga uniforme, verificada contra la fórmula cerrada y contra
+rigidez directa en numpy. Tres hallazgos: (a) interpolar linealmente entre las
+fuerzas de extremo da **−16,9 kN·m donde el real es +25,3** — signo cambiado, no
+solo magnitud; (b) los momentos nodales son **exactos** (3,5e-15) desde 4
+elementos: mallar no converge, **muestrea** —con 4 sale peor que con 3—; (c) usar
+cargas nodales equivalentes en vez de `eleLoad` da la misma deformada y **67 %
+menos** de momento en el apoyo, faltando exactamente `qL/2` y `qL²/12`.
+
+---
+
 ## ▶ PRÓXIMA SESIÓN — candidatos
+
+### Retomar el laboratorio (no necesita SAP2000 — sirve en el equipo personal)
+
+Orden sugerido en [`LAB.md`](LAB.md): **A1 → C1 → A2**, y C4 como primer hito
+largo. El ciclo por nota, ya rodado con la 01:
+
+1. Escribir `lab/notaNN_<slug>.py` con `main()` (cálculo + `reportar()` + asserts)
+   y `figuras()`. Copiar el molde de `nota01`.
+2. Agregar a `lab/_lib/ref.py` **solo** lo que la nota necesite (crece por demanda).
+3. `python -m lab.notaNN_<slug>` → tabla + SVG. `pytest` para la regresión.
+4. `python -m lab._lib.publish notaNN --slug lab-<tema>`.
+5. MDX en `struct_pad/src/content/blog/lab-<tema>.mdx` con `section: "Laboratorio"`,
+   **sin** `series`. Tablas = salida literal del script. `npm run build`.
+6. Marcar la fila en `LAB.md`.
+
+**Bloqueo conocido:** A1 (Rayleigh) necesita el **Chopra, _Dynamics of
+Structures_** a mano antes de escribir — regla no negociable. La nota D2
+(espectro desde acelerograma) está bloqueada hasta conseguir el registro **y su
+procedencia**.
+
+### O seguir con el motor (necesita el notebook del trabajo para lo de SAP)
 
 1. **Fase 1 — Chequeo de código** (AISC 360 / NCh427 por elemento): el valor que
    se paga. Con el análisis ya verificado (casos 1–8), viene "la otra mitad":
@@ -197,6 +246,14 @@ cargue pero el modal siga usando solo las masas explícitas de nudo (como caso 7
 6. [x] **Arriostramiento / liberación de momentos** — vs SAP2000, error ~0% (biela axial = Truss)
 7. [x] **Galpón 3D completo** — vs SAP2000, error ~0% (2 direcciones + CQC + 100/30; falta vertical)
 8. [x] **Peso propio, casos de carga y combinaciones** (galpón a dos aguas, 3 marcos + techo arriostrado) — vs SAP2000, error ~0%
+
+### Laboratorio (`lab/`) — la línea que no depende de SAP2000
+Notas de fenómenos de análisis contra referencia independiente. Backlog en
+[`LAB.md`](LAB.md); convención en [`lab/README.md`](lab/README.md).
+- [x] **01 · El momento del vano no está en la salida del elemento** — vs fórmula cerrada + rigidez directa en numpy
+- [ ] A1 · Rayleigh: el amortiguamiento de los modos que no anclaste *(necesita Chopra)*
+- [ ] C1 · Pandeo por autovalores: K − λK_g vs π²EI/(KL)²
+- [ ] A2 · Masa consistente vs concentrada: cuántos elementos por barra
 
 ### Fase 1 — Chequeo de código (el valor que se paga)
 - [ ] Verificación AISC 360 / NCh427 por elemento (tracción, compresión+pandeo, flexión, interacción H1)
