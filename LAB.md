@@ -19,6 +19,7 @@ cada tanto un hito largo cuando el tema lo pide.
 | Nota | Script | Post | Fecha |
 |---|---|---|---|
 | 01 · El momento del vano no está en la salida del elemento | `lab/nota01_eleload_empotramiento.py` | [`lab-eleload-empotramiento`](https://fcocarrascob.github.io/blog/lab-eleload-empotramiento/) | 2026-08-03 |
+| 02 · Mp = Z·Fy es una asíntota que nunca se toca | `lab/nota02_momento_curvatura_acero.py` | [`lab-momento-plastico-asintota`](https://fcocarrascob.github.io/blog/lab-momento-plastico-asintota/) | 2026-08-03 |
 
 ---
 
@@ -61,7 +62,16 @@ cada tanto un hito largo cuando el tema lo pide.
 | D3 | La forma espectral con ξ = 2 %, 3 %, 5 %: qué dice NCh2369 y qué da el cálculo | espectro calculado vs curva de la norma (`src/rukan/spectra.py`) | ⬜ |
 | D4 | Disipación numérica: HHT-α y el paso de tiempo | vibración libre cerrada, decaimiento espurio medido | ⬜ |
 
-**Orden sugerido:** B1 ✅ → A1 → C1 → A2, y C4 como primer hito largo.
+### E · Secciones
+
+| # | Nota | Referencia independiente | Estado |
+|---|---|---|---|
+| E1 | `Mp = Z·Fy` es una asíntota que nunca se toca | M(φ) cerrada del perfil I elastoplástico, derivada + suma de fibras en numpy | ✅ nota 02 |
+| E2 | Interacción P-M de un perfil I: la H1-1 del AISC contra la superficie plástica exacta | superficie plástica cerrada (eje neutro en el alma vs en el ala) | ⬜ |
+| E3 | Momento-curvatura de hormigón armado: lo que compra el confinamiento | fibras en numpy con la σ-ε publicada (no confinado vs confinado) | 🔒 falta Mander (1988) / Kent-Park |
+| E4 | Endurecimiento: qué cambia pasar de elastoplástico perfecto a bilineal con b = 1–3 % | suma de fibras en numpy, contra el caso b = 0 ya cerrado de la nota 02 | ⬜ |
+
+**Orden sugerido:** B1 ✅ → E1 ✅ → A1 → C1 → A2, y C4 como primer hito largo.
 
 ---
 
@@ -78,3 +88,10 @@ fuente, no se recuerda.
 | C1, C2 | AISC 360, Comentario Cap. C y Apéndice 7 — longitud efectiva y análisis de pandeo |
 | D2 | **el acelerograma y su procedencia — pedirla, no asumirla** |
 | D3 | NCh2369 (espectro de diseño) |
+| E2 | AISC 360, Cap. H — ecuación de interacción H1-1 |
+| E3 | **Mander, Priestley & Park (1988) y/o Kent & Park — pedirlos, no recordarlos** |
+
+E1 y E4 no necesitan fuente externa: la M(φ) elastoplástica es mecánica de
+sección —equilibrio, Navier y la ley constitutiva—, así que se **deriva** en el
+docstring y queda auditable, en vez de citarse. La regla vale para disposiciones
+normativas y datos tabulados, no para lo que se puede demostrar en el archivo.

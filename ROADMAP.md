@@ -163,7 +163,7 @@ no tiene y que son la base de todo: **casos de carga** y **combinaciones**.
 76.98 kN/m³ para acero) pero **masa = 0** (opción 2), para que el peso propio
 cargue pero el modal siga usando solo las masas explícitas de nudo (como caso 7).
 
-## ✅ Laboratorio ABIERTO — la segunda línea de contenido (nota 01 publicada)
+## ✅ Laboratorio ABIERTO — la segunda línea de contenido (notas 01 y 02 publicadas)
 
 El repo ahora alimenta **dos** líneas de posts. `verification/` valida el motor
 contra SAP2000 y necesita el notebook del trabajo; `lab/` explora **fenómenos de
@@ -172,10 +172,11 @@ análisis** contra una referencia independiente (fórmula cerrada o numpy puro) 
 la serie puede avanzar en el equipo personal.
 
 - Convención y molde del post: [`lab/README.md`](lab/README.md).
-- Backlog priorizado (17 notas en 4 familias) e índice: [`LAB.md`](LAB.md).
+- Backlog priorizado (21 notas en 5 familias) e índice: [`LAB.md`](LAB.md).
 - Andamiaje: `lab/_lib/report.py` (tabla markdown + `assert`), `ref.py` (rigidez
-  directa en numpy, **sin importar `rukan` ni `openseespy`**), `svg.py` (figuras
-  en la paleta del blog), `publish.py` (copia a struct_pad).
+  directa de pórtico plano **y** flexión elastoplástica de sección, en numpy,
+  **sin importar `rukan` ni `openseespy`**), `svg.py` (figuras en la paleta del
+  blog), `publish.py` (copia a struct_pad).
 - `tests/test_lab.py` corre cada nota como test de regresión: un post publicado
   no puede quedar mintiendo si el motor cambia.
 
@@ -189,14 +190,35 @@ elementos: mallar no converge, **muestrea** —con 4 sale peor que con 3—; (c)
 cargas nodales equivalentes en vez de `eleLoad` da la misma deformada y **67 %
 menos** de momento en el apoyo, faltando exactamente `qL/2` y `qL²/12`.
 
+**Nota 02 cerrada** — *«Mp = Z·Fy es una asíntota que nunca se toca»*
+(`lab/nota02_momento_curvatura_acero.py`, post `lab-momento-plastico-asintota`).
+Momento-curvatura de un H soldado de galpón, elastoplástico perfecto, por **tres
+caminos**: la M(φ) cerrada derivada en `SeccionI`, la suma de fibras en numpy y
+`section Fiber` + `zeroLengthSection` en OpenSees. Hallazgos: (a) Mp **no se
+alcanza a curvatura finita** —el núcleo elástico mide `c = ε_y/φ` y el déficit
+decae como 1/φ²— pero en un perfil I la asíntota es benigna: **98,3 % de Mp a
+2 φ_y**, contra 91,7 % de un rectángulo macizo, y esa distancia *es* el factor de
+forma (1,103 vs 1,500); (b) `Σ Aᵢyᵢ` reproduce `∫y dA` exactamente, así que **Mp
+sale exacto con una fibra por ala** — salvo con alma de número **impar** de
+fibras, donde la franja central cruza el eje neutro y con una sola fibra Mp cae
+**19 %**; (c) `Σ Aᵢyᵢ²` nunca reproduce `∫y² dA` (falta el Steiner de cada
+franja) y el déficit lo manda el **alma**: refinar el ala de 1 a 20 fibras mueve
+la rigidez 0,03 %, refinar el alma de 2 a 40 la mueve 3 %.
+
+La nota 02 estrenó además un patrón reutilizable: **tres caminos en vez de dos**.
+La suma de fibras en numpy predice lo que da el motor malla por malla (error 0),
+lo que separa el error de *discretización* de un eventual error del *motor*.
+
 ---
 
 ## ▶ PRÓXIMA SESIÓN — candidatos
 
 ### Retomar el laboratorio (no necesita SAP2000 — sirve en el equipo personal)
 
-Orden sugerido en [`LAB.md`](LAB.md): **A1 → C1 → A2**, y C4 como primer hito
-largo. El ciclo por nota, ya rodado con la 01:
+Orden sugerido en [`LAB.md`](LAB.md): **E2 → A1 → C1 → A2**, y C4 como primer
+hito largo. E2 (interacción P-M del perfil I, H1-1 del AISC contra la superficie
+plástica exacta) hereda la maquinaria de secciones que dejó la nota 02 y alimenta
+directo la Fase 1. El ciclo por nota, ya rodado con la 01 y la 02:
 
 1. Escribir `lab/notaNN_<slug>.py` con `main()` (cálculo + `reportar()` + asserts)
    y `figuras()`. Copiar el molde de `nota01`.
@@ -251,6 +273,8 @@ procedencia**.
 Notas de fenómenos de análisis contra referencia independiente. Backlog en
 [`LAB.md`](LAB.md); convención en [`lab/README.md`](lab/README.md).
 - [x] **01 · El momento del vano no está en la salida del elemento** — vs fórmula cerrada + rigidez directa en numpy
+- [x] **02 · `Mp = Z·Fy` es una asíntota que nunca se toca** — vs M(φ) cerrada derivada + suma de fibras en numpy
+- [ ] E2 · Interacción P-M del perfil I: H1-1 del AISC vs superficie plástica exacta
 - [ ] A1 · Rayleigh: el amortiguamiento de los modos que no anclaste *(necesita Chopra)*
 - [ ] C1 · Pandeo por autovalores: K − λK_g vs π²EI/(KL)²
 - [ ] A2 · Masa consistente vs concentrada: cuántos elementos por barra
