@@ -21,6 +21,7 @@ cada tanto un hito largo cuando el tema lo pide.
 | 01 · El momento del vano no está en la salida del elemento | `lab/nota01_eleload_empotramiento.py` | [`lab-eleload-empotramiento`](https://fcocarrascob.github.io/blog/lab-eleload-empotramiento/) | 2026-08-03 |
 | 02 · Mp = Z·Fy es una asíntota que nunca se toca | `lab/nota02_momento_curvatura_acero.py` | [`lab-momento-plastico-asintota`](https://fcocarrascob.github.io/blog/lab-momento-plastico-asintota/) | 2026-08-03 |
 | 03 · El triángulo bajo la zapata no depende de la rigidez del suelo | `lab/nota03_zapata_sin_traccion.py` | [`lab-zapata-sin-traccion`](https://fcocarrascob.github.io/blog/lab-zapata-sin-traccion/) | 2026-08-05 |
+| 04 · Cuándo la zapata deja de ser rígida | `lab/nota04_zapata_rigida_flexible.py` | [`lab-zapata-rigida-flexible`](https://fcocarrascob.github.io/blog/lab-zapata-rigida-flexible/) | 2026-08-05 |
 
 ---
 
@@ -84,13 +85,18 @@ Bowles, Poulos & Davis y Terzaghi no están en disco en ningún formato.
 |---|---|---|---|
 | F1 | La zapata que se despega: el triángulo no depende de k_s, y la superposición muere | Das §16.7, Ecs. (16.20)–(16.22) + longitud de contacto derivada | ✅ nota 03 |
 | F2 | Excentricidad bidireccional: reparto lineal vs área efectiva de Meyerhof | Das §16.9, Ecs. (16.23)–(16.25) — **está en disco** | ⬜ |
-| F3 | Zapata rígida vs flexible: dónde deja de valer el reparto lineal | criterio de la Ec. (25) de NCh2369:2025 §10.1.5 (leerla rasterizada) + barrido de EI | ⬜ |
+| F3 | Zapata rígida vs flexible: dónde deja de valer el reparto lineal | viga sobre resortes sin tracción por rigidez directa en numpy (`_lib/ref.py`) + Ec. (25) de NCh2369:2025 **§10.1.4** y Tabla 10, leídas rasterizadas | ✅ nota 04 |
 | F4 | Viga sobre fundación elástica: la longitud característica y cuándo λL manda | solución cerrada de Hetényi | 🔒 falta Hetényi o Bowles |
 | F5 | k_s no es una propiedad del suelo: depende del ancho de la zapata | corrección de Terzaghi (1955) por ancho | 🔒 falta Terzaghi o Bowles |
 | F6 | Winkler contra el semiespacio elástico: el punzón rígido tiene presión infinita en el borde | solución cerrada de Boussinesq para el punzón rígido | 🔒 falta Poulos & Davis |
 
-**Orden sugerido:** B1 ✅ → E1 ✅ → F1 ✅ → A1 → C1 → A2, y C4 como primer hito
-largo. F2 y F3 se pueden escribir hoy; F4, F5 y F6 no, hasta conseguir el libro.
+**Orden sugerido:** B1 ✅ → E1 ✅ → F1 ✅ → F3 ✅ → A1 → C1 → A2, y C4 como primer
+hito largo. F2 se puede escribir hoy; F4, F5 y F6 no, hasta conseguir el libro.
+
+La nota 04 dejó en `_lib/ref.py` un solver de **viga sobre resortes sin
+tracción** (rigidez directa + conjunto activo, sin `openseespy`). F4 sigue
+bloqueada por la solución cerrada de Hetényi, pero ya tiene contra qué medirla
+el día que aparezca.
 
 ---
 
@@ -110,7 +116,7 @@ fuente, no se recuerda.
 | E2 | AISC 360, Cap. H — ecuación de interacción H1-1 |
 | E3 | **Mander, Priestley & Park (1988) y/o Kent & Park — pedirlos, no recordarlos** |
 | F1, F2 | Das, *Fundamentos de Ingeniería Geotécnica*, 4.ª ed., §16.7 y §16.9 — `F:\OneDrive\Ingenieria\Libros\Braja_Das.pdf`, PDF pp. 511-522 (offset +21). Contraparte estructural del mismo teorema: AISC *Design Guide 1*, 3.ª ed., Ap. B §B.2.3 |
-| F1, F3 | NCh2369:2025, cláusula 10 — área apoyada mínima (§10.1.4), deslizamiento sobre el área en compresión (§10.1.3), fundaciones flexibles (§10.1.5) y ancladas (§10.1.6) |
+| F1, F3 | NCh2369:2025, cláusula 10 — área apoyada mínima **y criterio de rigidez, Ec. (25) + Tabla 10, las dos en §10.1.4** (no en §10.1.5, como se creyó al armar el backlog); deslizamiento sobre el área en compresión (§10.1.3); fundaciones flexibles (§10.1.5) y ancladas (§10.1.6) |
 | F4, F5, F6 | **Hetényi, Bowles, Terzaghi, Poulos & Davis — ninguno está en disco; conseguirlos antes de escribir** |
 
 E1 y E4 no necesitan fuente externa: la M(φ) elastoplástica es mecánica de

@@ -31,7 +31,9 @@ Analysis* — matriz de rigidez de viga-columna plana y vector de cargas
 consistente para carga uniforme. La flexión elastoplástica de sección se deriva
 en el propio `SeccionI` a partir de equilibrio y Navier. Las presiones de
 contacto bajo zapata rígida excéntrica salen de Das, *Fundamentos de Ingeniería
-Geotécnica*, 4.ª ed., §16.7 (ver `presion_zapata_rigida`).
+Geotécnica*, 4.ª ed., §16.7 (ver `presion_zapata_rigida`). El criterio de
+rigidez de una fundación superficial —Ec. (25)— y su longitud de cálculo salen
+de NCh2369:2025, 3.ª ed., §10.1.4 y Tabla 10 (ver `lambda_l_nch2369`).
 """
 
 from __future__ import annotations
@@ -54,6 +56,11 @@ __all__ = [
     "presion_zapata_rigida",
     "fraccion_apoyada",
     "excentricidad_para_fraccion",
+    "k_viga",
+    "ResultadoViga",
+    "VigaSobreResortes",
+    "lambda_l_nch2369",
+    "espesor_limite_nch2369",
 ]
 
 GDL_POR_NODO = 3
@@ -467,3 +474,242 @@ def excentricidad_para_fraccion(f: float, B: float) -> float:
     if not 0.0 < f <= 1.0:
         raise ValueError("la fracción apoyada vive en (0, 1]")
     return (1.5 - f) / 3.0 * B
+
+
+# ================ VIGA SOBRE RESORTES QUE NO TOMAN TRACCIÓN =================
+# La zapata rígida de `presion_zapata_rigida` es el caso límite EI → ∞. Cuando
+# la fundación es flexible el reparto ya no es plano y hay que resolver la viga
+# sobre la cama de resortes. Esto es rigidez directa en numpy puro, con el
+# contacto tratado por **conjunto activo**.
+#
+# El algoritmo no es una elección de estilo: es el que NCh2369:2025 §10.1.4
+# prescribe en palabras para una fundación que no clasifica como rígida —«el
+# análisis estructural de la losa requiere la utilización de métodos o análisis
+# numéricos, que incorporen, por ejemplo, una cama de resortes, teniendo la
+# precaución de verificar que en el análisis no resulten resortes traccionados.
+# De existir resortes traccionados, éstos se deben anular»— (leído en la página
+# rasterizada, PDF p.126, impresa 119).
+
+GDL_VIGA = 2  # (v, θ) por nodo: flexión pura, sin axial
+
+
+def k_viga(EI: float, L: float) -> np.ndarray:
+    """Rigidez 4×4 de flexión de una barra Euler-Bernoulli: GDL ``(v_i, θ_i, v_j, θ_j)``.
+
+    Es el mismo bloque de flexión que ya vive dentro de `k_local`, extraído a
+    2 GDL por nodo porque acá no hay axial: la viga no se estira y los resortes
+    no dan rigidez horizontal. `test_lab.py` verifica que los dos coincidan
+    término a término, así que este atajo no introduce una segunda verdad.
+    """
+    return EI * np.array(
+        [
+            [12 / L**3, 6 / L**2, -12 / L**3, 6 / L**2],
+            [6 / L**2, 4 / L, -6 / L**2, 2 / L],
+            [-12 / L**3, -6 / L**2, 12 / L**3, -6 / L**2],
+            [6 / L**2, 2 / L, -6 / L**2, 4 / L],
+        ]
+    )
+
+
+@dataclass
+class ResultadoViga:
+    """Reparto de presiones bajo una viga sobre resortes sin tracción.
+
+    Las claves calcan las del ``modelo()`` de OpenSees de la nota 03, para que
+    las dos rutas se comparen término a término sin traducción intermedia.
+    """
+
+    x: np.ndarray  # coordenada de cada nodo
+    q: np.ndarray  # presión de contacto, positiva en compresión
+    activos: np.ndarray  # máscara booleana: resortes que quedaron comprimidos
+    v: np.ndarray  # descenso de cada nodo (positivo hacia arriba)
+    trib: np.ndarray  # longitud tributaria de cada resorte
+    ancho: float
+    iteraciones: int
+
+    @property
+    def q_max(self) -> float:
+        return float(self.q.max())
+
+    @property
+    def q_borde(self) -> float:
+        """Presión en el borde x = B. Con e > 0 coincide con `q_max` en el caso
+        rígido, pero es un punto fijo y por lo tanto comparable entre casos."""
+        return float(self.q[-1])
+
+    @property
+    def a_contacto(self) -> float:
+        return float(self.trib[self.activos].sum())
+
+    @property
+    def fraccion_apoyada(self) -> float:
+        return self.a_contacto / float(self.trib.sum())
+
+    @property
+    def reaccion(self) -> float:
+        """Resultante de las presiones. Debe dar la carga vertical aplicada."""
+        return float((self.q * self.trib * self.ancho).sum())
+
+
+@dataclass
+class VigaSobreResortes:
+    """Viga sobre cama de resortes verticales que **no toman tracción**.
+
+    Rigidez directa (2 GDL por nodo) más **conjunto activo** iterativo: se
+    resuelve con todos los resortes puestos, se apagan los que quedaron
+    traccionados, y se repite hasta que el conjunto de resortes comprimidos deja
+    de cambiar. Es el método que NCh2369:2025 §10.1.4 describe en palabras (ver
+    el comentario del bloque).
+
+    Convenciones, heredadas del resto del módulo: ``v`` positivo **hacia
+    arriba**, así que un resorte comprimido es el de un nodo que baja (``v < 0``)
+    y su presión vale ``q = −k_v·v``.
+
+    La rigidez de cada resorte es ``k_v`` por su **área tributaria**, que en los
+    dos nodos de borde vale la mitad. Con rigidez uniforme la resultante de las
+    presiones no daría la carga aplicada — el mismo gotcha que la nota 03 pagó
+    del lado de OpenSees.
+
+    Este solver **no comparte una línea con OpenSees**: ensamble propio,
+    contacto por conjunto activo en vez de un material ``ENT`` con Newton. Esa
+    es la condición para que la comparación signifique algo.
+    """
+
+    B: float  # largo de la viga
+    n: int  # divisiones (deja n+1 nodos y n+1 resortes)
+    EI: float
+    k_v: float  # módulo de balasto, F/L³
+    ancho: float = 1.0  # ancho fuera del plano
+
+    MAX_ITER = 100
+
+    def malla(self) -> tuple[np.ndarray, np.ndarray]:
+        """Coordenadas nodales y longitud tributaria de cada resorte."""
+        h = self.B / self.n
+        xs = np.arange(self.n + 1) * h
+        trib = np.full(self.n + 1, h)
+        trib[0] = trib[-1] = h / 2.0
+        return xs, trib
+
+    def resolver(self, fuerzas: np.ndarray, momentos: np.ndarray | None = None) -> ResultadoViga:
+        """Resuelve con cargas nodales ``fuerzas`` (positivas hacia arriba) y ``momentos``.
+
+        Una carga vertical hacia abajo entra como ``fuerzas < 0``, igual que en
+        el resto del módulo.
+        """
+        xs, trib = self.malla()
+        n_nodos = self.n + 1
+        if fuerzas.shape != (n_nodos,):
+            raise ValueError(f"`fuerzas` debe tener {n_nodos} valores, uno por nodo")
+        if momentos is None:
+            momentos = np.zeros(n_nodos)
+
+        h = self.B / self.n
+        k_resorte = self.k_v * trib * self.ancho
+        k_barra = k_viga(self.EI, h)
+
+        # Rigidez de la viga sola: se ensambla una vez, no cambia al iterar.
+        n_gdl = n_nodos * GDL_VIGA
+        K_viga = np.zeros((n_gdl, n_gdl))
+        for k in range(self.n):
+            gdl = [2 * k, 2 * k + 1, 2 * k + 2, 2 * k + 3]
+            K_viga[np.ix_(gdl, gdl)] += k_barra
+
+        P = np.zeros(n_gdl)
+        P[0::2] = fuerzas
+        P[1::2] = momentos
+
+        activos = np.ones(n_nodos, dtype=bool)
+        vistos: list[tuple[bool, ...]] = []
+
+        for iteracion in range(1, self.MAX_ITER + 1):
+            if activos.sum() < 2:
+                raise RuntimeError(
+                    "quedan menos de 2 resortes comprimidos: la viga es un "
+                    "mecanismo (la fundación vuelca, no hay equilibrio posible)"
+                )
+            K = K_viga.copy()
+            K[np.arange(n_nodos) * 2, np.arange(n_nodos) * 2] += np.where(
+                activos, k_resorte, 0.0
+            )
+            try:
+                u = np.linalg.solve(K, P)
+            except np.linalg.LinAlgError as err:  # pragma: no cover - guarda
+                raise RuntimeError(
+                    f"matriz singular con {activos.sum()} resortes activos"
+                ) from err
+
+            v = u[0::2]
+            # Un resorte solo trabaja si su nodo bajó. `v <= 0` reactiva los que
+            # habían quedado apagados y vuelven a apoyar, así que el conjunto no
+            # es monótono decreciente y hace falta la detección de ciclo.
+            nuevos = v <= 0.0
+            if np.array_equal(nuevos, activos):
+                q = np.where(activos, -self.k_v * v, 0.0)
+                return ResultadoViga(
+                    x=xs, q=q, activos=activos, v=v, trib=trib,
+                    ancho=self.ancho, iteraciones=iteracion,
+                )
+            firma = tuple(bool(b) for b in nuevos)
+            if firma in vistos:
+                raise RuntimeError(
+                    f"el conjunto activo entró en ciclo en la iteración {iteracion}: "
+                    "el contacto no se estabiliza con esta malla"
+                )
+            vistos.append(firma)
+            activos = nuevos
+
+        raise RuntimeError(
+            f"el conjunto activo no convergió en {self.MAX_ITER} iteraciones"
+        )
+
+
+# ===================== EC. (25) DE NCh2369:2025 §10.1.4 =====================
+
+
+def lambda_l_nch2369(L: float, k_v: float, E: float, espesor: float) -> float:
+    """``λ·L`` de la Ec. (25): una fundación superficial es **rígida** si vale ≤ 1.
+
+    Fuente: NCh2369:2025, 3.ª ed., §10.1.4, Ec. (25) — transcrita de la **página
+    rasterizada** del PDF (p.125 del archivo, impresa 118), no de la capa de
+    texto::
+
+        L · ⁴√( k_v / (4·E·I) )  ≤  1                    (25)
+
+    en que, con las palabras de la norma:
+
+    * ``I = e³/12``, momento de inercia **por unidad de longitud** de fundación (m³);
+    * ``e`` = altura o espesor de la fundación (m);
+    * ``E`` = módulo de deformación del material constitutivo de la fundación (tonf/m²);
+    * ``k_v`` = rigidez vertical **sísmica** del suelo para efectos de este cálculo (tonf/m³);
+    * ``L`` = **longitud de cálculo, definida en la Tabla 10** (p.131 del archivo,
+      impresa 124) — y no es el largo de la fundación: para una zapata aislada
+      la fila que aplica es «Zarpa», o sea la distancia entre el borde de la
+      fundación y el borde exterior de la columna o muro.
+
+    Dos advertencias de notación, ambas trampas reales:
+
+    * La norma llama ``e`` al **espesor**; Das y la nota 03 llaman ``e`` a la
+      **excentricidad**. Acá el argumento se llama ``espesor`` a propósito.
+    * La norma la escribe en tonf, pero la expresión es **homogénea
+      dimensionalmente** (``k_v/(E·I)`` tiene unidades de 1/L⁴), así que sirve
+      cualquier sistema consistente. Este módulo trabaja en kN y m.
+    """
+    if min(L, k_v, E, espesor) <= 0.0:
+        raise ValueError("L, k_v, E y el espesor deben ser positivos")
+    I = espesor**3 / 12.0
+    return L * (k_v / (4.0 * E * I)) ** 0.25
+
+
+def espesor_limite_nch2369(L: float, k_v: float, E: float) -> float:
+    """Espesor al que la Ec. (25) da exactamente ``λ·L = 1``: el umbral rígido/flexible.
+
+    Se despeja de `lambda_l_nch2369`: con ``λL = 1`` es ``EI = k_v·L⁴/4``, y con
+    ``I = e³/12`` queda ``e = ∛(12·k_v·L⁴/(4E)) = ∛(3·k_v·L⁴/E)``.
+
+    Crece como ``L^(4/3)`` —por eso la fila de Tabla 10 que se elija cambia el
+    veredicto tanto— y como ``k_v^(1/3)``.
+    """
+    if min(L, k_v, E) <= 0.0:
+        raise ValueError("L, k_v y E deben ser positivos")
+    return (3.0 * k_v * L**4 / E) ** (1.0 / 3.0)
