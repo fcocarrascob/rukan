@@ -29,7 +29,9 @@ inferior. Ver `SeccionI` para la derivación de M(φ).
 Fuente: Cook, Malkus & Plesha, *Concepts and Applications of Finite Element
 Analysis* — matriz de rigidez de viga-columna plana y vector de cargas
 consistente para carga uniforme. La flexión elastoplástica de sección se deriva
-en el propio `SeccionI` a partir de equilibrio y Navier.
+en el propio `SeccionI` a partir de equilibrio y Navier. Las presiones de
+contacto bajo zapata rígida excéntrica salen de Das, *Fundamentos de Ingeniería
+Geotécnica*, 4.ª ed., §16.7 (ver `presion_zapata_rigida`).
 """
 
 from __future__ import annotations
@@ -48,6 +50,10 @@ __all__ = [
     "SeccionI",
     "MallaFibras",
     "discretizar_I",
+    "PresionZapata",
+    "presion_zapata_rigida",
+    "fraccion_apoyada",
+    "excentricidad_para_fraccion",
 ]
 
 GDL_POR_NODO = 3
@@ -355,3 +361,109 @@ def discretizar_I(sec: SeccionI, n_ala: int, n_alma: int) -> MallaFibras:
     y = np.concatenate([t[0] for t in tramos])
     area = np.concatenate([t[1] for t in tramos])
     return MallaFibras(y=y, area=area)
+
+
+# ==================== ZAPATA RÍGIDA SOBRE SUELO SIN TRACCIÓN ================
+# Presiones de contacto bajo una zapata **rígida** con carga excéntrica, en un
+# suelo que no toma tracción. La notación es la de Das: `Q` carga vertical, `M`
+# momento, `B` el lado en la dirección de la excentricidad y `L` el otro.
+
+
+@dataclass
+class PresionZapata:
+    """Reparto de presiones bajo una zapata rígida, con su longitud de contacto."""
+
+    q_max: float
+    q_min: float
+    a_contacto: float
+    e: float
+    B: float
+
+    @property
+    def despegada(self) -> bool:
+        return self.a_contacto < self.B
+
+    @property
+    def fraccion_apoyada(self) -> float:
+        return self.a_contacto / self.B
+
+
+def presion_zapata_rigida(Q: float, M: float, B: float, L: float) -> PresionZapata:
+    """Presiones de contacto bajo zapata rígida excéntrica, suelo sin tracción.
+
+    Fuente: Das, B. M., *Fundamentos de Ingeniería Geotécnica*, 4.ª ed., §16.7,
+    pp. 490-492 (transcritas de la página rasterizada, no de la capa de texto).
+
+    Con ``e = M/Q`` (Ec. 16.19), mientras la resultante cae dentro del núcleo
+    central el contacto es total y el reparto es lineal::
+
+        q_máx = Q/(BL)·(1 + 6e/B)        (16.20)
+        q_mín = Q/(BL)·(1 − 6e/B)        (16.21)
+
+    En ``e = B/6``, ``q_mín`` se anula. Pasado ese punto la Ec. (16.21) daría
+    tracción, y como el suelo no la toma, la zapata **se despega**: el reparto
+    pasa a ser un triángulo apoyado sobre parte de la base (Das, Fig. 16.6a)::
+
+        q_máx = 4Q / (3L(B − 2e))        (16.22)
+
+    La **longitud de contacto** no está tabulada en Das, pero sale de su propia
+    Ec. (16.22) por estática, sin agregar hipótesis: la resultante del triángulo
+    vale ``½·q_máx·a·L`` y tiene que igualar a ``Q``, así que
+
+        a = 2Q/(q_máx·L) = 2Q·3L(B − 2e)/(4Q·L) = 3·(B/2 − e)
+
+    —que es lo mismo que exigir que el centroide del triángulo, a ``a/3`` del
+    borde, caiga bajo la línea de acción de ``Q``, a ``B/2 − e`` de ese borde—.
+
+    **El reparto no depende de la rigidez del suelo.** No aparece acá ningún
+    módulo de balasto: para una zapata rígida las presiones salen de equilibrio
+    y de la hipótesis de contacto lineal. ``k_s`` fija el asentamiento, no el
+    reparto.
+    """
+    if Q <= 0.0:
+        raise ValueError("Q debe ser una compresión positiva")
+    e = M / Q
+    if abs(e) >= B / 2.0:
+        raise ValueError(
+            f"e = {e:.4g} m cae fuera de la zapata (B/2 = {B / 2:.4g} m): "
+            "no hay equilibrio posible, la zapata vuelca"
+        )
+    e = abs(e)  # el reparto es simétrico; q_máx va al borde que se comprime
+    if e <= B / 6.0:
+        q_max = Q / (B * L) * (1.0 + 6.0 * e / B)
+        q_min = Q / (B * L) * (1.0 - 6.0 * e / B)
+        a = B
+    else:
+        q_max = 4.0 * Q / (3.0 * L * (B - 2.0 * e))
+        q_min = 0.0
+        a = 3.0 * (B / 2.0 - e)
+    return PresionZapata(q_max=q_max, q_min=q_min, a_contacto=a, e=e, B=B)
+
+
+def fraccion_apoyada(e: float, B: float) -> float:
+    """Fracción de la base en compresión, para excentricidad ``e``.
+
+    Derivada de la longitud de contacto ``a = 3(B/2 − e)`` de
+    `presion_zapata_rigida`, saturada en 1 dentro del núcleo central::
+
+        a/B = mín(1, 3/2 − 3·e/B)
+
+    Es la magnitud que NCh2369:2025 §10.1.4 acota (80 % en fundaciones estándar
+    menores, 50 % en mayores). **La norma pide área apoyada, no excentricidad**:
+    la traducción a ``e/B`` es esta derivación, no texto normativo.
+    """
+    if abs(e) >= B / 2.0:
+        return 0.0
+    return min(1.0, 1.5 - 3.0 * abs(e) / B)
+
+
+def excentricidad_para_fraccion(f: float, B: float) -> float:
+    """Excentricidad que deja apoyada exactamente la fracción ``f`` de la base.
+
+    Inversa de `fraccion_apoyada` en la rama despegada: ``e/B = (3/2 − f)/3``.
+    Para ``f = 1`` devuelve ``B/6`` —el núcleo central—, y es lo que permite
+    poner el 80 % y el 50 % de NCh2369 §10.1.4 en la misma escala.
+    """
+    if not 0.0 < f <= 1.0:
+        raise ValueError("la fracción apoyada vive en (0, 1]")
+    return (1.5 - f) / 3.0 * B
