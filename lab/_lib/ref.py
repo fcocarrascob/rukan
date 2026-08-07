@@ -133,12 +133,20 @@ class Portico2D:
 
     ``coords`` es (n_nodos, 2); ``restricciones`` marca con ``True`` los GDL
     fijos; ``cargas`` son cargas nodales globales (Fx, Fy, M).
+
+    ``resortes`` agrega rigidez concentrada a tierra en un nodo, en el mismo
+    orden (ku, kv, kθ). Se suma a la diagonal del GDL, que es todo lo que un
+    resorte a tierra es en rigidez directa. Un GDL restringido gana el resorte
+    igual, pero no se nota: su fila sale del sistema. Existe para la base de
+    columna con rigidez rotacional finita, donde empotrada y rotulada son los
+    dos límites ``kθ → ∞`` y ``kθ = 0`` de la misma ecuación.
     """
 
     coords: np.ndarray
     barras: list[Barra2D]
     restricciones: dict[int, tuple[bool, bool, bool]] = field(default_factory=dict)
     cargas: dict[int, tuple[float, float, float]] = field(default_factory=dict)
+    resortes: dict[int, tuple[float, float, float]] = field(default_factory=dict)
 
     def _geometria(self, b: Barra2D) -> tuple[float, float, float]:
         dx, dy = self.coords[b.j] - self.coords[b.i]
@@ -169,6 +177,11 @@ class Portico2D:
             K[np.ix_(gdl, gdl)] += T.T @ kl @ T
             P[gdl] += T.T @ peq_l
             datos.append((T, kl, peq_l, gdl))
+
+        # Resortes a tierra: rigidez pura en la diagonal del GDL.
+        for nodo, ks in self.resortes.items():
+            for g, k in zip(self._gdl(nodo), ks):
+                K[g, g] += k
 
         fijos = [
             g
