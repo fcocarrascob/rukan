@@ -22,6 +22,18 @@ cada tanto un hito largo cuando el tema lo pide.
 | 02 · Mp = Z·Fy es una asíntota que nunca se toca | `lab/nota02_momento_curvatura_acero.py` | [`lab-momento-plastico-asintota`](https://fcocarrascob.github.io/blog/lab-momento-plastico-asintota/) | 2026-08-03 |
 | 03 · El triángulo bajo la zapata no depende de la rigidez del suelo | `lab/nota03_zapata_sin_traccion.py` | [`lab-zapata-sin-traccion`](https://fcocarrascob.github.io/blog/lab-zapata-sin-traccion/) | 2026-08-05 |
 | 04 · Cuándo la zapata deja de ser rígida | `lab/nota04_zapata_rigida_flexible.py` | [`lab-zapata-rigida-flexible`](https://fcocarrascob.github.io/blog/lab-zapata-rigida-flexible/) | 2026-08-05 |
+| 05 · La base no es empotrada ni rotulada † | `lab/nota05_base_rigidez_rotacional.py` | [`placas-base-empotrada-o-rotulada`](https://fcocarrascob.github.io/acero/placas-base-empotrada-o-rotulada/) | 2026-08-07 |
+
+† **La 05 no es una nota de la serie Laboratorio.** El script vive acá porque es donde vive el
+trabajo con OpenSeesPy, pero su destino es el post 3 de la serie «Placas base» de `struct_pad`,
+que va a `/acero/teoria`: la medición es una sección de ese post y no hay entrada con
+`section: "Laboratorio"`. Cumple igual el criterio de admisión —referencia independiente por
+rigidez directa en numpy contra OpenSeesPy, 12 magnitudes con error < 1e-13— y la cadena
+normativa se leyó en la **página rasterizada** del PDF de la AISC Design Guide 1, 3.ª ed.
+
+De paso `lab/_lib/ref.py` ganó `Portico2D.resortes`: rigidez concentrada a tierra por GDL. Es lo
+que permite que empotrada y rotulada sean los dos límites `kθ → ∞` y `kθ = 0` de la misma
+ecuación, en vez de tres modelos distintos que habría que confiar en que son el mismo pórtico.
 
 ---
 
