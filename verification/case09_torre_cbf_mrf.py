@@ -274,11 +274,19 @@ sp_z_dis = make_spectrum(sa_v, I_ * ESC03 / R_V)        # vertical diseño (Ec. 
 
 
 def ext_horizontal(dof: int) -> dict:
+    # Las derivas dr{k} se combinan como respuesta modal propia (CQC de
+    # derivas), no como resta de máximos CQC: los máximos de dos niveles no
+    # ocurren en el mismo instante. Aquí difieren < 2 % (el modo dominante
+    # lleva ~87-89 % de la masa), pero el extractor es la forma correcta y
+    # alimenta la verificación §6.3 del post de deformaciones.
     return {
         "Q0": lambda: sum(ops.nodeReaction(n, dof) for n in BASES),
         "u1": lambda: ops.nodeDisp(nid(1, 1), dof),
         "u2": lambda: ops.nodeDisp(nid(2, 1), dof),
         "u3": lambda: ops.nodeDisp(nid(3, 1), dof),
+        "dr1": lambda: ops.nodeDisp(nid(1, 1), dof),
+        "dr2": lambda: ops.nodeDisp(nid(2, 1), dof) - ops.nodeDisp(nid(1, 1), dof),
+        "dr3": lambda: ops.nodeDisp(nid(3, 1), dof) - ops.nodeDisp(nid(2, 1), dof),
         "colP": lambda: -ops.eleResponse(COL11, "localForces")[0],
         "colM3": lambda: ops.eleResponse(COL11, "localForces")[5],
     }
@@ -380,6 +388,14 @@ for name in ("RSX_DIS", "RSX_REF", "RSY_DIS", "RSY_REF"):
         r, s = CASOS[name][f"u{lev}"], SAP_U[name][lev - 1]
         print(f"    {name} n{lev}  Rukan {r:.9f}  SAP {s:.9f}  err {abs(r-s)/s*100:8.5f}%")
 
+print("\n  Derivas de entrepiso §6.3 (CQC de derivas modales), espectro de referencia [mm]:")
+LIM_63 = 0.015 * 4.0 * 1000.0  # 0,015·h con h = 4 000 mm
+for name, rot in (("RSX_REF", "X (CBF)"), ("RSY_REF", "Y (MRF)")):
+    ds = [CASOS[name][f"dr{i}"] * 1000.0 for i in (1, 2, 3)]
+    veredictos = "  ".join(f"piso {i}: {d:8.3f} ({d/LIM_63:5.3f} del limite)"
+                           for i, d in enumerate(ds, start=1))
+    print(f"    {rot}  {veredictos}")
+
 print("\n  Medias diagonales piso 1 cara A, axial P bajo RSX_DIS [kN]:")
 for k in (1, 2, 3, 4):
     r, s = RSX_DIS[f"D1A{k}"], SAP_D1A[k - 1]
@@ -443,6 +459,19 @@ for k in (1, 2, 3, 4):
     check(f"D1A{k}", RSX_DIS[f"D1A{k}"], SAP_D1A[k - 1])
 check("COL11 P", RSY_DIS["colP"], SAP_COL11["P"])
 check("COL11 M3", RSY_DIS["colM3"], SAP_COL11["M3"])
+
+# Derivas §6.3 (regresión rukan; SAP no exporta la deriva CQC directamente en
+# modelos sin diafragma, así que la referencia es el propio extractor, anclado
+# la primera vez el 2026-08-12 y citado por el post de deformaciones).
+DERIVAS_REF = {"RSX_REF": (9.561, 10.121, 6.368),
+               "RSY_REF": (112.221, 169.469, 112.137)}  # mm
+for name, refs in DERIVAS_REF.items():
+    for i, ref in enumerate(refs, start=1):
+        check(f"{name} dr{i}", CASOS[name][f"dr{i}"] * 1000.0, ref, 5e-4)
+assert max(CASOS["RSX_REF"][f"dr{i}"] * 1000.0 for i in (1, 2, 3)) < LIM_63, \
+    "X cumple 0,015h (§6.3)"
+assert all(CASOS["RSY_REF"][f"dr{i}"] * 1000.0 > LIM_63 for i in (1, 2, 3)), \
+    "Y excede 0,015h en los tres pisos (§6.3) - el hallazgo del post 3"
 
 # Cadena normativa: banda, R1 y consistencias internas.
 assert abs(Q0MIN - 168.0) < 1e-9, "Q0min = 0,25·0,56·1200 (Ec. 12)"
