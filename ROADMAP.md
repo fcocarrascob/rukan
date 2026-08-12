@@ -163,6 +163,36 @@ no tiene y que son la base de todo: **casos de carga** y **combinaciones**.
 76.98 kN/m³ para acero) pero **masa = 0** (opción 2), para que el peso propio
 cargue pero el modal siga usando solo las masas explícitas de nudo (como caso 7).
 
+## ✅ Caso 9 CERRADO — torre CBF/MRF, espectro NCh2369:2025 por dirección (error < 0.01 %)
+
+El escenario general de la estructura industrial chilena: torre 6×4 m de 3
+niveles, **arriostrada en X y marco de momento en Y**, con un espectro de diseño
+**distinto por dirección** porque el R* de la Ec. (1b) se calcula con el T* del
+modo dominante de cada una (flujo de dos pasadas: modal → T* → R* → casos RS).
+Perfiles soldados chilenos (HN/IN/cajón) con propiedades derivadas de placas y
+extraídas de SAP como fuente única; bases mixtas por GDL (articulada en el plano
+CBF, empotrada en el MRF); columnas con eje fuerte al marco. Verificado contra
+SAP2000: 12 períodos, masas participantes, 5 cortes basales CQC (diseño X/Y,
+referencia X/Y, vertical R_V=2), 12 desplazamientos, axiales de diagonales y
+P/M3 de columna, todo < 0.01 % (períodos ~1e-8). El espectro 2025 va **inline en
+el caso** (con la rama R ≤ 1 → R* = 1 impresa en la 3.ª ed.), anclado con 6
+ordenadas contra `nch2369-spectrum.ts` de struct_pad. Incluye la cadena
+normativa como asserts: Q0mín/Q0máx (§5.12–§5.13) por dirección, R₁ (Ec. 14) y
+100/30.
+
+- Caso: `verification/case09_torre_cbf_mrf.py`. Build SAP:
+  `case9_torre_build` + `case9_torre_extract` (`torre_cbf_mrf.sdb`).
+- **Trampa nueva (SAP OAPI):** el `DampRatio` de `Func.FuncRS.SetUser` debe ser
+  el ξ modal del caso. Con el default 0,05, SAP **re-corrige** la función hacia
+  el ξ del caso con Newmark-Hall (×1,2277 de 5 %→2 %) y **duplica** el
+  (0,05/ξ)^0,4 que las ordenadas NCh2369 ya traen: +22,8 % de demanda, uniforme
+  y silencioso. Se delató como factor constante entre motores.
+- Reafirmado el caso 5: sin deformación por corte en SAP — con las As automáticas
+  el período del MRF cambia 4 % (1,038 → 0,996 s). Ruta nueva y preferida: secciones
+  **con forma** (`SetISection`/`SetTube`, legibles en la GUI — `SetGeneral` se dibuja
+  como un círculo genérico) + `SetModifiers` con As2/As3 ×1e6, que reproduce la
+  convención As=0 a ~5e-8 relativo.
+
 ## ✅ Laboratorio ABIERTO — la segunda línea de contenido (notas 01 y 02 publicadas)
 
 El repo ahora alimenta **dos** líneas de posts. `verification/` valida el motor

@@ -25,6 +25,7 @@ python verification/case01_cantilever_column.py
 | 6 | Arriostramiento / liberación de momentos | axial, momentos, biela = Truss | SAP | ✅ |
 | 7 | Galpón 3D completo | 2 direcciones, CQC, 100/30 | SAP | ✅ |
 | 8 | Peso propio, casos y combinaciones | peso distribuido/concentrado, combinaciones | SAP | ✅ |
+| 9 | Torre CBF/MRF, espectro por dirección (NCh2369:2025) | R* con T* por dirección (Ec. 1b), 5 casos RS, banda §5.12–§5.13, R₁ | SAP | ✅ |
 
 Los casos contra SAP2000 se armaron en el **notebook del trabajo** (vía MCP de
 SAP2000); acá quedan con los valores de referencia ya extraídos, así que corren
