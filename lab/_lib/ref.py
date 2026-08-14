@@ -83,14 +83,27 @@ def rotacion(c: float, s: float) -> np.ndarray:
     return t
 
 
-def cargas_equivalentes(w: float, L: float) -> np.ndarray:
-    """Vector de cargas nodales consistentes de una carga uniforme local ``w``.
+def cargas_equivalentes(w: float, L: float, wx: float = 0.0) -> np.ndarray:
+    """Vector de cargas nodales consistentes de una carga uniforme local.
 
-    ``P_eq = ∫ Nᵀ w dx = w·[0, L/2, L²/12, 0, L/2, −L²/12]`` en ejes locales.
+    ``w`` es la componente **transversal** (eje local +y) y ``wx`` la
+    **axial** (eje local +x)::
+
+        P_eq = ∫ Nᵀ q dx = w·[0, L/2, L²/12, 0, L/2, −L²/12]
+                         + wx·[L/2, 0, 0, L/2, 0, 0]
+
     Con la barra empotrada en ambos extremos, las fuerzas de extremo valen
     ``S = −P_eq``, es decir los clásicos ``wL/2`` y ``wL²/12``.
+
+    La componente axial no es un adorno: una barra **vertical** bajo gravedad
+    tiene componente transversal **cero**, así que sin `wx` su peso propio y
+    todo lo que cuelgue de ella desaparecen del modelo sin dejar rastro —el
+    equilibrio de la parte que sí se aplicó sigue cerrando— y en el pórtico de
+    un galpón eso cambia la flecha de cumbrera un 6 %.
     """
-    return w * np.array([0.0, L / 2, L**2 / 12, 0.0, L / 2, -(L**2) / 12])
+    return w * np.array([0.0, L / 2, L**2 / 12, 0.0, L / 2, -(L**2) / 12]) + wx * np.array(
+        [L / 2, 0.0, 0.0, L / 2, 0.0, 0.0]
+    )
 
 
 @dataclass
@@ -102,7 +115,8 @@ class Barra2D:
     E: float
     A: float
     I: float
-    w: float = 0.0  # carga uniforme en el eje local +y
+    w: float = 0.0   # carga uniforme en el eje local +y (transversal)
+    wx: float = 0.0  # carga uniforme en el eje local +x (axial)
 
 
 @dataclass
@@ -157,7 +171,7 @@ class Portico2D:
             L, c, s = self._geometria(b)
             T = rotacion(c, s)
             kl = k_local(b.E, b.A, b.I, L)
-            peq_l = cargas_equivalentes(b.w, L)
+            peq_l = cargas_equivalentes(b.w, L, b.wx)
             gdl = self._gdl(b.i) + self._gdl(b.j)
             K[np.ix_(gdl, gdl)] += T.T @ kl @ T
             P[gdl] += T.T @ peq_l
@@ -186,6 +200,69 @@ class Portico2D:
             reacciones=reacciones.reshape(-1, GDL_POR_NODO),
             fuerzas=fuerzas,
         )
+
+    def rigidez(self) -> np.ndarray:
+        """Matriz de rigidez global ensamblada, sin condiciones de borde."""
+        n = len(self.coords) * GDL_POR_NODO
+        K = np.zeros((n, n))
+        for b in self.barras:
+            L, c, s = self._geometria(b)
+            T = rotacion(c, s)
+            gdl = self._gdl(b.i) + self._gdl(b.j)
+            K[np.ix_(gdl, gdl)] += T.T @ k_local(b.E, b.A, b.I, L) @ T
+        return K
+
+    def periodos(self, masas: dict[int, float], n_modos: int = 6) -> list[float]:
+        """Períodos de vibración [s], con masa traslacional concentrada en nudos.
+
+        ``masas`` es ``{nodo: masa}`` y se aplica a los **dos** GDL de traslación
+        del nudo, que es como un programa arma la masa a partir de una carga de
+        gravedad. Las rotaciones no llevan inercia.
+
+        Los GDL sin masa **se condensan** (condensación estática), no se
+        eliminan. La diferencia no es sutil: borrarlos equivale a empotrar todos
+        los giros, y en el pórtico de un galpón eso da un período fundamental
+        **ocho veces más corto**. El error entra sin ninguna señal, porque la
+        matriz reducida sigue siendo definida positiva y el eigen resuelve sin
+        quejarse. Con ``m`` = GDL con masa y ``s`` = GDL sin masa::
+
+            K_cc = K_mm − K_ms · K_ss⁻¹ · K_sm
+
+        y de ahí ``ω² = eig(M_mm⁻¹ · K_cc)``. Para masa concentrada es exacta, no
+        aproximada: los GDL condensados no tienen inercia, así que su ecuación de
+        movimiento es estática y la condensación no pierde nada.
+
+        Fuente: Chopra, *Dynamics of Structures*, §9.3 (condensación estática de
+        los GDL sin masa) y §10.2 (problema de valores propios).
+        """
+        K = self.rigidez()
+        n = len(self.coords) * GDL_POR_NODO
+        fijos = {
+            g
+            for nodo, restr in self.restricciones.items()
+            for g, fijo in zip(self._gdl(nodo), restr)
+            if fijo
+        }
+        m_diag = np.zeros(n)
+        for nodo, m in masas.items():
+            base = self._gdl(nodo)
+            m_diag[base[0]] += m
+            m_diag[base[1]] += m
+
+        libres = [g for g in range(n) if g not in fijos]
+        con = [g for g in libres if m_diag[g] > 0.0]
+        sin = [g for g in libres if m_diag[g] <= 0.0]
+        if not con:
+            raise ValueError("no hay GDL libres con masa")
+
+        Kcc = K[np.ix_(con, con)]
+        if sin:
+            Kms = K[np.ix_(con, sin)]
+            Kcc = Kcc - Kms @ np.linalg.solve(K[np.ix_(sin, sin)], Kms.T)
+
+        w2 = np.linalg.eigvals(np.diag(1.0 / m_diag[con]) @ Kcc)
+        w2 = np.sort(w2.real[w2.real > 1e-12])
+        return [float(2.0 * np.pi / np.sqrt(x)) for x in w2[:n_modos]]
 
 
 # ============================== SECCIONES =================================

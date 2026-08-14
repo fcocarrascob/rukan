@@ -9,6 +9,14 @@ cálculo de la serie. Los dos motores comparten **solo los datos**
 (`case10_data.py`); el ensamble, los autovalores y la combinación modal los hace
 cada uno por su cuenta.
 
+Precisión sobre qué significa «compartir los datos»: la geometría, las secciones y
+el cálculo de presiones de viento están **portados literalmente** del script de
+SAP, no re-derivados. Es deliberado. Si este archivo volviera a leer la Figura 12
+de NCh432 por su cuenta, una discrepancia quedaría ambigua —¿falló el análisis o
+la lectura de la norma?— y esa es justo la distinción que el contraste existe para
+hacer. La fidelidad del port se comprueba por sus resultantes: las cinco de viento
+coinciden con las de SAP a 5e-7 kN.
+
 Estructura: galpón industrial a dos aguas de 24 × 24 m para faena minera de
 altiplano (Pica, Tarapacá, ~3 800 m). 5 marcos a 6,0 m, luz 24,0 m, pendiente 10°,
 alero 8,0 m, bases articuladas.
@@ -460,10 +468,11 @@ def main() -> None:
     }
     assert len(GRUPOS["ENVG"]) == 63 and len(GRUPOS["ENVE"]) == 12
 
-    def envolver(nombres):
-        out = {}
+    def envolver(nombres, con_gobernantes=False):
+        out, quien = {}, {}
         for nm in MIEMBROS:
             pmin, pmax, mabs = 1e30, -1e30, 0.0
+            g = {"P_comp": None, "P_trac": None, "M3": None}
             for c in nombres:
                 items = combos[c]
                 for st in ("Pi", "Pj"):
@@ -471,16 +480,21 @@ def main() -> None:
                                  if k not in ESPECTRALES)
                     spr_p = sum(abs(f) * casos[k][nm + "|" + st] for k, f in items
                                 if k in ESPECTRALES)
-                    pmin = min(pmin, base_p - spr_p)
-                    pmax = max(pmax, base_p + spr_p)
+                    if base_p - spr_p < pmin:
+                        pmin, g["P_comp"] = base_p - spr_p, c
+                    if base_p + spr_p > pmax:
+                        pmax, g["P_trac"] = base_p + spr_p, c
                 for st in ("Mi", "Mj", "Mm"):
                     b = sum(f * casos[k][nm + "|" + st] for k, f in items
                             if k not in ESPECTRALES)
                     s = sum(abs(f) * casos[k][nm + "|" + st] for k, f in items
                             if k in ESPECTRALES)
-                    mabs = max(mabs, abs(b + s), abs(b - s))
+                    v = max(abs(b + s), abs(b - s))
+                    if v > mabs:
+                        mabs, g["M3"] = v, c
             out[nm] = (pmin, pmax, mabs)
-        return out
+            quien[nm] = g
+        return (out, quien) if con_gobernantes else out
 
     SAP_ENV = {
         "ENV": {"COL3A_1": (-190.14, 13.964, 158.321), "COL3A_4": (-180.384, 21.562, 633.284),
@@ -518,7 +532,40 @@ def main() -> None:
     print(f"\n    peor error relativo de las tres envolventes: {peor_env:.2e}")
     assert peor_env < 0.02, peor_env
 
-    print("\n  OK capa C - 79 combinaciones y las tres envolventes.")
+    # --- De 79 combinaciones, ¿cuantas dimensionan algo? ---
+    # Es la pregunta que justifica el post: armar el arbol completo es barato,
+    # pero la envolvente la deciden unas pocas. Se contrasta ademas contra las
+    # gobernantes que reporto SAP, miembro a miembro.
+    _, quien = envolver(GRUPOS["ENV"], con_gobernantes=True)
+    GOB_SAP = {
+        "COL3A_1": ("G3A_B", "G6_TXPP", "G3A_B"), "COL3A_4": ("G3A_B", "G6_TXPP", "G3A_B"),
+        "DIN3_1": ("G3A_B", "G6_LYNP", "G3A_B"), "DIN3_2": ("G3A_B", "G6_LYNP", "G3A_I"),
+        "DIN3_3": ("G3A_B", "G6_LYNP", "G3A_B"), "PUN00_1": ("E2N_B", "E2P_A", "E3P_A"),
+        "PUN09_2": ("G3A_B", "G6_TXNP", "E3P_A"), "ARWA1_1": ("E2P_A", "E2N_B", "E3P_A"),
+        "ART1_00_1": ("G3A_B", "E2N_B", "E3P_A"), "PIL1_06": ("E3P_A", "E3N_A", "G4_BLYPN"),
+    }
+    print("\n  Cuantas de las 79 dimensionan algo (combo gobernante por miembro):")
+    print(f"    {'miembro':10s} {'P_comp':>12s} {'SAP':>10s} {'P_trac':>12s} {'SAP':>10s}"
+          f" {'|M3|':>12s} {'SAP':>10s}")
+    usadas, coinciden, comparadas = set(), 0, 0
+    for nm in MIEMBROS:
+        g, s = quien[nm], GOB_SAP[nm]
+        mios = (g["P_comp"], g["P_trac"], g["M3"])
+        print(f"    {nm:10s} {mios[0]:>12s} {s[0]:>10s} {mios[1]:>12s} {s[1]:>10s}"
+              f" {mios[2]:>12s} {s[2]:>10s}")
+        usadas.update(mios)
+        for a, b in zip(mios, s):
+            comparadas += 1
+            coinciden += (a == b)
+    print(f"\n    combinaciones distintas que gobiernan algo: {len(usadas)} de 79")
+    print(f"    -> {sorted(usadas)}")
+    print(f"    coinciden con la gobernante de SAP: {coinciden} de {comparadas}")
+    assert len(usadas) <= 12, len(usadas)
+    # PIL1_06 no tiene traccion (P_max = 0,0 exacto en la estacion liberada), asi
+    # que su "gobernante de traccion" es un empate y no tiene por que coincidir.
+    assert coinciden >= comparadas - 2, (coinciden, comparadas)
+
+    print("\n  OK capa C - 79 combinaciones, las tres envolventes y las gobernantes.")
     print("\n  OK caso 10 - el galpon del altiplano reproduce el modelo congelado"
           " de SAP2000\n     sin abrir el programa.")
 

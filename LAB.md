@@ -21,6 +21,20 @@ cada tanto un hito largo cuando el tema lo pide.
 | 01 · El momento del vano no está en la salida del elemento | `lab/nota01_eleload_empotramiento.py` | [`lab-eleload-empotramiento`](https://fcocarrascob.github.io/blog/lab-eleload-empotramiento/) | 2026-08-03 |
 | 02 · Mp = Z·Fy es una asíntota que nunca se toca | `lab/nota02_momento_curvatura_acero.py` | [`lab-momento-plastico-asintota`](https://fcocarrascob.github.io/blog/lab-momento-plastico-asintota/) | 2026-08-03 |
 | 03 · El triángulo bajo la zapata no depende de la rigidez del suelo | `lab/nota03_zapata_sin_traccion.py` | [`lab-zapata-sin-traccion`](https://fcocarrascob.github.io/blog/lab-zapata-sin-traccion/) | 2026-08-05 |
+| 06 · Prismatizar o discretizar el peralte variable † | `lab/nota06_tapered_convergencia.py` | `rukan-verificacion-galpon-tapered` (post 2 de la serie del galpón) | 2026-08-13 |
+
+† **La 06 no es una nota de la serie Laboratorio.** El script vive acá porque es donde vive el
+trabajo con OpenSeesPy y donde está la referencia independiente, pero su destino es el post 2 de la
+serie del galpón del altiplano, que va a `blog/` con `section: "Rukan"`. Cumple igual el criterio de
+admisión —rigidez directa en numpy puro contra OpenSeesPy, cinco magnitudes con error 0,0000 %— y
+rehace un estudio que existía solo como resultados: sus entradas nunca se registraron
+(`struct_pad/SERIE-GALPON.md` §8), así que no era reproducible.
+
+De paso, `lab/_lib/ref.py` ganó dos cosas que le faltaban y que cualquier nota de dinámica va a
+necesitar: **`Portico2D.periodos`**, con condensación estática de los GDL sin masa, y la componente
+**axial** de la carga uniforme en `Barra2D`/`cargas_equivalentes`. La segunda no es un adorno: una
+barra vertical bajo gravedad tiene componente transversal cero, así que sin ella el peso propio de
+las columnas desaparecía del modelo sin dejar rastro.
 
 ---
 
