@@ -553,14 +553,17 @@ def seismic_mass(model: Model, meta: Meta, pats: dict,
     -------------------------------------------------
     Con `False` (por omisión) se **excluye** la masa de los pilares de hastial, y
     ese es el ajuste que hace calzar el modal con SAP2000: T₁ pasa de 0,883866 s a
-    0,852628 s contra los 0,852657 s de SAP, y las tres masas modales acumuladas
-    coinciden a la cuarta cifra. Con `True` el modelo queda 3,7 % más flexible.
+    0,852628 s contra los 0,852657 s de SAP, y las masas modales acumuladas
+    coinciden —X e Y a la cuarta cifra, Z a la tercera: 0,6509 contra 0,6513—.
+    Con `True` el modelo queda 3,7 % más flexible.
 
     El porqué es el mismo release que se documenta en `assemble`: el pilar de
     hastial lleva la **P liberada arriba**, así que todo su peso vertical —el
     propio y el del revestimiento que carga— reacciona en su propia base y nunca
-    llega al nudo de techo. SAP arrastra esa liberación al armado de la masa y deja
-    los 77,89 kN del pilar fuera de la matriz.
+    llega al nudo de techo. Todo indica que SAP arrastra esa liberación al armado de
+    la masa y deja los 77,89 kN del pilar fuera de la matriz: es la explicación que
+    cierra los números, no una lectura del programa — no se contrastó contra las
+    masas nodales del .sdb.
 
     **Eso es discutible, y el post lo discute**: la liberación axial gobierna el
     camino de la carga *vertical*, pero la inercia *horizontal* del pilar existe
