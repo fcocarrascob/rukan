@@ -96,8 +96,8 @@ en la estación exacta bajo el puntero.
 
 Con la malla del memo, dieciséis tramos por corte, cada barra es corta y esa parábola es una
 corrección pequeña: el diagrama se parece mucho a la poligonal por los nudos. La superposición
-manda donde un miembro **es** un solo elemento, que es adonde va el lote siguiente: la viga
-carrilera del eslabón 08, con sus dos ruedas sobre un vano de un tramo.
+manda donde un miembro **es** un solo elemento, y eso se ve en la entrada de al lado: la
+[viga carrilera](../carrilera/) del eslabón 08, con sus dos ruedas sobre un vano de un tramo.
 
 ## Límites
 
@@ -113,9 +113,9 @@ firmes un `T` leído de aquí.
 Los seis empujes son unitarios y **ninguno es una hipótesis de diseño**. El modelo no tiene
 casos de nieve —el esquema de proyecto todavía no declara cargas distribuidas que no sean el
 peso propio— ni cargas de rueda de grúa aplicadas donde de verdad entran, porque la viga
-carrilera **no está en este modelo**: es un vano simple de un solo tramo y tiene su propia
-entrada. Los dos casos sísmicos son estáticos equivalentes repartidos
-por masa; el análisis espectral con T\* y R\* por dirección es del esquema v2 del archivo de
+carrilera **no está en este modelo**: vive en [su propia entrada](../carrilera/), un vano
+simple de un solo tramo con las dos ruedas encima. Los dos casos sísmicos son estáticos
+equivalentes repartidos por masa; el análisis espectral con T\* y R\* por dirección es del esquema v2 del archivo de
 proyecto y todavía no existe.
 
 ## Procedencia

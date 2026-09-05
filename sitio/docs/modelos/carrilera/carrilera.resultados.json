@@ -1,0 +1,35 @@
+{
+  "esquema": "rukan/resultados@1",
+  "proyecto": "carrilera.proyecto.json",
+  "sha256_proyecto": "8752408e76574d67629ae624f07f9539f26805c3fb6b93f495ee4190b0114444",
+  "rukan": "0.1.0",
+  "commit": "a1b0924",
+  "openseespy": "3.8.0.0",
+  "generado": "2026-09-05T18:00:04",
+  "unidades": {
+    "M_ux": "kN·m",
+    "M_serv": "kN·m",
+    "M_L4": "kN·m",
+    "M_centro": "kN·m",
+    "M_3L4": "kN·m",
+    "M_D_centro": "kN·m",
+    "V_ux": "kN",
+    "R_izq": "kN",
+    "R_der": "kN",
+    "d_W1": "m",
+    "peso_total": "kN"
+  },
+  "valores": {
+    "M_ux": -707.2702838948665,
+    "M_serv": -361.60562221333305,
+    "M_L4": -459.15790868828105,
+    "M_centro": -648.3281107843745,
+    "M_3L4": -513.3342574882803,
+    "M_D_centro": -11.40906832031249,
+    "V_ux": -246.70966889833338,
+    "R_izq": 246.70966889833338,
+    "R_der": 387.05221055166453,
+    "d_W1": -0.007323961551314465,
+    "peso_total": 12.169672875
+  }
+}

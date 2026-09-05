@@ -1,0 +1,255 @@
+{
+  "esquema": "rukan/proyecto@1",
+  "titulo": "Viga carrilera — nch2369-galpon-grua",
+  "unidades": {
+    "longitud": "m",
+    "fuerza": "kN",
+    "masa": "t"
+  },
+  "origen": {
+    "script": "sitio/docs/modelos/carrilera/_generar.py",
+    "generador": "case11_data.carrilera_props() sobre un vano de s_marco"
+  },
+  "materiales": [
+    {
+      "id": 1,
+      "E": 200000000.0,
+      "nu": 0.3,
+      "rho": 10.538949246093603
+    }
+  ],
+  "secciones": [
+    {
+      "id": 1,
+      "nombre": "CARRILERA",
+      "A": 0.0157,
+      "Iy": 8.971523333333332e-05,
+      "Iz": 0.0012655934065817411,
+      "J": 1.2729333333333335e-06
+    }
+  ],
+  "nudos": [
+    {
+      "id": 1,
+      "nombre": "A",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "fijo": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "nombre": "W1",
+      "x": 2.9,
+      "y": 0.0,
+      "z": 0.0
+    },
+    {
+      "id": 3,
+      "nombre": "W2",
+      "x": 6.3,
+      "y": 0.0,
+      "z": 0.0
+    },
+    {
+      "id": 4,
+      "nombre": "B",
+      "x": 7.5,
+      "y": 0.0,
+      "z": 0.0,
+      "fijo": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "barras": [
+    {
+      "id": 1,
+      "nombre": "CAR_1",
+      "i": 1,
+      "j": 2,
+      "material": 1,
+      "seccion": 1,
+      "vecxz": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "id": 2,
+      "nombre": "CAR_2",
+      "i": 2,
+      "j": 3,
+      "material": 1,
+      "seccion": 1,
+      "vecxz": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "id": 3,
+      "nombre": "CAR_3",
+      "i": 3,
+      "j": 4,
+      "material": 1,
+      "seccion": 1,
+      "vecxz": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    }
+  ],
+  "masas": [],
+  "casos": {
+    "D": {
+      "peso_propio": "distribuido"
+    },
+    "Rv": {
+      "nodales": [
+        {
+          "nudo": "W1",
+          "F": [
+            0,
+            0,
+            -193.48696,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "nudo": "W2",
+          "F": [
+            0,
+            0,
+            -193.48696,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "Rw": {
+      "nodales": [
+        {
+          "nudo": "W1",
+          "F": [
+            0,
+            0,
+            -161.23913,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "nudo": "W2",
+          "F": [
+            0,
+            0,
+            -161.23913,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "combinaciones": {
+    "U": {
+      "D": 1.2,
+      "Rv": 1.6
+    }
+  },
+  "analisis": {},
+  "salidas": {
+    "M_ux": {
+      "que": "esfuerzo",
+      "barra": "CAR_1",
+      "componente": "Mz",
+      "x_rel": 1.0,
+      "caso": "U"
+    },
+    "M_serv": {
+      "que": "esfuerzo",
+      "barra": "CAR_1",
+      "componente": "Mz",
+      "x_rel": 1.0,
+      "caso": "Rw"
+    },
+    "M_L4": {
+      "que": "esfuerzo",
+      "barra": "CAR_1",
+      "componente": "Mz",
+      "x": 1.875,
+      "caso": "U"
+    },
+    "M_centro": {
+      "que": "esfuerzo",
+      "barra": "CAR_2",
+      "componente": "Mz",
+      "x": 0.8500000000000001,
+      "caso": "U"
+    },
+    "M_3L4": {
+      "que": "esfuerzo",
+      "barra": "CAR_2",
+      "componente": "Mz",
+      "x": 2.725,
+      "caso": "U"
+    },
+    "M_D_centro": {
+      "que": "esfuerzo",
+      "barra": "CAR_2",
+      "componente": "Mz",
+      "x": 0.8500000000000001,
+      "caso": "D"
+    },
+    "V_ux": {
+      "que": "esfuerzo",
+      "barra": "CAR_1",
+      "componente": "Vy",
+      "x_rel": 0.0,
+      "caso": "U"
+    },
+    "R_izq": {
+      "que": "reaccion",
+      "nudo": "A",
+      "gdl": "Uz",
+      "caso": "U"
+    },
+    "R_der": {
+      "que": "reaccion",
+      "nudo": "B",
+      "gdl": "Uz",
+      "caso": "U"
+    },
+    "d_W1": {
+      "que": "desplazamiento",
+      "nudo": "W1",
+      "gdl": "Uz",
+      "caso": "Rw"
+    },
+    "peso_total": {
+      "que": "peso_total"
+    }
+  }
+}

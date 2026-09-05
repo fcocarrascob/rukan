@@ -100,6 +100,11 @@ TUBO_PANEL = (0.125, 0.005)
 CAR_BFS, CAR_TFS = 0.350, 0.020
 CAR_HW, CAR_TW = 0.650, 0.008
 CAR_BFI, CAR_TFI = 0.250, 0.014
+# Riel ASCE 85 lb/yd. La designación da 85 lb/yd = 42,16465 kg/m; el memo la
+# redondea a 42,16 y con ella calcula, así que ésa es la que se copia —la regla
+# de la cifra impresa—. Con `G_MEMO` son los 0,41359 kN/m que el 08 · C4 suma al
+# peso de la viga para llegar a `w_carril = 1,62262 kN/m`.
+M_RIEL_LIN = 0.04216  # t/m — riel ASCE 85 lb/yd            (08 · S3 · C4)
 
 # ============================ MATERIAL =============================
 # ASTM A572 Gr. 50 en plancha.                               (07 · S5 · 10 · S1)
