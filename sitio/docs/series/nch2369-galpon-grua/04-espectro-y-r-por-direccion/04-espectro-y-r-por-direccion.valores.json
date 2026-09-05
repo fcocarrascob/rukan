@@ -1,0 +1,582 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 4,
+ "slug": "espectro-y-r-por-direccion",
+ "titulo": "Espectro y R* por dirección",
+ "normas": [
+  "NCh2369:2025"
+ ],
+ "hereda_de": [
+  "01"
+ ],
+ "entra": {
+  "I": {
+   "valor": 1.0,
+   "unidad": "—",
+   "de": "01",
+   "paso": "A1"
+  },
+  "R_T7": {
+   "valor": 5.0,
+   "unidad": "—",
+   "de": "01",
+   "paso": "D1"
+  },
+  "xi": {
+   "valor": 0.02,
+   "unidad": "—",
+   "de": "01",
+   "paso": "D1"
+  },
+  "k_amp": {
+   "valor": 0.7,
+   "unidad": "—",
+   "de": "01",
+   "paso": "C3"
+  },
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "h_libre": {
+   "valor": 10.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  }
+ },
+ "caso": {
+  "zona": {
+   "valor": 2.0,
+   "unidad": "—"
+  },
+  "A_0": {
+   "valor": 0.3,
+   "unidad": "g"
+  },
+  "S_C": {
+   "valor": 1.05,
+   "unidad": "—"
+  },
+  "r_C": {
+   "valor": 4.5,
+   "unidad": "—"
+  },
+  "T0_C": {
+   "valor": 0.4,
+   "unidad": "s"
+  },
+  "p_C": {
+   "valor": 1.5,
+   "unidad": "—"
+  },
+  "q_C": {
+   "valor": 3.0,
+   "unidad": "—"
+  },
+  "T1_C": {
+   "valor": 0.35,
+   "unidad": "s"
+  },
+  "A_0_h": {
+   "valor": 0.4,
+   "unidad": "g"
+  },
+  "S_D": {
+   "valor": 1.0,
+   "unidad": "—"
+  },
+  "r_D": {
+   "valor": 3.5,
+   "unidad": "—"
+  },
+  "T0_D": {
+   "valor": 0.6,
+   "unidad": "s"
+  },
+  "p_D": {
+   "valor": 1.0,
+   "unidad": "—"
+  },
+  "q_D": {
+   "valor": 2.5,
+   "unidad": "—"
+  },
+  "TX_d": {
+   "valor": 0.2,
+   "unidad": "s"
+  },
+  "TY_d": {
+   "valor": 0.4,
+   "unidad": "s"
+  },
+  "R_liv": {
+   "valor": 4.0,
+   "unidad": "—"
+  },
+  "k_amp_liv": {
+   "valor": 0.5,
+   "unidad": "—"
+  },
+  "xi_ref": {
+   "valor": 0.05,
+   "unidad": "—"
+  },
+  "R_piso": {
+   "valor": 1.5,
+   "unidad": "—"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "A_r": {
+    "valor": 0.42,
+    "unidad": "g"
+   }
+  },
+  "A2": {
+   "S_suelo": {
+    "valor": 1.05,
+    "unidad": "—"
+   },
+   "r_s": {
+    "valor": 4.5,
+    "unidad": "—"
+   },
+   "T_0": {
+    "valor": 0.4,
+    "unidad": "s"
+   },
+   "p_suelo": {
+    "valor": 1.5,
+    "unidad": "—"
+   },
+   "q_s": {
+    "valor": 3.0,
+    "unidad": "—"
+   },
+   "T_1": {
+    "valor": 0.35,
+    "unidad": "s"
+   }
+  },
+  "A3": {
+   "ArS": {
+    "valor": 0.441,
+    "unidad": "g"
+   },
+   "ArS_harneros": {
+    "valor": 0.5599999999999999,
+    "unidad": "g"
+   },
+   "raz_ArS": {
+    "valor": 0.7875000000000001,
+    "unidad": "—"
+   }
+  },
+  "B1": {
+   "f_xi": {
+    "valor": 1.4426999059072136,
+    "unidad": "—"
+   }
+  },
+  "B2": {
+   "u_pico": {
+    "valor": 0.8021716063658764,
+    "unidad": "—"
+   },
+   "T_pico": {
+    "valor": 0.34533307973333316,
+    "unidad": "s"
+   },
+   "Sa_pico": {
+    "valor": 1.236954776416541,
+    "unidad": "g"
+   },
+   "Sa_h_020": {
+    "valor": 1.1401901040551565,
+    "unidad": "g"
+   },
+   "raz_Sa_020": {
+    "valor": 0.8907884548324428,
+    "unidad": "—"
+   }
+  },
+  "C4": {
+   "Sa_ref_X": {
+    "valor": 1.015668181006535,
+    "unidad": "g"
+   },
+   "R_star_X": {
+    "valor": 4.0,
+    "unidad": "—"
+   },
+   "pena_rampa": {
+    "valor": 1.25,
+    "unidad": "—"
+   },
+   "sens_R": {
+    "valor": 12.500000000000002,
+    "unidad": "1/s"
+   }
+  },
+  "C2": {
+   "Cr_T1": {
+    "valor": 0.27999999999999997,
+    "unidad": "s"
+   },
+   "T_pico_pub": {
+    "valor": 0.34533,
+    "unidad": "s"
+   },
+   "raz_pico_frontera": {
+    "valor": 1.233321428571429,
+    "unidad": "—"
+   }
+  },
+  "C3": {
+   "T_star_X": {
+    "valor": 0.2,
+    "unidad": "s"
+   },
+   "T_star_Y": {
+    "valor": 0.4,
+    "unidad": "s"
+   },
+   "raz_T": {
+    "valor": 2.0,
+    "unidad": "—"
+   }
+  },
+  "C5": {
+   "R_star_Y": {
+    "valor": 5.0,
+    "unidad": "—"
+   },
+   "Sa_ref_Y": {
+    "valor": 1.21275,
+    "unidad": "g"
+   },
+   "Sa_pico_pub": {
+    "valor": 1.23695,
+    "unidad": "g"
+   },
+   "frac_pico": {
+    "valor": 0.9804357492218764,
+    "unidad": "—"
+   }
+  },
+  "C6": {
+   "Sa_dis_X": {
+    "valor": 0.36632609729276977,
+    "unidad": "g"
+   },
+   "Sa_dis_Y": {
+    "valor": 0.3499268621777947,
+    "unidad": "g"
+   },
+   "Sa_dis_X_pub": {
+    "valor": 0.36633,
+    "unidad": "g"
+   },
+   "Sa_dis_Y_pub": {
+    "valor": 0.34993,
+    "unidad": "g"
+   },
+   "raz_Sa_dis": {
+    "valor": 1.0468665161603747,
+    "unidad": "—"
+   }
+  },
+  "C7": {
+   "marg_X": {
+    "valor": 1.959999999999999,
+    "unidad": "—"
+   },
+   "marg_Y": {
+    "valor": 0.48999999999999977,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "Cr_T1_liv": {
+    "valor": 0.22399999999999998,
+    "unidad": "s"
+   },
+   "R_star_X_liv": {
+    "valor": 3.732142857142857,
+    "unidad": "—"
+   }
+  },
+  "D3": {
+   "R_star_Y_liv": {
+    "valor": 4.0,
+    "unidad": "—"
+   },
+   "alivio_Y": {
+    "valor": 0.8,
+    "unidad": "—"
+   }
+  },
+  "D2": {
+   "alivio_X": {
+    "valor": 0.9330357142857143,
+    "unidad": "—"
+   }
+  },
+  "D4": {
+   "sobre_nofusible": {
+    "valor": 1.4,
+    "unidad": "—"
+   }
+  },
+  "D5": {
+   "amp_X": {
+    "valor": 2.8,
+    "unidad": "—"
+   },
+   "amp_X_liv": {
+    "valor": 1.8660714285714286,
+    "unidad": "—"
+   },
+   "alza_X": {
+    "valor": 1.5004784688995214,
+    "unidad": "—"
+   },
+   "amp_Y": {
+    "valor": 3.5,
+    "unidad": "—"
+   },
+   "amp_Y_liv": {
+    "valor": 2.0,
+    "unidad": "—"
+   },
+   "alza_Y": {
+    "valor": 1.75,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "A_r": {
+   "valor": 0.42,
+   "unidad": "g",
+   "paso": "A1",
+   "heredan": [
+    "05",
+    "06"
+   ]
+  },
+  "S_suelo": {
+   "valor": 1.05,
+   "unidad": "—",
+   "paso": "A2",
+   "heredan": [
+    "05",
+    "06"
+   ]
+  },
+  "r_s": {
+   "valor": 4.5,
+   "unidad": "—",
+   "paso": "A2",
+   "heredan": [
+    "05",
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "T_0": {
+   "valor": 0.4,
+   "unidad": "s",
+   "paso": "A2",
+   "heredan": [
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "p_suelo": {
+   "valor": 1.5,
+   "unidad": "—",
+   "paso": "A2",
+   "heredan": [
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "q_s": {
+   "valor": 3.0,
+   "unidad": "—",
+   "paso": "A2",
+   "heredan": [
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "T_1": {
+   "valor": 0.35,
+   "unidad": "s",
+   "paso": "A2",
+   "heredan": [
+    "05"
+   ]
+  },
+  "T_pico": {
+   "valor": 0.34533307973333316,
+   "unidad": "s",
+   "paso": "B2",
+   "heredan": [
+    "06",
+    "07"
+   ]
+  },
+  "Sa_pico": {
+   "valor": 1.236954776416541,
+   "unidad": "g",
+   "paso": "B2",
+   "heredan": [
+    "06",
+    "07"
+   ]
+  },
+  "ArS": {
+   "valor": 0.441,
+   "unidad": "g",
+   "paso": "A3",
+   "heredan": [
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "f_xi": {
+   "valor": 1.4426999059072136,
+   "unidad": "—",
+   "paso": "B1",
+   "heredan": [
+    "05",
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "Cr_T1": {
+   "valor": 0.27999999999999997,
+   "unidad": "s",
+   "paso": "C2",
+   "heredan": [
+    "05",
+    "07",
+    "12"
+   ]
+  },
+  "T_star_X": {
+   "valor": 0.2,
+   "unidad": "s",
+   "paso": "S2",
+   "heredan": [
+    "05",
+    "06",
+    "12"
+   ]
+  },
+  "T_star_Y": {
+   "valor": 0.4,
+   "unidad": "s",
+   "paso": "S2",
+   "heredan": [
+    "05",
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "R_star_X": {
+   "valor": 4.0,
+   "unidad": "—",
+   "paso": "C4",
+   "heredan": [
+    "05",
+    "06",
+    "12"
+   ]
+  },
+  "R_star_Y": {
+   "valor": 5.0,
+   "unidad": "—",
+   "paso": "C5",
+   "heredan": [
+    "05",
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "Sa_ref_X": {
+   "valor": 1.015668181006535,
+   "unidad": "g",
+   "paso": "C4",
+   "heredan": [
+    "06",
+    "12"
+   ]
+  },
+  "Sa_ref_Y": {
+   "valor": 1.21275,
+   "unidad": "g",
+   "paso": "C5",
+   "heredan": [
+    "06",
+    "07"
+   ]
+  },
+  "Sa_dis_X": {
+   "valor": 0.36632609729276977,
+   "unidad": "g",
+   "paso": "C6",
+   "heredan": [
+    "05"
+   ]
+  },
+  "Sa_dis_Y": {
+   "valor": 0.3499268621777947,
+   "unidad": "g",
+   "paso": "C6",
+   "heredan": [
+    "05"
+   ]
+  }
+ },
+ "publicado": {
+  "A_r": "0,42",
+  "S_suelo": "1,05",
+  "r_s": "4,50",
+  "T_0": "0,40",
+  "p_suelo": "1,50",
+  "q_s": "3,00",
+  "T_1": "0,35",
+  "T_pico": "0,34533",
+  "Sa_pico": "1,23695",
+  "ArS": "0,44100",
+  "f_xi": "1,44270",
+  "Cr_T1": "0,28000",
+  "T_star_X": "0,20",
+  "T_star_Y": "0,40",
+  "R_star_X": "4,00000",
+  "R_star_Y": "5,00000",
+  "Sa_ref_X": "1,01567",
+  "Sa_ref_Y": "1,21275",
+  "Sa_dis_X": "0,36633",
+  "Sa_dis_Y": "0,34993"
+ },
+ "rukan": "0.1.0",
+ "commit": "1b7141f",
+ "generado": "2026-09-05T10:48:18"
+}

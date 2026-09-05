@@ -18,8 +18,7 @@ tridimensional en pantalla en el punto donde cada uno lo necesita. El modelo viv
 
 {{ tabla_serie('nch2369-galpon-grua') }}
 
-Los que faltan, en el orden en que se migran: 04 espectro y R* por dirección, 05 masa sísmica y
-carga suspendida, 06 combinaciones y derivas, 07 el marco de momento a dos aguas, 08 la viga
+Los que faltan, en el orden en que se migran: 05 masa sísmica y carga suspendida, 06 combinaciones y derivas, 07 el marco de momento a dos aguas, 08 la viga
 carrilera, 09 su fatiga, 10 la columna escalonada y el apoyo de la carrilera, 11 el
 arriostramiento continuo de techo, 12 los dos vanos libres, y 13 diagonales longitudinales y
 anclaje, que todavía no se ha escrito.
@@ -34,7 +33,7 @@ cada origen sea anterior a su consumidor.
 
 ## Dónde quedó
 
-- **Migrados**: 00 a 03. Cada uno reproduce, a la precisión que el memo original publicó,
+- **Migrados**: 00 a 04. Cada uno reproduce, a la precisión que el memo original publicó,
   las cifras de ese memo; un assert en su script lo garantiza.
 - **La cascada pendiente.** El 00 publica períodos que el 04 todavía no hereda: el 04 usa
   los declarados (0,20 y 0,40 s). Cuando los tome, cambiará de rama en Y y de ahí bajan R₁,
