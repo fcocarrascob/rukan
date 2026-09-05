@@ -456,12 +456,27 @@ def main() -> int:
           + D.CAR_TW * D.CAR_HW * (D.CAR_TFS + D.CAR_HW / 2)
           + D.CAR_BFI * D.CAR_TFI * (D.CAR_TFS + D.CAR_HW + D.CAR_TFI / 2))
          / D.carrilera_props()[0] * 1e3, 269.64968, "08 · `## Caso`"),
+        # Las cuatro propiedades que el modelo de la carrilera del sitio consume.
+        # `J` estuvo mal hasta el lote D —la altura del alma entraba como su
+        # espesor, ×576— y no se notaba porque nadie lo leía.
+        ("carrilera: A [mm2]", D.carrilera_props()[0] * 1e6, 15700.0, "08 · C1"),
+        ("carrilera: Ix [mm4]", D.carrilera_props()[1] * 1e12, 1265593407.0, "08 · C2"),
+        ("carrilera: Iy [mm4]", D.carrilera_props()[2] * 1e12, 89715233.0, "08 · C2"),
+        # Media unidad de 1 272 933 son 3,9e-7 relativo: el memo imprimio J al
+        # entero y no da para mas.
+        ("carrilera: J [mm4]", D.carrilera_props()[3] * 1e12, 1272933.0, "08 · C2", 4e-7),
     ]
     print()
-    for nom, v, s_, src in S_:
+    # La tolerancia por omision es 1e-8, y las filas la cumplen porque el memo
+    # imprime esas cifras con decimales de sobra. Una fila puede traer la suya
+    # cuando el memo la publico mas gruesa: la banda es media unidad del ultimo
+    # digito impreso, que es la regla del oraculo de la serie.
+    for chequeo in S_:
+        nom, v, s_, src = chequeo[:4]
+        tol = chequeo[4] if len(chequeo) > 4 else 1e-8
         err = abs(v / s_ - 1.0)
         print(f"    {nom:34s} {v:16.5f}   memo {s_:14.5f}  ({src})   err {err:.1e}")
-        assert err < 1e-8, nom
+        assert err < tol, nom
 
     # La seccion compuesta del escalon: el 10 · B3 la publica sin derivarla.
     Acmp, ybar, ix, iy, _ = D.comp_props(0.0)

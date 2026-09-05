@@ -199,7 +199,16 @@ def carrilera_props() -> tuple[float, float, float, float]:
     """Viga carrilera monosimétrica: `(A, I_fuerte, I_debil, J)`.
 
     Tres rectángulos —ala superior, alma, ala inferior— con el eje neutro donde
-    lo pone el equilibrio de áreas, no en el medio del canto.
+    lo pone el equilibrio de áreas, no en el medio del canto. Cada parte se
+    describe como `(area, y_centroide, b, h)` con `b` **horizontal** y `h`
+    **vertical**, que es lo que las dos inercias necesitan: `i_f` flecta con `h`
+    y `i_d` con `b`.
+
+    `J` es la suma de rectángulos delgados `Σ L t³/3`, y ahí `b` y `h` no sirven
+    tal cual: en las alas el espesor es `h` y en el alma es `b`. Se toma el
+    **menor** de los dos como espesor, que es lo que la fórmula significa. Con
+    eso la torsión da los 1 272 933 mm⁴ que el 08 · C2 publica; tratando la
+    altura del alma como su espesor daría 733 495 333, un factor de 576.
     """
     partes = [(CAR_BFS * CAR_TFS, CAR_TFS / 2.0, CAR_BFS, CAR_TFS),
               (CAR_TW * CAR_HW, CAR_TFS + CAR_HW / 2.0, CAR_TW, CAR_HW),
@@ -208,7 +217,7 @@ def carrilera_props() -> tuple[float, float, float, float]:
     yc = sum(a * y for a, y, _, _ in partes) / A
     i_f = sum(b * h ** 3 / 12.0 + a * (y - yc) ** 2 for a, y, b, h in partes)
     i_d = sum(h * b ** 3 / 12.0 for _, _, b, h in partes)
-    j = sum(b * h ** 3 / 3.0 for _, _, b, h in partes)
+    j = sum(max(b, h) * min(b, h) ** 3 / 3.0 for _, _, b, h in partes)
     return A, i_f, i_d, j
 
 
