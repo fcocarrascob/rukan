@@ -99,10 +99,33 @@ de la barra (color, diagramas N/V/M) quedan para `escena@2`**, con su verificaci
 despliega a GitHub Pages con `.github/workflows/sitio.yml` (hay que activar Pages con origen
 «GitHub Actions» una vez). Diseño: `docs/superpowers/specs/2026-09-05-sitio-rukan-design.md`.
 
-**Próximo paso:** la cascada 04→13 en el repo de memos con los períodos del 00, o
-**Fase 1** (chequeo de código AISC/NCh427), o el espectro vertical NCh2369, o `escena@2`
-(esfuerzos por barra) — ver `ROADMAP.md`. Diseño del puente:
-`docs/superpowers/specs/2026-09-05-puente-rukan-memos-design.md`.
+**Las series (2026-09-05): el sitio es la casa de la serie `nch2369-galpon-grua`.** Se
+migra desde el repo de guías eslabón por eslabón, y **nada nuevo se escribe allá**. Andamiaje
+en `sitio/serie.py`: cada eslabón es `sitio/docs/series/<serie>/<NN-slug>/` con un
+`_calculo.py` que declara con `Eslabon` (`caso`, `entra`, `paso`, `sale`, `publicado`) y
+escribe `<NN-slug>.valores.json` (esquema `rukan/valores@1`). Reglas: **la cadena se consume,
+no se copia** (`entra()` lee el JSON del origen o los `resultados.json` del modelo);
+`publicado()` es el **oráculo de migración** (lo que el memo original imprimió, como texto con
+coma decimal) y `escribir()` falla si un `sale` se aparta media unidad del último decimal;
+primario vs derivado (el modelo emite δ, `k = H/δ` es un `paso`); el memo sustituye en sus
+fórmulas la cifra **impresa**, así que cuando un paso no reproduce, primero se prueba con el
+valor redondeado a los decimales publicados (el 00 lo hizo con δ a 7 decimales). Macros en
+`main.py`: `v()` / `vt()` (LaTeX: `{,}` y `\,`), `ficha()`, `tabla_serie()`, `grafo_serie()`
+(mermaid), `figura()`. Figuras: `sitio/figuras.py` (helper SVG portado) y `_figuras.py` por
+eslabón con `cotas()` leídas del JSON. KaTeX vendoreado. `tests/test_series.py`: cadena
+(`verificar_cadena`), `_calculo.py` reproduce el JSON, cada `sale` aparece en `index.md`
+con `v(`/`vt(`, sin `\d.\d` dentro de `$$`, citas con página, cotas de SVG con respaldo. Un
+`heredan` hacia un eslabón no migrado es promesa, no hallazgo. Migrados: **00 y 01**; el 02 al
+12 siguen el pipeline del spec (`docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md`
+§ 6): leer memo y `.check.js` → `_calculo.py` con `publicado` → `_figuras.py` → `index.md`
+con el molde (narración por pasos, visores donde entra el modelo, ficha, referencias) →
+build estricto y captura → commit. **Fidelidad primero**: la cascada 04→13 con los períodos
+del 00 se aplica después de migrar todo. El modelo del sitio tiene la malla del memo
+(`nsub=16`, 1 000 kN por marco).
+
+**Próximo paso:** el lote B de la serie (eslabones 02 a 06), luego `escena@2` (esfuerzos por
+barra) y los eslabones 07 a 12; o **Fase 1** (chequeo de código AISC/NCh427); ver
+`ROADMAP.md`.
 
 ## Principios de arquitectura
 
@@ -216,7 +239,10 @@ lab/          # notas de análisis verificable (vs fórmula cerrada / numpy)
   _lib/       # report (tabla + assert), ref (numpy puro), svg, publish
   figs/       # SVG generados, se copian al blog
 sitio/        # el sitio: MkDocs Material + macros (main.py) + visor three.js
-  docs/visor/ # rukan-visor.js y three.js vendoreado (vendor/VERSION)
+  serie.py    # el andamiaje de una serie: Eslabon, valores@1, cadena, oráculo, citas
+  figuras.py  # helper SVG de las figuras de un eslabón (cotas desde el JSON)
+  docs/visor/ # rukan-visor.js, three.js y KaTeX vendoreados (vendor/*/VERSION)
   docs/modelos/<slug>/  # _generar.py + proyecto + resultados + escena + index.md
+  docs/series/<serie>/<NN-slug>/  # _calculo.py + valores.json + _figuras.py + figs/ + index.md
 tests/        # tests unitarios del núcleo + corrida de cada nota + el sitio
 ```

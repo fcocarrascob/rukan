@@ -23,6 +23,8 @@ Ningún ingeniero firma cálculos de una caja negra. Por eso Rukan:
 - Publica sus modelos con su narración en 3D en
   [el sitio de Rukan](https://fcocarrascob.github.io/rukan/): cada entrada es un
   archivo de proyecto que se corre, y lo que se dibuja y se escribe sale de esa corrida.
+  Las **series** encadenan eslabones de diseño sobre un mismo modelo; la primera es el
+  galpón con puente grúa por NCh2369.
 
 ## Instalación
 

@@ -292,6 +292,27 @@ la carga distribuida sobre las fuerzas de extremo, la maquinaria de `lab/nota01`
 contra numpy y SAP2000, y con ellos color por esfuerzo y diagramas N/V/M en el visor;
 segundas entradas (galpón a dos aguas del caso 8, torre del caso 9).
 
+## ▶ Las series — la cadena `nch2369-galpon-grua` se muda al sitio (2026-09-05, lote A cerrado)
+
+Decisión: el sitio de Rukan es la casa de la serie; el repo de guías queda congelado como
+referencia. Lo que se conserva del régimen de memos: cada cifra nace en un paso o en un
+modelo, lo que un eslabón hereda es lo que el anterior publicó, toda cita lleva página y
+frase. Lo que lo reemplaza: `_calculo.py` por eslabón (las cifras no se teclean), el oráculo
+`publicado` en vez del `.check.js`, macros en vez de índice a mano.
+
+- `sitio/serie.py` (esquema `rukan/valores@1`, `verificar_cadena`, `citas`,
+  `cotas_sin_respaldo`), `sitio/figuras.py`, macros `v/vt/ficha/tabla_serie/grafo_serie/figura`,
+  KaTeX vendoreado, `tests/test_series.py`.
+- Eslabón **00** (el modelo: seis visores, diez salidas al decimal del memo) y **01** (la raíz:
+  las ocho letras de §12.2.1, once salidas, dos figuras portadas). El modelo a `nsub=16`.
+- Hallazgo del oráculo: el memo sustituye la cifra impresa (δ a 7 decimales) y su `k` solo se
+  reproduce así; queda escrito en el paso B1 del 00.
+
+**Lotes que siguen** (spec `docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md`):
+B = 02–06 con el visor actual; C = `escena@2`; D = 07–12 con esfuerzos en pantalla (el 12
+pide un caso con la grúa en el tope); E = el 13 nuevo, con el PDF abierto; F = la cascada
+04→13 con los períodos del 00.
+
 ---
 
 ## ▶ PRÓXIMA SESIÓN — candidatos

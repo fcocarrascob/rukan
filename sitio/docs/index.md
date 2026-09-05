@@ -5,16 +5,22 @@ un motor de análisis estructural opensource sobre OpenSeesPy. Cada entrada es *
 que se puede correr**: su archivo de proyecto, la corrida que lo acompaña y la escena en
 3D que sale de esa corrida. Lo que se dibuja y lo que se escribe salen del mismo archivo.
 
+## Modelos y series
+
+Hay dos clases de entrada. Un **modelo** es una estructura que se corre: su archivo de
+proyecto, su corrida y su escena, con el visor al frente. Una **serie** es una cadena de
+eslabones que diseñan la misma estructura, cada uno con una pregunta y una decisión, con el
+modelo en pantalla en el punto donde cada eslabón lo necesita. [Qué es una serie](series/).
+
 ## Qué narra y qué no
 
 Narra **el modelo y lo que el motor hace con él**: qué se idealizó, cuántos nudos y barras
 tiene y por qué, cómo se mueve en cada modo, qué deformada deja cada caso de carga, y de
-dónde sale cada número. Cuando una norma entra en la historia, se dice qué lee del modelo
-y se remite al memo que hace el cálculo; el cálculo normativo no se rehace aquí.
+dónde sale cada número. Y en las series, **el diseño que se apoya en ese modelo**, paso a
+paso, con cada cláusula citada por página y frase.
 
-Dos cosas quedan fuera a propósito. La **verificación del motor** contra SAP2000 vive en
-[struct_pad](https://fcocarrascob.github.io), como serie numerada. El **cálculo de diseño**
-de cada estructura vive en su serie de memos, con su propio arnés.
+Una cosa queda fuera a propósito: la **verificación del motor** contra SAP2000 vive en
+[struct_pad](https://fcocarrascob.github.io), como serie numerada.
 
 ## Cómo se lee una entrada
 
