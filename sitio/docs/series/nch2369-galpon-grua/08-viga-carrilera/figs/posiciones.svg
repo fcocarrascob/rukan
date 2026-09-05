@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" width="720" height="400" role="img" aria-label="Tres elevaciones del mismo vano de 7,50 metros con las dos ruedas a 3,40 de separacion en las tres posiciones que gobiernan: momento maximo con la primera rueda a 2,90, reaccion maxima con una rueda sobre el apoyo, y flecha maxima con las dos simetricas respecto del centro" font-family="ui-monospace,'IBM Plex Mono',Menlo,Consolas,monospace" font-size="11">
+<title>Las tres posiciones de rueda que gobiernan</title>
+<rect width="720" height="400" fill="#fcfcfa"/>
+<text x="24.0" y="30.0" fill="#2b2a26" text-anchor="start" font-size="11.5" font-weight="600">Tres posiciones de rueda, tres resultados: ninguna sirve para las otras dos</text>
+<line x1="204.0" y1="88.0" x2="549.0" y2="88.0" stroke="#2b2a26" stroke-width="1.6"/>
+<polygon points="204.0,88.0 197.0,99.0 211.0,99.0" fill="#2b2a26"/>
+<polygon points="549.0,88.0 542.0,99.0 556.0,99.0" fill="#2b2a26"/>
+<text x="186.0" y="82.0" fill="#2b2a26" text-anchor="end" font-size="10.5" font-weight="600">momento máximo</text>
+<text x="186.0" y="96.0" fill="#8a8578" text-anchor="end" font-size="9.5" font-weight="normal">reacción 0,77333 por rueda</text>
+<circle cx="337.4" cy="79.0" r="7" fill="#fcfcfa" stroke="#a4442c" stroke-width="1.6"/>
+<line x1="337.4" y1="62.0" x2="337.4" y2="70.0" stroke="#a4442c" stroke-width="1.4"/>
+<polygon points="337.4,70.0 334.6,62.8 340.2,62.8" fill="#a4442c"/>
+<circle cx="493.8" cy="79.0" r="7" fill="#fcfcfa" stroke="#a4442c" stroke-width="1.6"/>
+<line x1="493.8" y1="62.0" x2="493.8" y2="70.0" stroke="#a4442c" stroke-width="1.4"/>
+<polygon points="493.8,70.0 491.0,62.8 496.6,62.8" fill="#a4442c"/>
+<text x="565.0" y="92.0" fill="#a4442c" text-anchor="start" font-size="10.5" font-weight="normal">M = 707,26725 kN·m</text>
+<line x1="337.4" y1="118.0" x2="493.8" y2="118.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="337.4,118.0 344.6,115.2 344.6,120.8" fill="#8a8578"/>
+<polygon points="493.8,118.0 486.6,120.8 486.6,115.2" fill="#8a8578"/>
+<text x="415.6" y="114.0" fill="#8a8578" text-anchor="middle" font-size="9.5" font-weight="normal">3,40 m</text>
+<line x1="204.0" y1="192.0" x2="549.0" y2="192.0" stroke="#2b2a26" stroke-width="1.6"/>
+<polygon points="204.0,192.0 197.0,203.0 211.0,203.0" fill="#2b2a26"/>
+<polygon points="549.0,192.0 542.0,203.0 556.0,203.0" fill="#2b2a26"/>
+<text x="186.0" y="186.0" fill="#2b2a26" text-anchor="end" font-size="10.5" font-weight="600">reacción máxima</text>
+<text x="186.0" y="200.0" fill="#8a8578" text-anchor="end" font-size="9.5" font-weight="normal">coeficiente 1,54667</text>
+<circle cx="204.0" cy="183.0" r="7" fill="#fcfcfa" stroke="#2f5d7c" stroke-width="1.6"/>
+<line x1="204.0" y1="166.0" x2="204.0" y2="174.0" stroke="#2f5d7c" stroke-width="1.4"/>
+<polygon points="204.0,174.0 201.2,166.8 206.8,166.8" fill="#2f5d7c"/>
+<circle cx="360.4" cy="183.0" r="7" fill="#fcfcfa" stroke="#2f5d7c" stroke-width="1.6"/>
+<line x1="360.4" y1="166.0" x2="360.4" y2="174.0" stroke="#2f5d7c" stroke-width="1.4"/>
+<polygon points="360.4,174.0 357.6,166.8 363.2,166.8" fill="#2f5d7c"/>
+<text x="565.0" y="196.0" fill="#2f5d7c" text-anchor="start" font-size="10.5" font-weight="normal">R = 299,25983 kN</text>
+<line x1="204.0" y1="222.0" x2="360.4" y2="222.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="204.0,222.0 211.2,219.2 211.2,224.8" fill="#8a8578"/>
+<polygon points="360.4,222.0 353.2,224.8 353.2,219.2" fill="#8a8578"/>
+<text x="282.2" y="218.0" fill="#8a8578" text-anchor="middle" font-size="9.5" font-weight="normal">3,40 m</text>
+<line x1="204.0" y1="296.0" x2="549.0" y2="296.0" stroke="#2b2a26" stroke-width="1.6"/>
+<polygon points="204.0,296.0 197.0,307.0 211.0,307.0" fill="#2b2a26"/>
+<polygon points="549.0,296.0 542.0,307.0 556.0,307.0" fill="#2b2a26"/>
+<text x="186.0" y="290.0" fill="#2b2a26" text-anchor="end" font-size="10.5" font-weight="600">flecha máxima</text>
+<text x="186.0" y="304.0" fill="#8a8578" text-anchor="end" font-size="9.5" font-weight="normal">2 050 mm a cada apoyo</text>
+<circle cx="298.3" cy="287.0" r="7" fill="#fcfcfa" stroke="#4a6b46" stroke-width="1.6"/>
+<line x1="298.3" y1="270.0" x2="298.3" y2="278.0" stroke="#4a6b46" stroke-width="1.4"/>
+<polygon points="298.3,278.0 295.5,270.8 301.1,270.8" fill="#4a6b46"/>
+<circle cx="454.7" cy="287.0" r="7" fill="#fcfcfa" stroke="#4a6b46" stroke-width="1.6"/>
+<line x1="454.7" y1="270.0" x2="454.7" y2="278.0" stroke="#4a6b46" stroke-width="1.4"/>
+<polygon points="454.7,278.0 451.9,270.8 457.5,270.8" fill="#4a6b46"/>
+<text x="565.0" y="300.0" fill="#4a6b46" text-anchor="start" font-size="10.5" font-weight="normal">flecha 8,26725 mm</text>
+<line x1="298.3" y1="326.0" x2="454.7" y2="326.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="298.3,326.0 305.5,323.2 305.5,328.8" fill="#8a8578"/>
+<polygon points="454.7,326.0 447.5,328.8 447.5,323.2" fill="#8a8578"/>
+<text x="376.5" y="322.0" fill="#8a8578" text-anchor="middle" font-size="9.5" font-weight="normal">3,40 m</text>
+<line x1="204.0" y1="366.0" x2="549.0" y2="366.0" stroke="#2b2a26" stroke-width="1"/>
+<polygon points="204.0,366.0 211.2,363.2 211.2,368.8" fill="#2b2a26"/>
+<polygon points="549.0,366.0 541.8,368.8 541.8,363.2" fill="#2b2a26"/>
+<text x="376.5" y="362.0" fill="#2b2a26" text-anchor="middle" font-size="10.5" font-weight="normal">vano 7,50 m</text>
+<text x="24.0" y="384.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">la de momento máximo pone la primera rueda a 2,90 m y la segunda a 6,30; la de flecha las deja simétricas</text>
+</svg>

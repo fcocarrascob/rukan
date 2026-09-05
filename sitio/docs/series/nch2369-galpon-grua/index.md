@@ -18,9 +18,9 @@ tridimensional en pantalla en el punto donde cada uno lo necesita. El modelo viv
 
 {{ tabla_serie('nch2369-galpon-grua') }}
 
-Los que faltan, en el orden en que se migran: 08 la viga carrilera, 09 su fatiga, 10 la columna
-escalonada y el apoyo de la carrilera, 11 el arriostramiento continuo de techo, 12 los dos vanos
-libres, y 13 diagonales longitudinales y anclaje, que todavía no se ha escrito.
+Los que faltan, en el orden en que se migran: 09 la fatiga de la carrilera, 10 la columna
+escalonada y el apoyo de la carrilera, 11 el arriostramiento continuo de techo, 12 los dos
+vanos libres, y 13 diagonales longitudinales y anclaje, que todavía no se ha escrito.
 
 ## La cadena
 
@@ -32,7 +32,7 @@ cada origen sea anterior a su consumidor.
 
 ## Dónde quedó
 
-- **Migrados**: 00 a 07. Cada uno reproduce, a la precisión que el memo original publicó, las
+- **Migrados**: 00 a 08. Cada uno reproduce, a la precisión que el memo original publicó, las
   cifras de ese memo; un assert en su script lo garantiza, y desde el 07 el oráculo cubre además
   las filas del `## Resumen` y no solo las salidas.
 - **La cascada pendiente.** El 00 publica períodos que el 04 todavía no hereda: el 04 usa

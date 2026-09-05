@@ -1,0 +1,1271 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 8,
+ "slug": "viga-carrilera",
+ "titulo": "La viga carrilera",
+ "normas": [
+  "AIST TR-13:2021",
+  "CMAA 70:2010",
+  "AISC 360-22",
+  "NCh3171:2017",
+  "NCh2369:2025"
+ ],
+ "hereda_de": [
+  "01",
+  "03",
+  "06",
+  "07"
+ ],
+ "entra": {
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "Qn_grua": {
+   "valor": 200.0,
+   "unidad": "kN",
+   "de": "01",
+   "paso": "S3"
+  },
+  "Wb_puente": {
+   "valor": 190.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "S2"
+  },
+  "Wt_carro": {
+   "valor": 40.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "S2"
+  },
+  "wb_ruedas": {
+   "valor": 3.4,
+   "unidad": "m",
+   "de": "03",
+   "paso": "S2"
+  },
+  "Rw_max": {
+   "valor": 161.23913043478262,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "B2"
+  },
+  "Rw_min": {
+   "valor": 53.76086956521739,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "B3"
+  },
+  "Rv_max": {
+   "valor": 193.48695652173913,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "C1"
+  },
+  "SS_total": {
+   "valor": 60.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "D1"
+  },
+  "SS_carril": {
+   "valor": 30.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "D3"
+  },
+  "T_long": {
+   "valor": 86.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "E1"
+  },
+  "N_ciclos": {
+   "valor": 75000.0,
+   "unidad": "ciclos",
+   "de": "03",
+   "paso": "A1"
+  },
+  "vida_grua": {
+   "valor": 25.0,
+   "unidad": "años",
+   "de": "03",
+   "paso": "S4"
+  },
+  "C_V": {
+   "valor": 0.5292,
+   "unidad": "—",
+   "de": "06",
+   "paso": "B1"
+  },
+  "Ez_carril": {
+   "valor": 159.8184,
+   "unidad": "kN",
+   "de": "06",
+   "paso": "B3"
+  },
+  "dlim_grua": {
+   "valor": 18.75,
+   "unidad": "mm",
+   "de": "06",
+   "paso": "E5"
+  },
+  "k_riel": {
+   "valor": 15057.33721,
+   "unidad": "kN/m",
+   "de": "07",
+   "paso": "S1"
+  },
+  "SS_marco": {
+   "valor": 46.4,
+   "unidad": "kN",
+   "de": "07",
+   "paso": "C1"
+  },
+  "Rcol_grua": {
+   "valor": 299.25983,
+   "unidad": "kN",
+   "de": "07",
+   "paso": "E3"
+  }
+ },
+ "caso": {
+  "Fy": {
+   "valor": 345.0,
+   "unidad": "MPa"
+  },
+  "E_ac": {
+   "valor": 200000.0,
+   "unidad": "MPa"
+  },
+  "phi_b": {
+   "valor": 0.9,
+   "unidad": "—"
+  },
+  "g_grav": {
+   "valor": 9.81,
+   "unidad": "m/s2"
+  },
+  "rho_acero": {
+   "valor": 7850.0,
+   "unidad": "kg/m3"
+  },
+  "bfs_carril": {
+   "valor": 350.0,
+   "unidad": "mm"
+  },
+  "tfs_carril": {
+   "valor": 20.0,
+   "unidad": "mm"
+  },
+  "hw_carril": {
+   "valor": 650.0,
+   "unidad": "mm"
+  },
+  "tw_carril": {
+   "valor": 8.0,
+   "unidad": "mm"
+  },
+  "bfi_carril": {
+   "valor": 250.0,
+   "unidad": "mm"
+  },
+  "tfi_carril": {
+   "valor": 14.0,
+   "unidad": "mm"
+  },
+  "h_riel_perfil": {
+   "valor": 131.76,
+   "unidad": "mm"
+  },
+  "m_riel": {
+   "valor": 42.16,
+   "unidad": "kg/m"
+  },
+  "L_carrilera": {
+   "valor": 60.0,
+   "unidad": "m"
+  },
+  "w_carril_05": {
+   "valor": 1.2,
+   "unidad": "kN/m"
+  },
+  "Wgrua_sc": {
+   "valor": 230.0,
+   "unidad": "kN"
+  },
+  "P_sismico": {
+   "valor": 1037.085,
+   "unidad": "kN"
+  },
+  "d_riel_grua": {
+   "valor": 3.08155,
+   "unidad": "mm"
+  },
+  "uso_grua_07": {
+   "valor": 0.16435,
+   "unidad": "—"
+  },
+  "ciclos_techoC": {
+   "valor": 100000.0,
+   "unidad": "ciclos"
+  },
+  "ciclos_pisoC": {
+   "valor": 20000.0,
+   "unidad": "ciclos"
+  },
+  "vida_aist": {
+   "valor": 50.0,
+   "unidad": "años"
+  },
+  "div_v_C": {
+   "valor": 600.0,
+   "unidad": "—"
+  },
+  "div_v_B": {
+   "valor": 1000.0,
+   "unidad": "—"
+  },
+  "div_lat": {
+   "valor": 400.0,
+   "unidad": "—"
+  },
+  "c_lam_p": {
+   "valor": 0.38,
+   "unidad": "—"
+  },
+  "c_lam_rw": {
+   "valor": 5.7,
+   "unidad": "—"
+  },
+  "c_e_riel": {
+   "valor": 0.75,
+   "unidad": "—"
+  },
+  "c_tope": {
+   "valor": 1.6,
+   "unidad": "—"
+  },
+  "c_Lp": {
+   "valor": 1.1,
+   "unidad": "—"
+  },
+  "c_Lr": {
+   "valor": 1.95,
+   "unidad": "—"
+  },
+  "c_676": {
+   "valor": 6.76,
+   "unidad": "—"
+  },
+  "c_kv": {
+   "valor": 5.34,
+   "unidad": "—"
+  },
+  "c_Cv1": {
+   "valor": 1.1,
+   "unidad": "—"
+  },
+  "c_atie": {
+   "valor": 2.54,
+   "unidad": "—"
+  },
+  "c_corte": {
+   "valor": 0.6,
+   "unidad": "—"
+  },
+  "c_658": {
+   "valor": 0.658,
+   "unidad": "—"
+  },
+  "c_CMAA": {
+   "valor": 0.1,
+   "unidad": "—"
+  },
+  "f_D": {
+   "valor": 1.2,
+   "unidad": "—"
+  },
+  "f_L": {
+   "valor": 1.6,
+   "unidad": "—"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "coef_reac": {
+    "valor": 1.54667,
+    "unidad": "—"
+   },
+   "R_carril_s": {
+    "valor": 23.20005,
+    "unidad": "kN"
+   }
+  },
+  "A2": {
+   "coef_077": {
+    "valor": 0.77333,
+    "unidad": "—"
+   },
+   "eta2": {
+    "valor": 0.15542,
+    "unidad": "—"
+   },
+   "eta_cont": {
+    "valor": 1.8575,
+    "unidad": "—"
+   },
+   "sube_cont": {
+    "valor": 1.20097,
+    "unidad": "—"
+   },
+   "R_carril_cont": {
+    "valor": 27.8625,
+    "unidad": "kN"
+   }
+  },
+  "A3": {
+   "SS_marco_cont": {
+    "valor": 55.725,
+    "unidad": "kN"
+   },
+   "d_riel_cont": {
+    "valor": 3.70085,
+    "unidad": "mm"
+   },
+   "uso_cont": {
+    "valor": 0.19738,
+    "unidad": "—"
+   },
+   "margen_cont": {
+    "valor": 5.06637,
+    "unidad": "—"
+   }
+  },
+  "B1": {
+   "frac_techoC": {
+    "valor": 0.75,
+    "unidad": "—"
+   },
+   "veces_pisoC": {
+    "valor": 3.75,
+    "unidad": "—"
+   }
+  },
+  "B2": {
+   "N_50": {
+    "valor": 150000.0,
+    "unidad": "ciclos"
+   },
+   "sobre_techoC": {
+    "valor": 1.5,
+    "unidad": "—"
+   }
+  },
+  "B3": {
+   "dlim_v_C": {
+    "valor": 12.5,
+    "unidad": "mm"
+   },
+   "dlim_v_B": {
+    "valor": 7.5,
+    "unidad": "mm"
+   },
+   "razon_lim_v": {
+    "valor": 1.66667,
+    "unidad": "—"
+   },
+   "dlim_lat": {
+    "valor": 18.75,
+    "unidad": "mm"
+   }
+  },
+  "C1": {
+   "d_carril": {
+    "valor": 684.0,
+    "unidad": "mm"
+   },
+   "A_carril": {
+    "valor": 15700.0,
+    "unidad": "mm2"
+   },
+   "razon_alas": {
+    "valor": 2.0,
+    "unidad": "—"
+   }
+  },
+  "C2": {
+   "ybar_carril": {
+    "valor": 269.64968,
+    "unidad": "mm"
+   },
+   "y_inf": {
+    "valor": 414.35032,
+    "unidad": "mm"
+   },
+   "Ix_carril": {
+    "valor": 1265593407.0,
+    "unidad": "mm4"
+   },
+   "Sxc_carril": {
+    "valor": 4693473.0,
+    "unidad": "mm3"
+   },
+   "Sxt_carril": {
+    "valor": 3054404.0,
+    "unidad": "mm3"
+   },
+   "y_p": {
+    "valor": 126.25,
+    "unidad": "mm"
+   },
+   "Zx_carril": {
+    "valor": 3969188.0,
+    "unidad": "mm3"
+   },
+   "h_o": {
+    "valor": 667.0,
+    "unidad": "mm"
+   },
+   "h_c": {
+    "valor": 499.29936,
+    "unidad": "mm"
+   },
+   "h_p": {
+    "valor": 212.5,
+    "unidad": "mm"
+   },
+   "J_carril": {
+    "valor": 1272933.0,
+    "unidad": "mm4"
+   },
+   "Iy_carril": {
+    "valor": 89715233.0,
+    "unidad": "mm4"
+   },
+   "ry_carril": {
+    "valor": 75.59329,
+    "unidad": "mm"
+   }
+  },
+  "C3": {
+   "raiz_EFy": {
+    "valor": 24.07717,
+    "unidad": "—"
+   },
+   "lam_ala_sup": {
+    "valor": 8.75,
+    "unidad": "—"
+   },
+   "lam_p_ala": {
+    "valor": 9.14932,
+    "unidad": "—"
+   },
+   "uso_compac": {
+    "valor": 0.95636,
+    "unidad": "—"
+   },
+   "bf_max": {
+    "valor": 365.9728,
+    "unidad": "mm"
+   },
+   "lam_alma": {
+    "valor": 62.41242,
+    "unidad": "—"
+   },
+   "lam_rw": {
+    "valor": 137.23987,
+    "unidad": "—"
+   }
+  },
+  "C4": {
+   "w_viga": {
+    "valor": 1.20903,
+    "unidad": "kN/m"
+   },
+   "w_riel": {
+    "valor": 0.41359,
+    "unidad": "kN/m"
+   },
+   "w_carril": {
+    "valor": 1.62262,
+    "unidad": "kN/m"
+   },
+   "sobre_05": {
+    "valor": 1.35218,
+    "unidad": "—"
+   },
+   "Ez_real": {
+    "valor": 173.23743,
+    "unidad": "kN"
+   },
+   "sube_Ez": {
+    "valor": 1.08396,
+    "unidad": "—"
+   },
+   "W_falta": {
+    "valor": 25.3572,
+    "unidad": "kN"
+   },
+   "sube_P": {
+    "valor": 1.02445,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "x1_rueda": {
+    "valor": 2.9,
+    "unidad": "m"
+   },
+   "x2_rueda": {
+    "valor": 6.3,
+    "unidad": "m"
+   },
+   "coef_M": {
+    "valor": 2.24266,
+    "unidad": "m"
+   },
+   "M_serv": {
+    "valor": 361.60455,
+    "unidad": "kN·m"
+   }
+  },
+  "D2": {
+   "kappa": {
+    "valor": 0.94783,
+    "unidad": "—"
+   },
+   "R_Cds": {
+    "valor": 66.4566,
+    "unidad": "kN"
+   },
+   "R_Cvs": {
+    "valor": 94.783,
+    "unidad": "kN"
+   },
+   "R_suma": {
+    "valor": 161.2396,
+    "unidad": "kN"
+   },
+   "P_aist": {
+    "valor": 282.99725,
+    "unidad": "kN"
+   },
+   "P_nch": {
+    "valor": 309.57914,
+    "unidad": "kN"
+   },
+   "mas_nch": {
+    "valor": 1.09393,
+    "unidad": "—"
+   },
+   "w_u": {
+    "valor": 1.94714,
+    "unidad": "kN/m"
+   },
+   "R_izq": {
+    "valor": 246.70861,
+    "unidad": "kN"
+   },
+   "M_ux": {
+    "valor": 707.26725,
+    "unidad": "kN·m"
+   }
+  },
+  "D3": {
+   "ev_carril": {
+    "valor": 141.76,
+    "unidad": "mm"
+   },
+   "e_riel": {
+    "valor": 6.0,
+    "unidad": "mm"
+   },
+   "H_rueda": {
+    "valor": 24.0,
+    "unidad": "kN"
+   },
+   "T_empuje": {
+    "valor": 3402.24,
+    "unidad": "kN·mm"
+   },
+   "T_exc": {
+    "valor": 1857.47484,
+    "unidad": "kN·mm"
+   },
+   "T_par": {
+    "valor": 5259.71484,
+    "unidad": "kN·mm"
+   },
+   "frac_exc": {
+    "valor": 0.35315,
+    "unidad": "—"
+   }
+  },
+  "D4": {
+   "F_par": {
+    "valor": 7.88563,
+    "unidad": "kN"
+   },
+   "H_ala": {
+    "valor": 31.88563,
+    "unidad": "kN"
+   },
+   "amplif_tors": {
+    "valor": 1.32857,
+    "unidad": "—"
+   },
+   "M_uy": {
+    "valor": 71.50863,
+    "unidad": "kN·m"
+   }
+  },
+  "D5": {
+   "R_serv": {
+    "valor": 299.25983,
+    "unidad": "kN"
+   },
+   "V_u": {
+    "valor": 486.1175,
+    "unidad": "kN"
+   }
+  },
+  "D6": {
+   "P_u": {
+    "valor": 68.8,
+    "unidad": "kN"
+   }
+  },
+  "E1": {
+   "M_p": {
+    "valor": 1369.36986,
+    "unidad": "kN·m"
+   },
+   "tope_16": {
+    "valor": 2590.7971,
+    "unidad": "kN·m"
+   },
+   "M_yc": {
+    "valor": 1619.24819,
+    "unidad": "kN·m"
+   },
+   "M_yt": {
+    "valor": 1053.76938,
+    "unidad": "kN·m"
+   },
+   "R_pc": {
+    "valor": 0.84568,
+    "unidad": "—"
+   },
+   "R_pt": {
+    "valor": 1.2995,
+    "unidad": "—"
+   },
+   "razon_alturas": {
+    "valor": 2.34964,
+    "unidad": "—"
+   },
+   "lam_pw": {
+    "valor": 151.17752,
+    "unidad": "—"
+   },
+   "razon_S": {
+    "valor": 0.65078,
+    "unidad": "—"
+   },
+   "F_L": {
+    "valor": 224.5191,
+    "unidad": "MPa"
+   },
+   "queda_07Fy": {
+    "valor": 0.92969,
+    "unidad": "—"
+   }
+  },
+  "E2": {
+   "a_w": {
+    "valor": 0.57063,
+    "unidad": "—"
+   },
+   "r_t": {
+    "valor": 97.9864,
+    "unidad": "mm"
+   },
+   "L_p": {
+    "valor": 2595.15873,
+    "unidad": "mm"
+   },
+   "term_tors": {
+    "valor": 0.00040662,
+    "unidad": "—"
+   },
+   "L_r_ltb": {
+    "valor": 9856.66268,
+    "unidad": "mm"
+   },
+   "M_A": {
+    "valor": 459.15594,
+    "unidad": "kN·m"
+   },
+   "M_B": {
+    "valor": 648.32419,
+    "unidad": "kN·m"
+   },
+   "M_C": {
+    "valor": 513.32841,
+    "unidad": "kN·m"
+   },
+   "C_b": {
+    "valor": 1.21458,
+    "unidad": "—"
+   },
+   "interp": {
+    "valor": 0.67546,
+    "unidad": "—"
+   },
+   "M_arranque": {
+    "valor": 1053.77433,
+    "unidad": "kN·m"
+   },
+   "corchete": {
+    "valor": 1156.1977,
+    "unidad": "kN·m"
+   },
+   "Mn_LTB": {
+    "valor": 1404.2946,
+    "unidad": "kN·m"
+   },
+   "Cb_min": {
+    "valor": 1.18437,
+    "unidad": "—"
+   },
+   "margen_Cb": {
+    "valor": 1.02551,
+    "unidad": "—"
+   },
+   "M_cx": {
+    "valor": 1232.43287,
+    "unidad": "kN·m"
+   },
+   "uso_fuerte": {
+    "valor": 0.57388,
+    "unidad": "—"
+   }
+  },
+  "E3": {
+   "Z_y": {
+    "valor": 612500.0,
+    "unidad": "mm3"
+   },
+   "S_y": {
+    "valor": 408333.0,
+    "unidad": "mm3"
+   },
+   "M_ny": {
+    "valor": 211.3125,
+    "unidad": "kN·m"
+   },
+   "tope_y": {
+    "valor": 225.39982,
+    "unidad": "kN·m"
+   },
+   "M_cy": {
+    "valor": 190.18125,
+    "unidad": "kN·m"
+   },
+   "uso_debil": {
+    "valor": 0.376,
+    "unidad": "—"
+   },
+   "esbeltez_punt": {
+    "valor": 99.21516,
+    "unidad": "—"
+   },
+   "F_e": {
+    "valor": 200.52737,
+    "unidad": "MPa"
+   },
+   "razon_FyFe": {
+    "valor": 1.72046,
+    "unidad": "—"
+   },
+   "F_cr": {
+    "valor": 167.91288,
+    "unidad": "MPa"
+   },
+   "P_c": {
+    "valor": 2372.60899,
+    "unidad": "kN"
+   }
+  },
+  "E4": {
+   "razon_axial": {
+    "valor": 0.029,
+    "unidad": "—"
+   },
+   "term_axial": {
+    "valor": 0.0145,
+    "unidad": "—"
+   },
+   "interaccion": {
+    "valor": 0.96438,
+    "unidad": "—"
+   },
+   "uso_debil_sin": {
+    "valor": 0.28301,
+    "unidad": "—"
+   },
+   "interaccion_sin": {
+    "valor": 0.87139,
+    "unidad": "—"
+   },
+   "pesa_tors": {
+    "valor": 1.10671,
+    "unidad": "—"
+   }
+  },
+  "E5": {
+   "frontera_corte": {
+    "valor": 61.20244,
+    "unidad": "—"
+   },
+   "lam_alma_corte": {
+    "valor": 81.25,
+    "unidad": "—"
+   },
+   "C_v1": {
+    "valor": 0.75326,
+    "unidad": "—"
+   },
+   "V_n": {
+    "valor": 810.80906,
+    "unidad": "kN"
+   },
+   "V_c": {
+    "valor": 729.72815,
+    "unidad": "kN"
+   },
+   "uso_corte": {
+    "valor": 0.66616,
+    "unidad": "—"
+   },
+   "umbral_atie": {
+    "valor": 61.15601,
+    "unidad": "—"
+   }
+  },
+  "E6": {
+   "lef_carril": {
+    "valor": 303.52,
+    "unidad": "mm"
+   },
+   "R_n": {
+    "valor": 837.7152,
+    "unidad": "kN"
+   },
+   "uso_alma_rueda": {
+    "valor": 0.36955,
+    "unidad": "—"
+   }
+  },
+  "F1": {
+   "b_flecha": {
+    "valor": 2050.0,
+    "unidad": "mm"
+   },
+   "delta_v": {
+    "valor": 8.26725,
+    "unidad": "mm"
+   },
+   "uso_v_C": {
+    "valor": 0.66138,
+    "unidad": "—"
+   }
+  },
+  "F3": {
+   "uso_v_B": {
+    "valor": 1.1023,
+    "unidad": "—"
+   },
+   "I_clase_B": {
+    "valor": 1395063613.0,
+    "unidad": "mm4"
+   }
+  },
+  "F2": {
+   "I_ala": {
+    "valor": 71458333.0,
+    "unidad": "mm4"
+   },
+   "H_CMAA": {
+    "valor": 16.12391,
+    "unidad": "kN"
+   },
+   "delta_l_CMAA": {
+    "valor": 14.64206,
+    "unidad": "mm"
+   },
+   "uso_l_CMAA": {
+    "valor": 0.78091,
+    "unidad": "—"
+   },
+   "H_AIST": {
+    "valor": 15.0,
+    "unidad": "kN"
+   },
+   "delta_l_AIST": {
+    "valor": 13.62144,
+    "unidad": "mm"
+   },
+   "uso_l_AIST": {
+    "valor": 0.72648,
+    "unidad": "—"
+   },
+   "mayor_CMAA": {
+    "valor": 1.07493,
+    "unidad": "—"
+   },
+   "H_CMAA_desc": {
+    "valor": 5.37609,
+    "unidad": "kN"
+   },
+   "frac_desc": {
+    "valor": 0.35841,
+    "unidad": "—"
+   }
+  },
+  "F4": {
+   "d_total_riel": {
+    "valor": 17.72361,
+    "unidad": "mm"
+   },
+   "uso_suma": {
+    "valor": 0.94526,
+    "unidad": "—"
+   },
+   "veces_viga": {
+    "valor": 4.75152,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "bfs_carril": {
+   "valor": 350.0,
+   "unidad": "mm",
+   "paso": "S2",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "tfs_carril": {
+   "valor": 20.0,
+   "unidad": "mm",
+   "paso": "S2",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "hw_carril": {
+   "valor": 650.0,
+   "unidad": "mm",
+   "paso": "S2",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "tw_carril": {
+   "valor": 8.0,
+   "unidad": "mm",
+   "paso": "S2",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "bfi_carril": {
+   "valor": 250.0,
+   "unidad": "mm",
+   "paso": "S2",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "tfi_carril": {
+   "valor": 14.0,
+   "unidad": "mm",
+   "paso": "S2",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "d_carril": {
+   "valor": 684.0,
+   "unidad": "mm",
+   "paso": "C1",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "Ix_carril": {
+   "valor": 1265593407.0,
+   "unidad": "mm4",
+   "paso": "C2",
+   "heredan": [
+    "09"
+   ]
+  },
+  "Sxc_carril": {
+   "valor": 4693473.0,
+   "unidad": "mm3",
+   "paso": "C2",
+   "heredan": [
+    "09"
+   ]
+  },
+  "Sxt_carril": {
+   "valor": 3054404.0,
+   "unidad": "mm3",
+   "paso": "C2",
+   "heredan": [
+    "09"
+   ]
+  },
+  "ybar_carril": {
+   "valor": 269.64968,
+   "unidad": "mm",
+   "paso": "C2",
+   "heredan": [
+    "09"
+   ]
+  },
+  "w_carril": {
+   "valor": 1.62262,
+   "unidad": "kN/m",
+   "paso": "C4",
+   "heredan": [
+    "09",
+    "10"
+   ]
+  },
+  "M_serv": {
+   "valor": 361.60455,
+   "unidad": "kN·m",
+   "paso": "D1",
+   "heredan": [
+    "09"
+   ]
+  },
+  "e_riel": {
+   "valor": 6.0,
+   "unidad": "mm",
+   "paso": "D3",
+   "heredan": [
+    "09"
+   ]
+  },
+  "ev_carril": {
+   "valor": 141.76,
+   "unidad": "mm",
+   "paso": "D3",
+   "heredan": [
+    "09"
+   ]
+  },
+  "lef_carril": {
+   "valor": 303.52,
+   "unidad": "mm",
+   "paso": "E6",
+   "heredan": [
+    "09"
+   ]
+  },
+  "N_50": {
+   "valor": 150000.0,
+   "unidad": "ciclos",
+   "paso": "B2",
+   "heredan": [
+    "09"
+   ]
+  }
+ },
+ "publicado": {
+  "bfs_carril": "350",
+  "tfs_carril": "20",
+  "hw_carril": "650",
+  "tw_carril": "8",
+  "bfi_carril": "250",
+  "tfi_carril": "14",
+  "d_carril": "684",
+  "Ix_carril": "1265593407",
+  "Sxc_carril": "4693473",
+  "Sxt_carril": "3054404",
+  "ybar_carril": "269,64968",
+  "w_carril": "1,62262",
+  "M_serv": "361,60455",
+  "e_riel": "6,00",
+  "ev_carril": "141,76",
+  "lef_carril": "303,52",
+  "N_50": "150000"
+ },
+ "resumen": {
+  "coef_reac": "1,54667",
+  "R_carril_s": "23,20005",
+  "x1_rueda": "2,90000",
+  "coef_077": "0,77333",
+  "eta2": "0,15542",
+  "eta_cont": "1,85750",
+  "sube_cont": "1,20097",
+  "R_carril_cont": "27,86250",
+  "SS_marco_cont": "55,72500",
+  "d_riel_cont": "3,70085",
+  "uso_cont": "0,19738",
+  "margen_cont": "5,06637",
+  "frac_techoC": "0,75000",
+  "veces_pisoC": "3,75000",
+  "N_50": "150000,00000",
+  "sobre_techoC": "1,50000",
+  "dlim_v_C": "12,50000",
+  "dlim_v_B": "7,50000",
+  "razon_lim_v": "1,66667",
+  "dlim_lat": "18,75000",
+  "d_carril": "684,00000",
+  "A_carril": "15700,00000",
+  "razon_alas": "2,00000",
+  "ybar_carril": "269,64968",
+  "y_inf": "414,35032",
+  "Ix_carril": "1265593407",
+  "Sxc_carril": "4693473",
+  "Sxt_carril": "3054404",
+  "y_p": "126,25000",
+  "Zx_carril": "3969188",
+  "h_o": "667,00000",
+  "h_c": "499,29936",
+  "h_p": "212,50000",
+  "J_carril": "1272933",
+  "Iy_carril": "89715233",
+  "ry_carril": "75,59329",
+  "lam_ala_sup": "8,75000",
+  "lam_p_ala": "9,14932",
+  "uso_compac": "0,95636",
+  "bf_max": "365,97280",
+  "lam_alma": "62,41242",
+  "lam_rw": "137,23987",
+  "w_viga": "1,20903",
+  "w_riel": "0,41359",
+  "w_carril": "1,62262",
+  "sobre_05": "1,35218",
+  "Ez_real": "173,23743",
+  "sube_Ez": "1,08396",
+  "W_falta": "25,35720",
+  "sube_P": "1,02445",
+  "coef_M": "2,24266",
+  "M_serv": "361,60455",
+  "kappa": "0,94783",
+  "R_Cds": "66,45660",
+  "R_Cvs": "94,78300",
+  "R_suma": "161,23960",
+  "P_aist": "282,99725",
+  "P_nch": "309,57914",
+  "mas_nch": "1,09393",
+  "w_u": "1,94714",
+  "R_izq": "246,70861",
+  "M_ux": "707,26725",
+  "ev_carril": "141,76000",
+  "e_riel": "6,00000",
+  "T_par": "5259,71484",
+  "T_empuje": "3402,24000",
+  "T_exc": "1857,47484",
+  "frac_exc": "0,35315",
+  "F_par": "7,88563",
+  "H_ala": "31,88563",
+  "amplif_tors": "1,32857",
+  "M_uy": "71,50863",
+  "R_serv": "299,25983",
+  "V_u": "486,11750",
+  "P_u": "68,80000",
+  "M_p": "1369,36986",
+  "tope_16": "2590,79710",
+  "M_yt": "1053,76938",
+  "R_pc": "0,84568",
+  "R_pt": "1,29950",
+  "razon_alturas": "2,34964",
+  "lam_pw": "151,17752",
+  "razon_S": "0,65078",
+  "F_L": "224,51910",
+  "queda_07Fy": "0,92969",
+  "a_w": "0,57063",
+  "r_t": "97,98640",
+  "L_p": "2595,15873",
+  "term_tors": "0,00040662",
+  "L_r_ltb": "9856,66268",
+  "M_A": "459,15594",
+  "M_B": "648,32419",
+  "M_C": "513,32841",
+  "C_b": "1,21458",
+  "interp": "0,67546",
+  "M_arranque": "1053,77433",
+  "corchete": "1156,19770",
+  "Mn_LTB": "1404,29460",
+  "Cb_min": "1,18437",
+  "margen_Cb": "1,02551",
+  "M_cx": "1232,43287",
+  "uso_fuerte": "0,57388",
+  "Z_y": "612500,00000",
+  "S_y": "408333,00000",
+  "M_ny": "211,31250",
+  "tope_y": "225,39982",
+  "M_cy": "190,18125",
+  "uso_debil": "0,37600",
+  "esbeltez_punt": "99,21516",
+  "F_e": "200,52737",
+  "razon_FyFe": "1,72046",
+  "F_cr": "167,91288",
+  "P_c": "2372,60899",
+  "razon_axial": "0,02900",
+  "term_axial": "0,01450",
+  "interaccion": "0,96438",
+  "uso_debil_sin": "0,28301",
+  "interaccion_sin": "0,87139",
+  "pesa_tors": "1,10671",
+  "frontera_corte": "61,20244",
+  "lam_alma_corte": "81,25000",
+  "C_v1": "0,75326",
+  "V_n": "810,80906",
+  "V_c": "729,72815",
+  "uso_corte": "0,66616",
+  "umbral_atie": "61,15601",
+  "lef_carril": "303,52000",
+  "R_n": "837,71520",
+  "uso_alma_rueda": "0,36955",
+  "b_flecha": "2050,00000",
+  "delta_v": "8,26725",
+  "uso_v_C": "0,66138",
+  "uso_v_B": "1,10230",
+  "I_clase_B": "1395063613",
+  "I_ala": "71458333",
+  "H_CMAA": "16,12391",
+  "delta_l_CMAA": "14,64206",
+  "uso_l_CMAA": "0,78091",
+  "delta_l_AIST": "13,62144",
+  "uso_l_AIST": "0,72648",
+  "mayor_CMAA": "1,07493",
+  "H_CMAA_desc": "5,37609",
+  "frac_desc": "0,35841",
+  "d_total_riel": "17,72361",
+  "uso_suma": "0,94526"
+ },
+ "rukan": "0.1.0",
+ "commit": "ce87a03",
+ "generado": "2026-09-05T18:33:49"
+}

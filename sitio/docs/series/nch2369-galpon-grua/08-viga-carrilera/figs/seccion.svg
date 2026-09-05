@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 470" width="720" height="470" role="img" aria-label="Seccion transversal de la viga carrilera con el riel encima, a escala: ala superior de 350 por 20, alma de 650 por 8, ala inferior de 250 por 14, canto total 684, centro de gravedad a 269,64968 de la fibra superior, 667 entre centroides de ala y el riel desplazado 6,00 respecto del eje del alma" font-family="ui-monospace,'IBM Plex Mono',Menlo,Consolas,monospace" font-size="11">
+<title>De dónde sale la torsión de la carrilera</title>
+<rect width="720" height="470" fill="#fcfcfa"/>
+<text x="24.0" y="30.0" fill="#2b2a26" text-anchor="start" font-size="11.5" font-weight="600">El brazo de torsión no está en la viga: está en el riel y en su tolerancia</text>
+<text x="24.0" y="48.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">sección a escala real · el empuje lateral entra en la cabeza del riel</text>
+<rect x="279.3" y="76.5" width="45.5" height="13.6" fill="#b3b6ba" stroke="#2b2a26" stroke-width="1.1"/>
+<rect x="299.0" y="90.2" width="6.2" height="19.1" fill="#b3b6ba" stroke="#2b2a26" stroke-width="1.1"/>
+<rect x="279.3" y="109.3" width="45.5" height="12.7" fill="#b3b6ba" stroke="#2b2a26" stroke-width="1.1"/>
+<rect x="239.6" y="122.0" width="120.7" height="6.9" fill="#d5d7da" stroke="#2b2a26" stroke-width="1.1"/>
+<rect x="298.6" y="128.9" width="2.8" height="224.2" fill="#d5d7da" stroke="#2b2a26" stroke-width="1.1"/>
+<rect x="256.9" y="353.1" width="86.2" height="4.8" fill="#d5d7da" stroke="#2b2a26" stroke-width="1.1"/>
+<line x1="300.0" y1="60.5" x2="300.0" y2="372.0" stroke="#8a8578" stroke-width="0.9" stroke-dasharray="3 3"/>
+<line x1="302.1" y1="60.5" x2="302.1" y2="118.0" stroke="#a4442c" stroke-width="0.9" stroke-dasharray="3 3"/>
+<text x="328.1" y="56.5" fill="#a4442c" text-anchor="start" font-size="10" font-weight="normal">e = 6,00 mm</text>
+<text x="328.1" y="68.5" fill="#a4442c" text-anchor="start" font-size="9.5" font-weight="normal">(tres cuartos del alma)</text>
+<line x1="305.1" y1="52.5" x2="326.1" y2="52.5" stroke="#a4442c" stroke-width="0.9"/>
+<line x1="246.5" y1="83.4" x2="275.2" y2="83.4" stroke="#a4442c" stroke-width="1.6"/>
+<polygon points="275.2,83.4 266.2,86.9 266.2,79.9" fill="#a4442c"/>
+<text x="244.8" y="87.4" fill="#a4442c" text-anchor="end" font-size="10" font-weight="normal">empuje lateral</text>
+<line x1="205.6" y1="215.0" x2="372.4" y2="215.0" stroke="#2f5d7c" stroke-width="1.1" stroke-dasharray="5 3"/>
+<circle cx="300.0" cy="215.0" r="3.2" fill="#2f5d7c"/>
+<text x="378.4" y="212.0" fill="#2f5d7c" text-anchor="start" font-size="10" font-weight="normal">centro de gravedad</text>
+<text x="378.4" y="225.0" fill="#2f5d7c" text-anchor="start" font-size="10" font-weight="normal">269,64968 mm</text>
+<line x1="209.6" y1="122.0" x2="209.6" y2="215.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="209.6,122.0 212.4,129.2 206.8,129.2" fill="#8a8578"/>
+<polygon points="209.6,215.0 206.8,207.8 212.4,207.8" fill="#8a8578"/>
+<text x="203.6" y="171.5" fill="#8a8578" text-anchor="end" font-size="10" font-weight="normal">269,64968</text>
+<line x1="163.6" y1="122.0" x2="163.6" y2="358.0" stroke="#2b2a26" stroke-width="1"/>
+<polygon points="163.6,122.0 166.4,129.2 160.8,129.2" fill="#2b2a26"/>
+<polygon points="163.6,358.0 160.8,350.8 166.4,350.8" fill="#2b2a26"/>
+<text x="157.6" y="243.0" fill="#2b2a26" text-anchor="end" font-size="10" font-weight="normal">684</text>
+<text x="157.6" y="372.0" fill="#8a8578" text-anchor="end" font-size="9.5" font-weight="normal">canto total</text>
+<line x1="488.4" y1="125.5" x2="488.4" y2="355.6" stroke="#4a6b46" stroke-width="1"/>
+<polygon points="488.4,125.5 491.2,132.7 485.6,132.7" fill="#4a6b46"/>
+<polygon points="488.4,355.6 485.6,348.4 491.2,348.4" fill="#4a6b46"/>
+<text x="494.4" y="243.5" fill="#4a6b46" text-anchor="start" font-size="10" font-weight="normal">667</text>
+<text x="494.4" y="349.6" fill="#4a6b46" text-anchor="start" font-size="9.5" font-weight="normal">entre centroides</text>
+<text x="494.4" y="361.6" fill="#4a6b46" text-anchor="start" font-size="9.5" font-weight="normal">de ala</text>
+<line x1="394.4" y1="125.5" x2="488.4" y2="125.5" stroke="#c9c4b5" stroke-width="0.8" stroke-dasharray="3 3"/>
+<line x1="403.1" y1="355.6" x2="488.4" y2="355.6" stroke="#c9c4b5" stroke-width="0.8" stroke-dasharray="3 3"/>
+<line x1="239.6" y1="128.9" x2="239.6" y2="404.0" stroke="#c9c4b5" stroke-width="0.8" stroke-dasharray="3 3"/>
+<line x1="360.4" y1="128.9" x2="360.4" y2="404.0" stroke="#c9c4b5" stroke-width="0.8" stroke-dasharray="3 3"/>
+<line x1="256.9" y1="384.0" x2="343.1" y2="384.0" stroke="#2b2a26" stroke-width="1"/>
+<polygon points="256.9,384.0 264.1,381.2 264.1,386.8" fill="#2b2a26"/>
+<polygon points="343.1,384.0 335.9,386.8 335.9,381.2" fill="#2b2a26"/>
+<text x="300.0" y="380.0" fill="#2b2a26" text-anchor="middle" font-size="10" font-weight="normal">250</text>
+<line x1="239.6" y1="408.0" x2="360.4" y2="408.0" stroke="#2b2a26" stroke-width="1"/>
+<polygon points="239.6,408.0 246.8,405.2 246.8,410.8" fill="#2b2a26"/>
+<polygon points="360.4,408.0 353.2,410.8 353.2,405.2" fill="#2b2a26"/>
+<text x="300.0" y="404.0" fill="#2b2a26" text-anchor="middle" font-size="10" font-weight="normal">350</text>
+<text x="368.4" y="129.4" fill="#2b2a26" text-anchor="start" font-size="10" font-weight="normal">20</text>
+<text x="311.4" y="241.0" fill="#2b2a26" text-anchor="start" font-size="10" font-weight="normal">alma 8</text>
+<text x="311.4" y="254.0" fill="#8a8578" text-anchor="start" font-size="9.5" font-weight="normal">650 de alto</text>
+<text x="351.1" y="359.6" fill="#2b2a26" text-anchor="start" font-size="10" font-weight="normal">14</text>
+<text x="338.8" y="84.5" fill="#b3b6ba" text-anchor="start" font-size="10" font-weight="normal">riel 131,76 de alto</text>
+<text x="24.0" y="440.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">el ala superior es el doble del área de la inferior:</text>
+<text x="24.0" y="454.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">por eso el centro de gravedad sube y el ala traccionada fluye primero</text>
+</svg>
