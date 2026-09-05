@@ -145,6 +145,9 @@ class RukanVisor extends HTMLElement {
     for (let k = 0; k < N; k++) bb.expandByPoint(new THREE.Vector3(this.base[3 * k], this.base[3 * k + 1], this.base[3 * k + 2]));
     this.centro = bb.getCenter(new THREE.Vector3());
     this.diag = bb.getSize(new THREE.Vector3()).length() || 1;
+    this.esquinas = [];
+    for (const x of [bb.min.x, bb.max.x]) for (const y of [bb.min.y, bb.max.y]) for (const z of [bb.min.z, bb.max.z])
+      this.esquinas.push(new THREE.Vector3(x, y, z));
 
     // three
     this.scene = new THREE.Scene();
@@ -246,19 +249,36 @@ class RukanVisor extends HTMLElement {
   _tamano() {
     const w = this.lienzo.clientWidth || 600, h = this.alto;
     this.renderer.setSize(w, h);
-    const asp = w / h, semi = 0.58 * this.diag;
+    this._encuadrar();
+    this._render();
+  }
+
+  // El frustum ortográfico se ajusta a la proyección de la caja del modelo en
+  // la dirección actual de la cámara, con un margen: así una elevación llena el
+  // lienzo con el marco y no con la diagonal 3D del galpón entero.
+  _encuadrar() {
+    const w = this.lienzo.clientWidth || 600, h = this.alto, asp = w / h;
+    this.camera.updateMatrixWorld();
+    const inv = this.camera.matrixWorldInverse;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const e of this.esquinas) {
+      const q = e.clone().applyMatrix4(inv);
+      x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y);
+    }
+    const sx = Math.max((x1 - x0) / 2, 1e-6), sy = Math.max((y1 - y0) / 2, 1e-6);
+    const semi = 1.12 * Math.max(sy, sx / asp);
     this.camera.left = -semi * asp; this.camera.right = semi * asp;
     this.camera.top = semi; this.camera.bottom = -semi;
     this.camera.updateProjectionMatrix();
-    this._render();
   }
 
   _vista(nombre) {
     const v = VISTAS[nombre] || VISTAS.iso;
     this.camera.up.set(...v.up);
     this.camera.position.copy(this.centro).addScaledVector(new THREE.Vector3(...v.dir), 2 * this.diag);
+    this.camera.lookAt(this.centro);
     this.camera.zoom = 1;
-    this.camera.updateProjectionMatrix();
+    this._encuadrar();
     this.controls.target.copy(this.centro);
     this.controls.update();
     this._render();

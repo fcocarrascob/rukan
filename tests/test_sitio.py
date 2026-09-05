@@ -13,7 +13,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
-import runpy
+import os
 import shutil
 import subprocess
 import sys
@@ -26,6 +26,17 @@ from rukan import io
 RAIZ = Path(__file__).resolve().parent.parent
 SITIO = RAIZ / "sitio"
 MODELOS = SITIO / "docs" / "modelos"
+# Los hijos escriben UTF-8 y su salida se captura aparte: MkDocs imprime un
+# aviso con caracteres que, en cp1252 y por el fd que pytest captura, rompen
+# la decodificación de toda la sesión.
+ENV = {**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
+
+
+def _correr(cmd, cwd):
+    r = subprocess.run(cmd, cwd=cwd, env=ENV, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    assert r.returncode == 0, "\n".join([" ".join(map(str, cmd)), r.stdout, r.stderr])
+    return r
 
 
 def _main():
@@ -144,14 +155,13 @@ def test_el_generador_reproduce_el_proyecto_versionado(carpeta, tmp_path):
     """El modelo del sitio es el del caso de verificación, no una copia que se aleja."""
     slug = carpeta.name
     salida = tmp_path / f"{slug}.proyecto.json"
-    subprocess.run([sys.executable, str(carpeta / "_generar.py"), str(salida)],
-                   check=True, cwd=RAIZ)
+    _correr([sys.executable, str(carpeta / "_generar.py"), str(salida)], RAIZ)
     esperado = json.loads((carpeta / f"{slug}.proyecto.json").read_text(encoding="utf-8"))
     assert json.loads(salida.read_text(encoding="utf-8")) == esperado
 
 
 @pytest.mark.skipif(shutil.which("mkdocs") is None, reason="mkdocs no está instalado")
 def test_mkdocs_build_estricto(tmp_path):
-    subprocess.run(["mkdocs", "build", "--strict", "-f", str(SITIO / "mkdocs.yml"),
-                    "-d", str(tmp_path / "build")], check=True, cwd=SITIO)
+    _correr(["mkdocs", "build", "--strict", "-f", str(SITIO / "mkdocs.yml"),
+             "-d", str(tmp_path / "build")], SITIO)
     assert (tmp_path / "build" / "index.html").exists()

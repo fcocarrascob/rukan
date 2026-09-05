@@ -50,3 +50,5 @@ extra_javascript:
 
 nav:
   - Inicio: index.md
+  - Modelos:
+      - El galpón con puente grúa: modelos/galpon-grua/index.md
