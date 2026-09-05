@@ -239,6 +239,31 @@ La nota 02 estrenó además un patrón reutilizable: **tres caminos en vez de do
 La suma de fibras en numpy predice lo que da el motor malla por malla (error 0),
 lo que separa el error de *discretización* de un eventual error del *motor*.
 
+## ✅ El puente con el repo de memos — el archivo de proyecto (2026-09-05)
+
+El memo cita un resultado de análisis, y ese resultado tiene que salir de algo que
+cualquiera regenere y vuelva a correr. Antes era `emitir_json` a mano en el caso 11;
+ahora es **un archivo**: `rukan/proyecto@1`, JSON con modelo + casos + combinaciones +
+análisis + salidas (símbolo → sonda). `python -m rukan run` no toma opciones y deja
+`<p>.resultados.json` con el SHA-256 del proyecto; el arnés del repo de memos compara
+hashes y ya no lee nada fuera de su repo.
+
+- `src/rukan/io.py` (serialización, validación que nombra el campo, nombres↔ids, Pint en
+  la frontera), `analysis.py` (modal con participación 3D, casos estáticos, combos,
+  sondas), `__main__.py` (`run` / `validar`). 65 tests. Versión 0.1.0.
+- Caso 11, capa E: round-trip a 1e-15; el sway de los diez aleros es el marco **más** el
+  techo arriostrado (2,6·10⁻⁴). `figuras()` regenera los SVG.
+- Repo de memos: `_modelos/_proyecto-nch2369-galpon-grua-00.py` → proyecto de 965 nudos
+  (malla 16, `T*_Y` converge a 1e-5 s) → `python -m rukan run` → memo
+  `nch2369-galpon-grua-00-el-modelo` con `## Modelo`, `orden: 0`, cinco arneses en verde.
+  Publica `T*_X = 0,20602 s`, `T*_Y = 0,24878 s`, masas acumuladas y dos desplazamientos;
+  `k_Y = 15 047,57 kN/m` es un paso del memo.
+- Diseño: `docs/superpowers/specs/2026-09-05-puente-rukan-memos-design.md`.
+
+**Pendiente que abre:** la cascada 04→13 del repo de memos con los períodos del 00;
+`espectral` en el esquema v2; verificar corte y torsión de barra contra SAP2000
+(hoy solo axial y momentos, casos 6, 9 y 10).
+
 ---
 
 ## ▶ PRÓXIMA SESIÓN — candidatos
@@ -282,6 +307,9 @@ procedencia**.
 ### Fase 0 — Núcleo headless (sin GUI)
 - [x] Capa de unidades (Pint en la frontera + sistema interno consistente)
 - [x] Modelo de datos 3D (dataclasses)
+- [x] **Archivo de proyecto** `rukan/proyecto@1` (`io.py`) + runner (`analysis.py`) + CLI
+      `python -m rukan run` — el puente con el repo de memos; el memo 00 lo consume
+- [ ] Esquema v2: `analisis.espectral` (NCh2369, T*/R* por dirección, 100/30)
 - [x] Constructor OpenSees desde el modelo (`engine.py`) — 3D, verificado vs voladizo analítico
 - [ ] Base de perfiles chilenos (catálogo ICHA: IN, HN, cajón, tubos, ángulos, XL)
 - [x] Análisis estático y modal

@@ -50,12 +50,28 @@ el galpón con puente grúa de la serie de memos `nch2369-galpon-grua` de
 (geometría y secciones, cada constante con el eslabón que la publica),
 `case11_ref.py` (rigidez directa 2D en numpy puro, sin `rukan` ni `openseespy` —
 la regla del laboratorio aplicada a `verification/`) y
-`case11_galpon_grua_nch2369.py`. Capas A–C listas —geometría, rigidez del marco y
-arrastre— y la **D**, el galpon completo en 3D: 245 nudos, 324 barras, periodos por
-direccion y masas participantes. Emite `case11_galpon_grua.json`, que el repo de memos
-consume con su propio arnes. Encontró que la `k_Y` declarada en el memo 07
-sale de un empuje en un solo alero y no de un *sway*: 9,6 % de diferencia, con
-`k_riel` calzando a 2·10⁻⁵ por venir del caso correcto.
+`case11_galpon_grua_nch2369.py`. Capas A–C —geometría, rigidez del marco y
+arrastre—, **D** (el galpón completo en 3D: períodos por dirección y masas
+participantes) y **E** (el galpón como archivo de proyecto, round-trip a 1e-15).
+Encontró que la `k_Y` declarada en el memo 07 sale de un empuje en un solo alero y
+no de un *sway*: 9,6 % de diferencia, con `k_riel` calzando a 2·10⁻⁵ por venir del
+caso correcto. Y en la capa E, que empujar los diez aleros con la misma H es el sway
+del marco **más el techo arriostrado**, que lo endurece 2,6·10⁻⁴ porque las
+diagonales unen líneas distintas del rafter. `figuras()` regenera sus seis SVG.
+
+**El archivo de proyecto (2026-09-05) es el puente con el repo de memos.** Esquema
+`rukan/proyecto@1` (`io.py`): un JSON con modelo + casos + combinaciones + análisis +
+**salidas** (símbolo del memo → sonda: `periodo_dominante`, `desplazamiento{nudo,gdl,caso}`,
+`reaccion`, `fuerza`, …). `python -m rukan run <p>.proyecto.json` (`__main__.py`,
+`analysis.py`) no toma opciones y escribe `<p>.resultados.json` con el SHA-256 del
+proyecto, la versión, el commit y el `openseespy`. El repo de memos versiona el
+proyecto junto al memo (`_modelos/`), un generador lo escribe importando la geometría
+de `case11_data.py` vía `RUKAN_ROOT`, y `_kit/verify_modelo.py` compara hashes. **El
+memo 00 de la serie es el primer consumidor**, con los cinco arneses en verde. Reglas:
+las salidas son magnitudes primarias (`k = H/δ` es un paso del memo); nombres o ids en
+`nudo`/`barra`; Pint en `io.load`, el núcleo nunca ve otra unidad. `espectral` (T*/R*
+por dirección) queda para el esquema v2. Corte y torsión de barra siguen la regla
+análoga a la axial y **no están verificados contra SAP2000**; axial y momentos sí.
 
 **`vista.py` (2026-09-05) es la primera visualización que tiene el repo**, y un
 adelanto parcial de la Fase 2: planta, elevaciones, axonometría y deformada de un
@@ -64,8 +80,9 @@ modo, a SVG y sin dependencias nuevas. **Sin eliminación de líneas ocultas**, 
 exista en el texto. `escena()` toma `filtro` — sin él, en una elevación las barras
 que comparten proyección se tapan y la que queda encima miente.
 
-**Próximo paso: Fase 1** (chequeo de código AISC/NCh427) o el espectro vertical
-NCh2369 — ver `ROADMAP.md`.
+**Próximo paso:** la cascada 04→13 en el repo de memos con los períodos del 00, o
+**Fase 1** (chequeo de código AISC/NCh427), o el espectro vertical NCh2369 — ver
+`ROADMAP.md`. Diseño del puente: `docs/superpowers/specs/2026-09-05-puente-rukan-memos-design.md`.
 
 ## Principios de arquitectura
 
@@ -152,6 +169,8 @@ pip install -e ".[dev]"                       # instala Rukan editable + pytest
 pytest                                        # tests unitarios + notas del laboratorio
 python verification/case01_cantilever_column.py   # corre un caso de verificación
 python -m lab.nota01_eleload_empotramiento        # corre una nota del laboratorio
+python -m rukan validar <p>.proyecto.json         # valida el esquema sin correr nada
+python -m rukan run <p>.proyecto.json             # corre y escribe <p>.resultados.json
 ```
 
 ## Estructura
@@ -165,6 +184,9 @@ src/rukan/
   modal.py    # análisis espectral propio: CQC/SRSS + direccional 100/30
   spectra.py  # espectro NCh2369
   vista.py    # dibujo del modelo a SVG: planta, elevaciones, isométrica, deformada
+  io.py       # el archivo de proyecto rukan/proyecto@1: (de)serialización, validación, unidades
+  analysis.py # el runner: modal + casos + combinaciones + sondas -> {simbolo: valor}
+  __main__.py # CLI: `python -m rukan run|validar`
 verification/ # escalera de casos: test + artefacto de blog (vs SAP2000)
 lab/          # notas de análisis verificable (vs fórmula cerrada / numpy)
   _lib/       # report (tabla + assert), ref (numpy puro), svg, publish
