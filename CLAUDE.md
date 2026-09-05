@@ -32,14 +32,40 @@ estructuras simples/cotidianas (análisis modal, espectral, pushover).
 
 Verificados los casos 1–3 (voladizo, edificio de corte, reticulado), 5 (modal
 espectral NCh2369), 6 (arriostramiento con liberación de momentos), 7 (galpón 3D:
-2 direcciones + CQC + 100/30) y **8** (peso propio, casos de carga y combinaciones,
-galpón a dos aguas), todos con error ~0% vs SAP2000. El ensamblador `engine.py`
-(Model 3D → OpenSees, con liberación de momentos), el análisis espectral propio
-(`modal.py`: CQC/SRSS + `run_directional_spectral` + `directional_combination`
-100/30) y las cargas (`loads.py`: peso propio distribuido/concentrado, masa
-propia, casos y combinaciones) están verificados contra SAP2000. **Próximo paso:
-Fase 1 (chequeo de código AISC/NCh427) o el espectro vertical NCh2369** — ver
-`ROADMAP.md`. Los casos contra SAP2000 requieren el notebook del trabajo (MCP SAP2000).
+2 direcciones + CQC + 100/30), 8 (peso propio, casos de carga y combinaciones,
+galpón a dos aguas), 9 (torre CBF/MRF con T*/R* por dirección) y 10 (galpón del
+altiplano: 188 barras, 79 combinaciones), todos con error ~0 % vs SAP2000.
+
+El ensamblador `engine.py` (Model 3D → OpenSees, con liberación de momentos), el
+análisis espectral propio (`modal.py`: CQC/SRSS + `run_directional_spectral` +
+`directional_combination` 100/30) y las cargas (`loads.py`: peso propio
+distribuido/concentrado, masa propia, casos y combinaciones) están verificados
+contra SAP2000. Los casos contra SAP2000 requieren el notebook del trabajo (MCP
+SAP2000).
+
+**Caso 11 (2026-09-04): el primero cuyo patrón de referencia no es SAP2000.** Es
+el galpón con puente grúa de la serie de memos `nch2369-galpon-grua` de
+`F:\Proyectos_Python\Guias_Interactivas`, que publica sus resultados de análisis
+**declarados**; el caso los corre y los contrasta. Tres archivos: `case11_data.py`
+(geometría y secciones, cada constante con el eslabón que la publica),
+`case11_ref.py` (rigidez directa 2D en numpy puro, sin `rukan` ni `openseespy` —
+la regla del laboratorio aplicada a `verification/`) y
+`case11_galpon_grua_nch2369.py`. Capas A–C listas —geometría, rigidez del marco y
+arrastre— y la **D**, el galpon completo en 3D: 245 nudos, 324 barras, periodos por
+direccion y masas participantes. Emite `case11_galpon_grua.json`, que el repo de memos
+consume con su propio arnes. Encontró que la `k_Y` declarada en el memo 07
+sale de un empuje en un solo alero y no de un *sway*: 9,6 % de diferencia, con
+`k_riel` calzando a 2·10⁻⁵ por venir del caso correcto.
+
+**`vista.py` (2026-09-05) es la primera visualización que tiene el repo**, y un
+adelanto parcial de la Fase 2: planta, elevaciones, axonometría y deformada de un
+modo, a SVG y sin dependencias nuevas. **Sin eliminación de líneas ocultas**, y con
+`cotas` explícito porque el arnés del repo de memos exige que toda cifra dibujada
+exista en el texto. `escena()` toma `filtro` — sin él, en una elevación las barras
+que comparten proyección se tapan y la que queda encima miente.
+
+**Próximo paso: Fase 1** (chequeo de código AISC/NCh427) o el espectro vertical
+NCh2369 — ver `ROADMAP.md`.
 
 ## Principios de arquitectura
 
@@ -84,6 +110,9 @@ de regresión y un post de blog. La escalera (ver `ROADMAP.md`):
 6. Arriostramiento / liberación de momentos — vs SAP ✅ error ~0% (biela = Truss)
 7. Galpón 3D completo — vs SAP ✅ error ~0% (2 direcciones + CQC + 100/30)
 8. Peso propio, casos de carga y combinaciones — vs SAP ✅ error ~0% (galpón dos aguas)
+9. Torre CBF/MRF, T*/R* por dirección — vs SAP ✅
+10. Galpón del altiplano, 188 barras, 79 combinaciones — vs SAP ✅
+11. Galpón con puente grúa — **vs una serie de memos verificados y numpy puro**, no vs SAP
 
 Regla de contenido: teoría + cálculo a mano donde ilumina (casos 1-3); a partir
 del caso 4-5 el cálculo a mano deja de ser tractable y SAP2000 pasa a ser el
@@ -135,6 +164,7 @@ src/rukan/
   loads.py    # peso propio, casos de carga y combinaciones
   modal.py    # análisis espectral propio: CQC/SRSS + direccional 100/30
   spectra.py  # espectro NCh2369
+  vista.py    # dibujo del modelo a SVG: planta, elevaciones, isométrica, deformada
 verification/ # escalera de casos: test + artefacto de blog (vs SAP2000)
 lab/          # notas de análisis verificable (vs fórmula cerrada / numpy)
   _lib/       # report (tabla + assert), ref (numpy puro), svg, publish
