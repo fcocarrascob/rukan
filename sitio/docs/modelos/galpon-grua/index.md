@@ -45,15 +45,36 @@ rigidez. La masa acumulada en quince modos llega a
 
 ## Los casos de carga
 
-Cuatro casos estáticos. `H_alero` empuja los diez aleros con 500 kN cada uno, 1 000 kN por
-marco: es el *sway* del marco, la deformada que un modo de traslación tiene. `H_alero_uno`
-pone los 1 000 kN en **un solo alero**. `H_riel` empuja los diez nudos de columna al nivel
-del riel. `D` es el peso propio de los perfiles, distribuido a lo largo de cada barra: suma
-{{ r('galpon-grua', 'peso_total', 2) }} kN, y no es la masa sísmica de la serie, que se fijó
-por áreas y pesa más. Bajo ese peso la cumbrera del marco 3 baja
-{{ r('galpon-grua', 'd_cumbrera_D', 2, factor=-1000) }} mm.
+Siete casos estáticos: seis empujes y el peso propio. Los empujes son **unitarios**, en la
+unidad que el memo 00 fijó —1 000 kN por marco—, y esa decisión es de fondo: ninguna magnitud
+de nivel de diseño entra al modelo. La página que necesite un corte basal o una fuerza de
+diafragma la escala en un paso a la vista, y las razones que los memos publican —una deriva
+contra la promedio, el reparto entre marcos, la razón entre dos momentos— no dependen de la
+escala en absoluto.
+
+| Caso | Qué empuja | Resultante |
+|---|---|---:|
+| `H_alero` | los diez aleros a la vez: el *sway*, la deformada de un modo de traslación | 5 000 kN en Y |
+| `H_alero_uno` | **un solo alero**, el del marco 3 | 1 000 kN en Y |
+| `H_riel` | los diez nudos de columna al nivel del riel | 5 000 kN en Y |
+| `H_riel_uno` | los **dos rieles de un marco**: el empuje de grúa entrando por uno solo | 1 000 kN en Y |
+| `E_X` | sismo longitudinal, repartido como la masa sísmica | 5 000 kN en X |
+| `E_Y_tope` | lo mismo en la dirección de los marcos, con la grúa contra su tope | 5 000 kN en Y |
+| `D` | el peso propio de los perfiles, distribuido a lo largo de cada barra | {{ r('galpon-grua', 'peso_total', 2) }} kN |
+
+`D` **no es la masa sísmica** de la serie, que se fijó por áreas y pesa más. Bajo ese peso la
+cumbrera del marco 3 baja {{ r('galpon-grua', 'd_cumbrera_D', 2, factor=-1000) }} mm.
 
 <rukan-visor src="galpon-grua.escena.json" caso="D" vista="transversal"></rukan-visor>
+
+Los dos casos sísmicos reparten su resultante **con las mismas masas del modal**, así que caen
+donde la serie puso su centro de masa. `E_X` cae en el centro de la nave; `E_Y_tope` mueve la
+grúa a su tope de recorrido y la resultante se corre hacia ese extremo. Esa excentricidad no la
+decidió este modelo: sale de repartir la grúa entre los dos marcos que la flanquean, que es lo
+que el eslabón 05 ya hacía, y cuánto vale lo publica el eslabón 12. Bajo ella el galpón no solo
+se traslada: gira en planta, y los cinco marcos se mueven distinto.
+
+<rukan-visor src="galpon-grua.escena.json" caso="E_Y_tope" vista="planta"></rukan-visor>
 
 ## Los esfuerzos sobre el modelo
 
@@ -89,8 +110,13 @@ nota 07 del laboratorio contra dos caminos independientes. La **torsión** es el
 sin diagrama del cual derivarse: sigue la regla análoga a la axial y **espera SAP2000**. No
 firmes un `T` leído de aquí.
 
-El modelo tampoco tiene todavía los casos de grúa, nieve ni sismo estático: sus cuatro casos son
-tres empujes unitarios y el peso propio.
+Los seis empujes son unitarios y **ninguno es una hipótesis de diseño**. El modelo no tiene
+casos de nieve —el esquema de proyecto todavía no declara cargas distribuidas que no sean el
+peso propio— ni cargas de rueda de grúa aplicadas donde de verdad entran, porque la viga
+carrilera **no está en este modelo**: es un vano simple de un solo tramo y tiene su propia
+entrada. Los dos casos sísmicos son estáticos equivalentes repartidos
+por masa; el análisis espectral con T\* y R\* por dirección es del esquema v2 del archivo de
+proyecto y todavía no existe.
 
 ## Procedencia
 
