@@ -287,10 +287,8 @@ versionados, y un visor 3D incrustado.
 - `tests/test_sitio.py`, `.github/workflows/sitio.yml` (GitHub Pages; activar Pages con
   origen «GitHub Actions» una vez). Diseño: `docs/superpowers/specs/2026-09-05-sitio-rukan-design.md`.
 
-**Pendiente que abre:** `escena@2` con esfuerzos a lo largo de la barra (superposición de
-la carga distribuida sobre las fuerzas de extremo, la maquinaria de `lab/nota01`), verificados
-contra numpy y SAP2000, y con ellos color por esfuerzo y diagramas N/V/M en el visor;
-segundas entradas (galpón a dos aguas del caso 8, torre del caso 9).
+**Pendiente que abre:** segundas entradas (galpón a dos aguas del caso 8, torre del caso 9).
+Los esfuerzos a lo largo de la barra los cerró el lote C, más abajo.
 
 ## ▶ Las series — la cadena `nch2369-galpon-grua` se muda al sitio (2026-09-05, lotes A y B cerrados)
 
@@ -319,8 +317,43 @@ frase. Lo que lo reemplaza: `_calculo.py` por eslabón (las cifras no se teclean
   tolerancia era relativa; los dos quedan anotados en los `## Límites` de su página.
 
 **Lotes que siguen** (spec `docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md`):
-C = `escena@2`; D = 07–12 con esfuerzos en pantalla (el 12 pide un caso con la grúa en el
-tope); E = el 13 nuevo, con el PDF abierto; F = la cascada 04→13 con los períodos del 00.
+D = 07–12 con esfuerzos en pantalla (el 12 pide un caso con la grúa en el tope); E = el 13
+nuevo, con el PDF abierto; F = la cascada 04→13 con los períodos del 00. El lote C está
+cerrado (abajo).
+
+## ✅ El lote C — `escena@2`: los esfuerzos a lo largo de la barra (2026-09-06)
+
+`localForces` de OpenSees entrega los dos extremos de la barra y nada más: se comprobó que
+`eleResponse(tag, "sectionX", perc)`, `"section"` e `"integrationPoints"` devuelven `[]` en un
+`elasticBeamColumn` (esas respuestas son de `pipe` y `curvedPipe`). La superposición de la
+carga de vano la hace Rukan, y desde este lote la hace en un solo lugar.
+
+- `src/rukan/esfuerzos.py`: la fórmula sobre los seis esfuerzos del **diagrama en el extremo
+  i** —lo que la escena publica— más `w = (wx, wy, wz)`, la carga de vano en ejes locales:
+  `Mz(x) = Mz_i + Vy_i·x − wy·x²/2`, `My(x) = My_i − Vz_i·x + wz·x²/2`. Su gemelo sin imports
+  es `sitio/docs/visor/esfuerzos.js`, y `tests/test_esfuerzos_js.py` corre `node` para
+  compararlos número a número (también `ejesLocales` contra `loads.local_axes`).
+- `rukan/escena@2`: `barras[].vecxz` y `casos.<c>.w[n_barras][3]`, omitida entera en los casos
+  sin carga distribuida. Magnitudes primarias, no el diagrama muestreado: +47 KB en el galpón
+  contra los ~880 KB que habrían costado seis componentes en cinco estaciones. **Reemplaza a
+  `@1`**, y el visor comprueba el esquema.
+- Sonda `esfuerzo` (`barra`, `componente`, `caso`, y `x` o `x_rel`): vocabulario aditivo, el
+  proyecto sigue siendo `rukan/proyecto@1`. `loads.uniform_local_loads` y
+  `analysis.cargas_de_vano`; los extractores se arman por caso, y las combinaciones siguen
+  siendo lineales porque el esfuerzo a `x` fijo lo es.
+- El visor: color divergente sobre todas las barras y diagrama normal al eje sobre las que
+  `filtro` selecciona, con la escala y el máximo en el rótulo y el valor en el tooltip.
+- Verificación: `lab/nota07_esfuerzos_en_el_vano.py`, tres caminos (la cerrada, el equilibrio
+  integrado en numpy de `ref.diagrama_por_integracion`, y una malla ×16 en OpenSees), 34
+  magnitudes con error 0 %. Diseño:
+  `docs/superpowers/specs/2026-09-06-escena2-esfuerzos-por-barra-design.md`.
+
+**Lo que este lote *no* cerró, y hay que decirlo:** el signo del **corte** quedó determinado
+por equilibrio (`dMz/dx = +Vy`, `dMy/dx = −Vz`) contra una convención de momento ya verificada
+contra SAP2000, pero la **torsión** no tiene diagrama del cual derivarse y **sigue sin
+contraste externo**. `verification/case12` queda encolado para cuando haya notebook del
+trabajo: comparar los seis componentes en `x/L = 0; 0,25; 0,5; 0,75; 1` sobre una barra con
+carga de vano, en los dos planos locales, más torsión pura.
 
 ---
 
@@ -395,6 +428,10 @@ Notas de fenómenos de análisis contra referencia independiente. Backlog en
 - [ ] C1 · Pandeo por autovalores: K − λK_g vs π²EI/(KL)²
 - [ ] A2 · Masa consistente vs concentrada: cuántos elementos por barra
 
+### Verificación encolada, necesita SAP2000
+- [ ] `verification/case12` · los seis esfuerzos a lo largo de una barra con carga de vano,
+      en los dos planos locales y con torsión pura: es lo único que le falta al lote C
+
 ### Fase 1 — Chequeo de código (el valor que se paga)
 - [ ] Verificación AISC 360 / NCh427 por elemento (tracción, compresión+pandeo, flexión, interacción H1)
 - [ ] Límites NCh2369 (esbeltez de diagonales KL/r, deformaciones sísmicas)
@@ -403,7 +440,7 @@ Notas de fenómenos de análisis contra referencia independiente. Backlog en
 ### Fase 2 — GUI
 - [ ] Constructor de modelo (empezar en 2D → galpón por marcos)
 - [x] Visor de resultados — v1 web: `rukan/escena@1` + `rukan-visor.js` (three.js) en `sitio/`
-- [ ] Visor v2: esfuerzos por barra (`escena@2`), color y diagramas N/V/M
+- [x] Visor v2: esfuerzos por barra (`rukan/escena@2`), color y diagrama normal al eje
 - [ ] PySide6
 
 ## Wedge 2 — Edificios de hormigón NCh433 (expansión, no MVP)

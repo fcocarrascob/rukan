@@ -81,7 +81,7 @@ exista en el texto. `escena()` toma `filtro` — sin él, en una elevación las 
 que comparten proyección se tapan y la que queda encima miente.
 
 **El sitio (2026-09-05) es el repo de modelos con su narración en 3D**, en `sitio/`,
-sin relación con struct_pad. Tres capas: el esquema `rukan/escena@1` (`escena.py`,
+sin relación con struct_pad. Tres capas: el esquema `rukan/escena@2` (`escena.py`,
 `python -m rukan escena`: geometría, modos normalizados, deformadas de **todos** los casos y
 combinaciones, reacciones y fuerzas de extremo con el signo del diagrama, misma cabecera de
 procedencia que los resultados); el visor `sitio/docs/visor/rukan-visor.js` (web component
@@ -95,7 +95,7 @@ necesita OpenSees). `tests/test_sitio.py` exige que el generador reproduzca byte
 proyecto versionado. Identidad del sitio: narra **el modelo y lo que el motor hace con él**;
 el cálculo normativo se cita al memo, la verificación del motor queda en struct_pad. Primera
 entrada: el galpón con puente grúa (caso 11, cuatro casos estáticos). **Esfuerzos a lo largo
-de la barra (color, diagramas N/V/M) quedan para `escena@2`**, con su verificación. Se
+de la barra (color, diagramas N/V/M) quedan para `escena@2`**, que cerró el lote C (más abajo). Se
 despliega a GitHub Pages con `.github/workflows/sitio.yml` (hay que activar Pages con origen
 «GitHub Actions» una vez). Diseño: `docs/superpowers/specs/2026-09-05-sitio-rukan-design.md`.
 
@@ -134,8 +134,24 @@ en los `## Límites` de su página: el `k_req_Y` del 05 (5 216,93102 impreso con
 y el corte con nieve en la masa del 06 (357,53340 contra 357,53342); los dos pasaban porque el
 arnés de allá comparaba con tolerancia **relativa** y el oráculo de acá es absoluto.
 
-**Próximo paso:** `escena@2` (esfuerzos por barra, lote C) y con ella los eslabones 07 a 12
-(lote D); o **Fase 1** (chequeo de código AISC/NCh427); ver `ROADMAP.md`.
+**El lote C (2026-09-06) cerró `escena@2`: los esfuerzos a lo largo de la barra.** OpenSees no los
+entrega —se comprobó que `sectionX`, `section` e `integrationPoints` devuelven `[]` en un
+`elasticBeamColumn`—, así que la superposición de la carga de vano sobre las fuerzas de extremo la
+hace Rukan, y la hace en **un** lugar: `esfuerzos.py`, sobre los seis valores del **diagrama en el
+extremo i** (no las `localForces` crudas, para que el visor pueda alimentarla con lo que la escena
+publica), con `Mz(x) = Mz_i + Vy_i·x − wy·x²/2` y `My(x) = My_i − Vz_i·x + wz·x²/2`. La escena gana
+`barras[].vecxz` y `casos.<c>.w` —magnitudes primarias, +47 KB, contra los ~880 KB que costaría
+muestrear el diagrama— y **reemplaza** a `@1`; el visor comprueba el esquema. El gemelo en JS
+(`sitio/docs/visor/esfuerzos.js`) no importa nada y `tests/test_esfuerzos_js.py` lo cruza con
+`node`: es la mitigación del único riesgo real del diseño, que la fórmula viva en dos lenguajes.
+El visor pinta las 1 044 barras con una rampa divergente y dibuja el diagrama normal al eje solo
+sobre las que `filtro` selecciona. Verificado en `lab/nota07` con tres caminos (la cerrada, el
+equilibrio integrado en numpy, una malla ×16 en OpenSees), 34 magnitudes con error 0 %. Diseño:
+`docs/superpowers/specs/2026-09-06-escena2-esfuerzos-por-barra-design.md`.
+
+**Próximo paso:** los eslabones 07 a 12 (lote D), que además necesitan casos nuevos en el proyecto
+—ruedas de grúa, nieve, sismo estático, `x_grua = X_G_TOPE`—; o **Fase 1** (chequeo de código
+AISC/NCh427); ver `ROADMAP.md`.
 
 ## Principios de arquitectura
 
@@ -238,11 +254,12 @@ src/rukan/
   engine.py   # ensamblador Model 3D → dominio OpenSees
   loads.py    # peso propio, casos de carga y combinaciones
   modal.py    # análisis espectral propio: CQC/SRSS + direccional 100/30
+  esfuerzos.py # los seis esfuerzos a lo largo de la barra: extremo i + carga de vano
   spectra.py  # espectro NCh2369
   vista.py    # dibujo del modelo a SVG: planta, elevaciones, isométrica, deformada
   io.py       # el archivo de proyecto rukan/proyecto@1: (de)serialización, validación, unidades
   analysis.py # el runner: modal + casos + combinaciones + sondas -> {simbolo: valor}
-  escena.py   # el esquema rukan/escena@1: lo que el visor dibuja, con procedencia
+  escena.py   # el esquema rukan/escena@2: lo que el visor dibuja, con procedencia
   __main__.py # CLI: `python -m rukan run|validar|escena`
 verification/ # escalera de casos: test + artefacto de blog (vs SAP2000)
 lab/          # notas de análisis verificable (vs fórmula cerrada / numpy)
@@ -251,7 +268,8 @@ lab/          # notas de análisis verificable (vs fórmula cerrada / numpy)
 sitio/        # el sitio: MkDocs Material + macros (main.py) + visor three.js
   serie.py    # el andamiaje de una serie: Eslabon, valores@1, cadena, oráculo, citas
   figuras.py  # helper SVG de las figuras de un eslabón (cotas desde el JSON)
-  docs/visor/ # rukan-visor.js, three.js y KaTeX vendoreados (vendor/*/VERSION)
+  docs/visor/ # rukan-visor.js, esfuerzos.js (gemelo de rukan/esfuerzos.py, sin imports),
+              # three.js y KaTeX vendoreados (vendor/*/VERSION)
   docs/modelos/<slug>/  # _generar.py + proyecto + resultados + escena + index.md
   docs/series/<serie>/<NN-slug>/  # _calculo.py + valores.json + _figuras.py + figs/ + index.md
 tests/        # tests unitarios del núcleo + corrida de cada nota + el sitio
