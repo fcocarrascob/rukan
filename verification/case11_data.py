@@ -333,7 +333,12 @@ class Meta:
 
 
 class _Armador:
-    """Acumulador de nodos, secciones y barras con nombre."""
+    """Acumulador de nodos, secciones y barras con nombre.
+
+    El nombre va **dentro** de cada dataclass (`nombre=`) y también en `Meta`:
+    lo primero es lo que el archivo de proyecto escribe y lo que una sonda cita
+    (`"nudo": "R3_0"`); lo segundo, los índices que este caso usa para armar.
+    """
 
     def __init__(self) -> None:
         self.meta = Meta()
@@ -344,7 +349,7 @@ class _Armador:
 
     def nodo(self, nm, x, y, z, restr=LIBRE):
         i = len(self.nodes) + 1
-        self.nodes.append(Node(i, x, y, z, restr))
+        self.nodes.append(Node(i, x, y, z, restr, nombre=nm))
         self.meta.node_id[nm] = i
         self.meta.node_xyz[nm] = (x, y, z)
         (self.meta.bases if restr is EMPOTRADA else self.meta.libres).append(nm)
@@ -354,13 +359,13 @@ class _Armador:
         if nm not in self.sec_id:
             i = len(self.sections) + 1
             self.sec_id[nm] = i
-            self.sections.append(Section(i, A=A, Iy=Iy, Iz=Iz, J=J))
+            self.sections.append(Section(i, A=A, Iy=Iy, Iz=Iz, J=J, nombre=nm))
         return nm
 
     def barra(self, nm, a, b, sec, vecxz, **kw):
         i = len(self.els) + 1
         self.els.append(FrameElement(i, self.meta.node_id[a], self.meta.node_id[b],
-                                     1, self.sec_id[sec], vecxz, **kw))
+                                     1, self.sec_id[sec], vecxz, nombre=nm, **kw))
         self.meta.elem_id[nm] = i
         self.meta.elem_sec[nm] = sec
         self.meta.elem_len[nm] = math.dist(self.meta.node_xyz[a], self.meta.node_xyz[b])

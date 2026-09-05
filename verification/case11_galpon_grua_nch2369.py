@@ -54,8 +54,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import case11_data as D  # noqa: E402
 import case11_ref as REF  # noqa: E402
-from rukan import loads  # noqa: E402
+from rukan import analysis, io, loads, vista  # noqa: E402
 from rukan.engine import build  # noqa: E402
+
+FIGS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figs")
 
 TOL = 5e-4       # 0,05 % — la tolerancia de la escalera, entre los dos motores
 TOL_MEMO = 1e-4  # contra una cifra que el memo publica con cinco decimales
@@ -231,6 +233,147 @@ def capa_d() -> dict:
           f" acumuladas en 15 modos.")
     print("\n  OK capa D - el modelo 3D corre y coincide con lo que la serie declaraba.")
     return out
+
+
+# ==================== CAPA E - EL ARCHIVO DE PROYECTO ====================
+def proyecto_3d(nsub: int = 4, escalonada: bool = True) -> tuple[io.Proyecto, "D.Meta"]:
+    """El galpón como archivo de proyecto: lo que el memo 00 versiona y corre.
+
+    Dos casos estáticos que no necesitan un segundo modelo plano: **empujar los
+    diez aleros** (o los diez nudos de riel) con la misma `H` es el *sway* del
+    marco, casi aislado. Con la misma traslación en todos los marcos, las X de
+    muro no se deforman —viven en planos `y = cte`— y los puntales tampoco —sus
+    dos extremos se mueven igual—. Las diagonales de techo **sí**: unen la línea
+    `j` de un marco con la `j+1` del siguiente, y bajo sway esas dos líneas del
+    rafter no se desplazan igual. Es el techo arriostrado resistiendo la
+    deformación del rafter, y vale unas partes en diez mil. La capa E lo mide
+    contra `rigidez_ops`, y de ahí que `k_Y = H_marco/δ` pueda ser un paso del
+    memo 00 con `H_marco = 1 kN`, declarando que es la del galpón y no la del
+    marco solo.
+    """
+    model, meta = D.build_model(nsub=nsub, escalonada=escalonada)
+    aleros = ["R%d_0" % f for f in range(1, D.NMARCOS + 1)] + \
+             ["R%d_%d" % (f, D.NJ) for f in range(1, D.NMARCOS + 1)]
+    rieles = []
+    for f in range(1, D.NMARCOS + 1):
+        for l in D.WALLS:
+            cand = [(abs(xyz[2] - D.Z_RIEL), nm) for nm, xyz in meta.node_xyz.items()
+                    if nm.startswith("K%d%s_" % (f, l))]
+            d_, nm = min(cand)
+            assert d_ < 1e-9, "no hay nudo de riel en el marco %d" % f
+            rieles.append(nm)
+    h = 0.5                   # 1 kN por marco, medio a cada lado: diez nudos
+    p = io.Proyecto(
+        model=model,
+        titulo="Galpón con puente grúa — nch2369-galpon-grua (caso 11, capa E)",
+        origen={"script": "verification/" + os.path.basename(__file__),
+                "generador": "case11_data.build_model(nsub=%d, escalonada=%s)"
+                             % (nsub, escalonada)},
+        casos={"H_alero": {"nodales": [{"nudo": n, "F": [0, h, 0, 0, 0, 0]} for n in aleros]},
+               "H_riel": {"nodales": [{"nudo": n, "F": [0, h, 0, 0, 0, 0]} for n in rieles]}},
+        analisis={"modal": {"n_modos": 15}},
+        salidas={
+            "T_star_X": {"que": "periodo_dominante", "direccion": "X"},
+            "T_star_Y": {"que": "periodo_dominante", "direccion": "Y"},
+            "Ux": {"que": "participacion_dominante", "direccion": "X"},
+            "Uy": {"que": "participacion_dominante", "direccion": "Y"},
+            "macum_X": {"que": "masa_acumulada", "direccion": "X"},
+            "macum_Y": {"que": "masa_acumulada", "direccion": "Y"},
+            "macum_Z": {"que": "masa_acumulada", "direccion": "Z"},
+            "d_alero": {"que": "desplazamiento", "nudo": "R3_0", "gdl": "Uy",
+                        "caso": "H_alero"},
+            "d_riel": {"que": "desplazamiento", "nudo": rieles[4], "gdl": "Uy",
+                       "caso": "H_riel"},
+        })
+    return p, meta
+
+
+def capa_e(d: dict) -> None:
+    print("\n  Capa E - el archivo de proyecto: lo que sale del JSON es lo que sale"
+          " del script\n")
+    p, meta = proyecto_3d()
+    ruta = os.path.join(os.environ.get("TMP", os.environ.get("TEMP", ".")),
+                        "case11_capa_e.proyecto.json")
+    io.save(p, ruta)
+    p2 = io.load(ruta)
+    assert io.to_dict(p2) == io.to_dict(p), "el round-trip cambio algo"
+    print(f"    {ruta}  ({os.path.getsize(ruta)/1024:.0f} KB, sha256 {io.sha256(ruta)[:12]})")
+    r = analysis.run(p2)
+    for k in ("T_star_X", "T_star_Y", "Ux", "Uy", "macum_X", "macum_Y", "macum_Z"):
+        ref = d[k + "_esc"]
+        print(f"    {k:10s} proyecto {r[k]:12.8f}   capa D {ref:12.8f}   {abs(r[k]/ref-1):.1e}")
+        assert abs(r[k] / ref - 1.0) < 1e-9, k
+    # El sway de los diez aleros contra el marco plano aislado, misma malla.
+    for k, nodos, medida in (("d_alero", [ALERO["A"], ALERO["B"]], ALERO["A"]),
+                             ("d_riel", [RIEL["A"], RIEL["B"]], RIEL["A"])):
+        k2d = rigidez_ops(4, nodos, medida, escalonada=True)
+        k3d = 1.0 / r[k]
+        print(f"    k de {k[2:]:6s} 3D {k3d:14.5f}   marco 2D {k2d:14.5f}"
+              f"   {abs(k3d/k2d-1):.1e}")
+        assert k3d > k2d and abs(k3d / k2d - 1.0) < 1e-3, \
+            "el sway 3D deberia ser el del marco mas el aporte del techo"
+    print("\n    -> empujar los diez aleros con la misma H es el sway del marco mas el"
+          "\n       techo arriostrado, que lo endurece unas partes en diez mil: las"
+          "\n       diagonales unen lineas distintas del rafter. k_Y puede ser un paso"
+          "\n       del memo 00, declarando que es la del galpon y no la del marco solo.")
+    print("\n  OK capa E - el proyecto reproduce la capa D, y el sway el marco mas el techo.")
+
+
+# ==================== LAS FIGURAS ====================
+def figuras() -> None:
+    """Las seis figuras del caso, regeneradas por el mismo script que calcula.
+
+    Sin cotas: ninguna cifra nace en la capa de dibujo. Las del memo 00 las
+    escribe su propio generador con las suyas.
+    """
+    model, meta = D.build_model(nsub=4, escalonada=True)
+    # Trazos: bielas de techo finas, X de muro en acento -- son las que la
+    # serie dimensiona en el 12 y el 13 y las que la planta existe para ubicar.
+    fina = {meta.eid(n): "fina" for n in meta.elem_id if n.startswith(("DTA", "DTB", "PUN"))}
+    fina.update({meta.eid(n): "acento" for n in meta.elem_id if n.startswith(("PXA", "PXB"))})
+    marco3 = {meta.eid(n) for n in meta.elem_id if n.startswith(("COL3", "RAF3"))}
+    muro_a = {meta.eid(n) for n in meta.elem_id
+              if (n.startswith(("PXAA", "PXBA")) or (n.startswith("PUN") and n.endswith("_0"))
+                  or (n.startswith("COL") and n[4] == "A"))}
+    build(model)
+    mr = analysis.modal(model, 15)
+
+    def vec(k):
+        return {n.id: tuple(ops.nodeEigenvector(n.id, k, c) for c in (1, 2, 3))
+                for n in model.nodes}
+
+    kx, ky = mr.dominante("X") + 1, mr.dominante("Y") + 1
+    os.makedirs(FIGS, exist_ok=True)
+    out = {
+        "planta": vista.planta(model, clases=fina, titulo="Planta del galpon",
+                               alt="Planta de 30,00 por 25,00 m con los cinco marcos a"
+                                   " 7,50 y las X de los dos vanos extremos",
+                               pie="escala real · los dos vanos con X son el 1 y el 4"),
+        "transversal": vista.elevacion(model, "YZ", filtro=marco3,
+                                       titulo="Elevacion transversal - marco 3",
+                                       alt="Marco a dos aguas de 25,00 m de luz, 10,50 al"
+                                           " alero y 13,00 a la cumbrera"),
+        "longitudinal": vista.elevacion(model, "XZ", filtro=muro_a, clases=fina,
+                                        titulo="Elevacion longitudinal - muro A",
+                                        alt="Elevacion de 30,00 m con los cuatro vanos de"
+                                            " 7,50 y las X de los extremos"),
+        "iso": vista.isometrica(model, clases=fina, titulo="El modelo, en axonometria",
+                                alt="Vista axonometrica del galpon con el techo"
+                                    " arriostrado"),
+        "modo-x": vista.modo(model, vec(kx), "XZ", filtro=muro_a,
+                             titulo=f"Modo {kx} - longitudinal",
+                             alt=f"Deformada del modo {kx}, el de mayor masa traslacional"
+                                 " en X"),
+        "modo-y": vista.modo(model, vec(ky), "YZ", filtro=marco3,
+                             titulo=f"Modo {ky} - transversal",
+                             alt=f"Deformada del modo {ky}, el de mayor masa traslacional"
+                                 " en Y"),
+    }
+    for nm, svg in out.items():
+        with open(os.path.join(FIGS, f"case11-{nm}.svg"), "w", encoding="utf-8",
+                  newline="\n") as fh:
+            fh.write(svg)
+    print(f"\n  figuras  {FIGS}  ({len(out)} SVG regenerados)")
 
 
 def emitir_json(ruta: str, datos: dict) -> None:
@@ -458,8 +601,10 @@ def main() -> int:
     })
     emitir_json(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              "case11_galpon_grua.json"), d)
+    capa_e(d)
+    figuras()
 
-    print("  Caso 11, capas A a D: OK.")
+    print("  Caso 11, capas A a E: OK.")
     return 0
 
 
