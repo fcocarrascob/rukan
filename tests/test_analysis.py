@@ -93,4 +93,4 @@ def test_solo_lo_que_se_pide(voladizo):
 def test_las_unidades_de_cada_salida(voladizo):
     u = analysis.unidades(voladizo)
     assert u["T1"] == "s" and u["d"] == "m" and u["Rx"] == "kN"
-    assert u["My_i"] == "kN·m" and u["Ux"] == "-" and u["W"] == "kN"
+    assert u["My_i"] == "kN·m" and u["Ux"] == "—" and u["W"] == "kN"

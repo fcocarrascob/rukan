@@ -190,14 +190,14 @@ def run(p: Proyecto) -> dict[str, float]:
 
 def unidades(p: Proyecto) -> dict[str, str]:
     """La unidad de cada salida en el sistema interno, para el archivo de
-    resultados. Los adimensionales van con `-`."""
+    resultados. Los adimensionales van con `—`, como en las tablas de la serie."""
     u: dict[str, str] = {}
     for simbolo, s in p.salidas.items():
         que = s["que"]
         if que == "periodo" or que == "periodo_dominante":
             u[simbolo] = "s"
         elif que in ("participacion_dominante", "masa_acumulada"):
-            u[simbolo] = "-"
+            u[simbolo] = "—"
         elif que == "peso_total":
             u[simbolo] = "kN"
         elif que == "desplazamiento":
