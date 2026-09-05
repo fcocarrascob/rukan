@@ -1,0 +1,374 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 2,
+ "slug": "nieve-balanceada-y-desbalanceada",
+ "titulo": "Nieve balanceada y desbalanceada",
+ "normas": [
+  "NCh431:2010",
+  "NCh2369:2025",
+  "NCh3171:2017"
+ ],
+ "hereda_de": [
+  "01"
+ ],
+ "entra": {
+  "L_luz": {
+   "valor": 25.0,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "I": {
+   "valor": 1.0,
+   "unidad": "—",
+   "de": "01",
+   "paso": "A1"
+  }
+ },
+ "caso": {
+  "h_cumbrera": {
+   "valor": 2.5,
+   "unidad": "m"
+  },
+  "lat": {
+   "valor": 36.9,
+   "unidad": "°"
+  },
+  "alt": {
+   "valor": 1200.0,
+   "unidad": "m"
+  },
+  "p_g_T1": {
+   "valor": 1.5,
+   "unidad": "kN/m2"
+  },
+  "p_g_normal": {
+   "valor": 0.25,
+   "unidad": "kN/m2"
+  },
+  "C_e_T4": {
+   "valor": 1.0,
+   "unidad": "—"
+  },
+  "C_e_exp": {
+   "valor": 0.9,
+   "unidad": "—"
+  },
+  "C_e_mont": {
+   "valor": 0.8,
+   "unidad": "—"
+  },
+  "C_t_T2": {
+   "valor": 1.2,
+   "unidad": "—"
+  },
+  "C_t_cal": {
+   "valor": 1.0,
+   "unidad": "—"
+  },
+  "C_s_F1": {
+   "valor": 1.0,
+   "unidad": "—"
+  },
+  "theta_min": {
+   "valor": 2.38,
+   "unidad": "°"
+  },
+  "theta_max": {
+   "valor": 70.0,
+   "unidad": "°"
+  },
+  "gamma_tope": {
+   "valor": 4.7,
+   "unidad": "kN/m3"
+  },
+  "p_g_lluvia": {
+   "valor": 0.96,
+   "unidad": "kN/m2"
+  },
+  "hd_c75": {
+   "valor": 0.4623,
+   "unidad": "m"
+  },
+  "hd_c15": {
+   "valor": 0.7613,
+   "unidad": "m"
+  },
+  "hd_c30": {
+   "valor": 1.0485,
+   "unidad": "m"
+  },
+  "hd_c60": {
+   "valor": 1.4134,
+   "unidad": "m"
+  },
+  "hd_c120": {
+   "valor": 1.8925,
+   "unidad": "m"
+  },
+  "hd_c180": {
+   "valor": 2.2367,
+   "unidad": "m"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "p_g": {
+    "valor": 1.5,
+    "unidad": "kN/m2"
+   }
+  },
+  "A2": {
+   "raz_normal": {
+    "valor": 6.0,
+    "unidad": "—"
+   }
+  },
+  "B1": {
+   "C_e": {
+    "valor": 1.0,
+    "unidad": "—"
+   }
+  },
+  "B2": {
+   "C_t": {
+    "valor": 1.2,
+    "unidad": "—"
+   }
+  },
+  "B4": {
+   "p_f": {
+    "valor": 1.26,
+    "unidad": "kN/m2"
+   }
+  },
+  "B5": {
+   "W": {
+    "valor": 12.5,
+    "unidad": "m"
+   },
+   "theta_lim": {
+    "valor": 2.2039999999999997,
+    "unidad": "°"
+   }
+  },
+  "C1": {
+   "tan_theta": {
+    "valor": 0.2,
+    "unidad": "—"
+   },
+   "theta_techo": {
+    "valor": 11.309932474020215,
+    "unidad": "°"
+   }
+  },
+  "C2": {
+   "S_pend": {
+    "valor": 5.0,
+    "unidad": "—"
+   }
+  },
+  "C3": {
+   "C_s": {
+    "valor": 1.0,
+    "unidad": "—"
+   }
+  },
+  "C4": {
+   "p_s": {
+    "valor": 1.26,
+    "unidad": "kN/m2"
+   }
+  },
+  "E1": {
+   "I_u": {
+    "valor": 12.5,
+    "unidad": "m"
+   }
+  },
+  "E2": {
+   "hd_pie": {
+    "valor": 0.10413762039831215,
+    "unidad": "m"
+   }
+  },
+  "E3": {
+   "t_int": {
+    "valor": 0.7141826395813934,
+    "unidad": "—"
+   },
+   "h_d": {
+    "valor": 0.6758406092348366,
+    "unidad": "m"
+   }
+  },
+  "E4": {
+   "raz_pie": {
+    "valor": 6.489879513761105,
+    "unidad": "—"
+   }
+  },
+  "E5": {
+   "Iu_asce": {
+    "valor": 120.0,
+    "unidad": "m"
+   },
+   "hd_asce_120": {
+    "valor": 1.9783685003631184,
+    "unidad": "m"
+   },
+   "raz_asce": {
+    "valor": 1.045373051711027,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "raz_theta": {
+    "valor": 4.7520724680757205,
+    "unidad": "—"
+   }
+  },
+  "D2": {
+   "gamma_nieve": {
+    "valor": 2.8390000000000004,
+    "unidad": "kN/m3"
+   }
+  },
+  "D3": {
+   "L_ac": {
+    "valor": 4.0299347845439115,
+    "unidad": "m"
+   },
+   "frac_faldon": {
+    "valor": 0.3223947827635129,
+    "unidad": "—"
+   }
+  },
+  "D4": {
+   "p_d": {
+    "valor": 0.8580738639990124,
+    "unidad": "kN/m2"
+   }
+  },
+  "D5": {
+   "p_bar": {
+    "valor": 0.378,
+    "unidad": "kN/m2"
+   },
+   "p_pico": {
+    "valor": 2.1180738639990127,
+    "unidad": "kN/m2"
+   },
+   "raz_pico": {
+    "valor": 1.6810110031738195,
+    "unidad": "—"
+   }
+  },
+  "D6": {
+   "F_bal": {
+    "valor": 236.24999999999997,
+    "unidad": "kN"
+   },
+   "F_des": {
+    "valor": 179.49736284178215,
+    "unidad": "kN"
+   },
+   "raz_des": {
+    "valor": 0.7597771972138928,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "p_g": {
+   "valor": 1.5,
+   "unidad": "kN/m2",
+   "paso": "A1",
+   "heredan": [
+    "05"
+   ]
+  },
+  "p_f": {
+   "valor": 1.26,
+   "unidad": "kN/m2",
+   "paso": "B4",
+   "heredan": [
+    "05",
+    "06"
+   ]
+  },
+  "p_s": {
+   "valor": 1.26,
+   "unidad": "kN/m2",
+   "paso": "C4",
+   "heredan": [
+    "06",
+    "07"
+   ]
+  },
+  "p_bar": {
+   "valor": 0.378,
+   "unidad": "kN/m2",
+   "paso": "D5",
+   "heredan": [
+    "07"
+   ]
+  },
+  "p_pico": {
+   "valor": 2.1180738639990127,
+   "unidad": "kN/m2",
+   "paso": "D5",
+   "heredan": [
+    "07"
+   ]
+  },
+  "L_ac": {
+   "valor": 4.0299347845439115,
+   "unidad": "m",
+   "paso": "D3",
+   "heredan": [
+    "07"
+   ]
+  },
+  "theta_techo": {
+   "valor": 11.309932474020215,
+   "unidad": "°",
+   "paso": "C1",
+   "heredan": [
+    "07",
+    "11"
+   ]
+  },
+  "S_pend": {
+   "valor": 5.0,
+   "unidad": "—",
+   "paso": "C2",
+   "heredan": [
+    "05",
+    "07",
+    "11",
+    "12"
+   ]
+  }
+ },
+ "publicado": {
+  "p_g": "1,50",
+  "p_f": "1,26000",
+  "p_s": "1,26000",
+  "p_bar": "0,37800",
+  "p_pico": "2,11807",
+  "L_ac": "4,02993",
+  "theta_techo": "11,30993",
+  "S_pend": "5,00000"
+ },
+ "rukan": "0.1.0",
+ "commit": "bd0e5d7",
+ "generado": "2026-09-05T10:34:48"
+}
