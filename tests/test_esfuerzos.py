@@ -35,6 +35,12 @@ A, E, G, J, Iy, Iz = 1e-2, 2.0e8, 7.7e7, 1e-5, 1e-4, 2e-4
 LIBRE = (0, 0, 0, 0, 0, 0)
 
 
+def _diag(S):
+    """Las `localForces` crudas -> los seis esfuerzos del diagrama en el extremo
+    i, que es lo que `esfuerzos` toma y lo que la escena publica."""
+    return [analysis.signo_diagrama("i", c) * S[k] for k, c in enumerate(COMPONENTES)]
+
+
 def _barra(w, vecxz=(1.0, 0.0, 0.0), fix_j=LIBRE, n=1, nodal=None):
     """Barra vertical de `L` m mallada en `n` tramos, con carga uniforme local
     ``w = (wx, wy, wz)`` y, si se pide, una carga `nodal` de seis componentes en
@@ -76,9 +82,9 @@ def test_los_extremos_son_los_de_signo_diagrama(vecxz, fix_j):
     w = (-3.0, -10.0, 4.0)
     S = _barra(w, vecxz=vecxz, fix_j=fix_j)[0]
     for k, comp in enumerate(COMPONENTES):
-        assert esfuerzos.esfuerzo(S, w, L, comp, 0.0) == pytest.approx(
+        assert esfuerzos.esfuerzo(_diag(S), w, L, comp, 0.0) == pytest.approx(
             analysis.signo_diagrama("i", comp) * S[k], rel=1e-12, abs=1e-9)
-        assert esfuerzos.esfuerzo(S, w, L, comp, L) == pytest.approx(
+        assert esfuerzos.esfuerzo(_diag(S), w, L, comp, L) == pytest.approx(
             analysis.signo_diagrama("j", comp) * S[k + 6], rel=1e-12, abs=1e-9)
 
 
@@ -95,12 +101,12 @@ def test_la_derivada_del_momento_es_el_corte():
     S = _barra(w, vecxz=(0.0, 1.0, 0.0), fix_j=(0, 1, 1, 0, 0, 0))[0]
     h = L / 8.0
     for x in (h, L / 2.0, L - h):
-        dMz = (esfuerzos.esfuerzo(S, w, L, "Mz", x + h)
-               - esfuerzos.esfuerzo(S, w, L, "Mz", x - h)) / (2 * h)
-        dMy = (esfuerzos.esfuerzo(S, w, L, "My", x + h)
-               - esfuerzos.esfuerzo(S, w, L, "My", x - h)) / (2 * h)
-        assert dMz == pytest.approx(esfuerzos.esfuerzo(S, w, L, "Vy", x), rel=1e-9)
-        assert dMy == pytest.approx(-esfuerzos.esfuerzo(S, w, L, "Vz", x), rel=1e-9)
+        dMz = (esfuerzos.esfuerzo(_diag(S), w, L, "Mz", x + h)
+               - esfuerzos.esfuerzo(_diag(S), w, L, "Mz", x - h)) / (2 * h)
+        dMy = (esfuerzos.esfuerzo(_diag(S), w, L, "My", x + h)
+               - esfuerzos.esfuerzo(_diag(S), w, L, "My", x - h)) / (2 * h)
+        assert dMz == pytest.approx(esfuerzos.esfuerzo(_diag(S), w, L, "Vy", x), rel=1e-9)
+        assert dMy == pytest.approx(-esfuerzos.esfuerzo(_diag(S), w, L, "Vz", x), rel=1e-9)
 
 
 # ===================== contra la fórmula cerrada ==============================
@@ -119,12 +125,12 @@ def test_la_viga_apuntalada_da_la_formula_cerrada():
     # La barra es vertical con `vecxz = (1,0,0)`: su eje local z cae sobre el
     # X global, así que la rótula del plano local x-y se libera soltando Rx.
     S = _barra(w, fix_j=(1, 1, 1, 0, 1, 1))[0]
-    assert esfuerzos.esfuerzo(S, w, L, "Mz", 0.0) == pytest.approx(q * L**2 / 8.0)
-    assert esfuerzos.esfuerzo(S, w, L, "Mz", L) == pytest.approx(0.0, abs=1e-9)
-    assert esfuerzos.esfuerzo(S, w, L, "Mz", 5 * L / 8) == pytest.approx(
+    assert esfuerzos.esfuerzo(_diag(S), w, L, "Mz", 0.0) == pytest.approx(q * L**2 / 8.0)
+    assert esfuerzos.esfuerzo(_diag(S), w, L, "Mz", L) == pytest.approx(0.0, abs=1e-9)
+    assert esfuerzos.esfuerzo(_diag(S), w, L, "Mz", 5 * L / 8) == pytest.approx(
         -9.0 * q * L**2 / 128.0)
-    assert esfuerzos.esfuerzo(S, w, L, "Vy", 0.0) == pytest.approx(-5.0 * q * L / 8)
-    assert esfuerzos.esfuerzo(S, w, L, "Vy", L) == pytest.approx(3.0 * q * L / 8)
+    assert esfuerzos.esfuerzo(_diag(S), w, L, "Vy", 0.0) == pytest.approx(-5.0 * q * L / 8)
+    assert esfuerzos.esfuerzo(_diag(S), w, L, "Vy", L) == pytest.approx(3.0 * q * L / 8)
 
 
 # ===================== la identidad de malla ==================================
@@ -143,7 +149,7 @@ def test_un_elemento_da_lo_mismo_que_una_malla_de_dieciseis():
     for k in range(n):
         x = k * L / n
         for c, comp in enumerate(COMPONENTES):
-            assert esfuerzos.esfuerzo(S1, w, L, comp, x) == pytest.approx(
+            assert esfuerzos.esfuerzo(_diag(S1), w, L, comp, x) == pytest.approx(
                 analysis.signo_diagrama("i", comp) * Sn[k][c], rel=1e-7, abs=1e-7), \
                 f"{comp} en x = {x}"
 
@@ -155,12 +161,12 @@ def test_sin_carga_de_vano_el_corte_es_constante_y_el_momento_lineal():
     todo cero y el test pasaría sin comprobar nada."""
     S = _barra((0.0, 0.0, 0.0), nodal=(0.0, 25.0, 0.0, 0.0, 0.0, 0.0))[0]
     for w in (None, (0.0, 0.0, 0.0)):
-        vs = [esfuerzos.esfuerzo(S, w, L, "Vy", x) for x in (0.0, L / 3, L)]
+        vs = [esfuerzos.esfuerzo(_diag(S), w, L, "Vy", x) for x in (0.0, L / 3, L)]
         assert vs[0] != pytest.approx(0.0, abs=1e-6)
         assert vs[0] == pytest.approx(vs[1]) == pytest.approx(vs[2])
-        medio = esfuerzos.esfuerzo(S, w, L, "Mz", L / 2)
-        extremos = (esfuerzos.esfuerzo(S, w, L, "Mz", 0.0)
-                    + esfuerzos.esfuerzo(S, w, L, "Mz", L)) / 2
+        medio = esfuerzos.esfuerzo(_diag(S), w, L, "Mz", L / 2)
+        extremos = (esfuerzos.esfuerzo(_diag(S), w, L, "Mz", 0.0)
+                    + esfuerzos.esfuerzo(_diag(S), w, L, "Mz", L)) / 2
         assert medio == pytest.approx(extremos, abs=1e-9)
 
 
@@ -175,14 +181,14 @@ def test_la_torsion_es_constante_a_lo_largo_de_la_barra():
     w = (-3.0, -10.0, 4.0)
     S = _barra(w, vecxz=(0.0, 1.0, 0.0),
                nodal=(0.0, 0.0, 0.0, 0.0, 0.0, 18.0))[0]
-    T0 = esfuerzos.esfuerzo(S, w, L, "T", 0.0)
+    T0 = esfuerzos.esfuerzo(_diag(S), w, L, "T", 0.0)
     # Con la regla `i: −, j: +` que la torsión toma prestada de la axial, un
     # torsor de +18 aplicado en el extremo j da un diagrama de +18 en toda la
     # barra. Que ese sea el signo correcto es justo lo que no está verificado
     # contra otro programa: acá se fija, y SAP2000 lo confirmará.
     assert T0 == pytest.approx(18.0)
     for x in (L / 4, L / 2, L):
-        assert esfuerzos.esfuerzo(S, w, L, "T", x) == pytest.approx(T0)
+        assert esfuerzos.esfuerzo(_diag(S), w, L, "T", x) == pytest.approx(T0)
 
 
 def test_una_diagonal_liberada_no_tiene_momento_en_ningun_punto():
@@ -211,9 +217,9 @@ def test_una_diagonal_liberada_no_tiene_momento_en_ningun_punto():
     S = r["S"]
     largo = math.dist((0.0, 0.0, 0.0), (4.0, 0.0, 3.0))
     for x in (0.0, largo / 3, largo / 2, largo):
-        assert esfuerzos.esfuerzo(S, None, largo, "Mz", x) == pytest.approx(0.0, abs=1e-9)
-        assert esfuerzos.esfuerzo(S, None, largo, "My", x) == pytest.approx(0.0, abs=1e-9)
-    assert esfuerzos.esfuerzo(S, None, largo, "N", 0.0) != pytest.approx(0.0, abs=1e-6)
+        assert esfuerzos.esfuerzo(_diag(S), None, largo, "Mz", x) == pytest.approx(0.0, abs=1e-9)
+        assert esfuerzos.esfuerzo(_diag(S), None, largo, "My", x) == pytest.approx(0.0, abs=1e-9)
+    assert esfuerzos.esfuerzo(_diag(S), None, largo, "N", 0.0) != pytest.approx(0.0, abs=1e-6)
 
 
 # ===================== el diagrama muestreado =================================
@@ -221,12 +227,12 @@ def test_diagrama_muestrea_las_estaciones_y_coincide_con_esfuerzo():
     w = (-3.0, -10.0, 4.0)
     S = _barra(w, vecxz=(0.0, 1.0, 0.0))[0]
     n = 5
-    d = esfuerzos.diagrama(S, w, L, n)
+    d = esfuerzos.diagrama(_diag(S), w, L, n)
     assert len(d) == n and all(len(fila) == 6 for fila in d)
     for k, fila in enumerate(d):
         x = k * L / (n - 1)
         for c, comp in enumerate(COMPONENTES):
-            assert fila[c] == pytest.approx(esfuerzos.esfuerzo(S, w, L, comp, x))
+            assert fila[c] == pytest.approx(esfuerzos.esfuerzo(_diag(S), w, L, comp, x))
 
 
 def test_estaciones_reparte_de_extremo_a_extremo():
@@ -237,11 +243,11 @@ def test_estaciones_reparte_de_extremo_a_extremo():
 # ===================== errores ================================================
 def test_un_componente_inexistente_falla_nombrandolo():
     with pytest.raises(ValueError, match="M3"):
-        esfuerzos.esfuerzo([0.0] * 12, None, L, "M3", 0.0)
+        esfuerzos.esfuerzo(_diag([0.0] * 12), None, L, "M3", 0.0)
 
 
 def test_una_estacion_fuera_de_la_barra_falla_en_vez_de_extrapolar():
     with pytest.raises(ValueError, match="fuera"):
-        esfuerzos.esfuerzo([0.0] * 12, None, L, "Mz", 1.5 * L)
+        esfuerzos.esfuerzo(_diag([0.0] * 12), None, L, "Mz", 1.5 * L)
     with pytest.raises(ValueError, match="fuera"):
-        esfuerzos.esfuerzo([0.0] * 12, None, L, "Mz", -0.1)
+        esfuerzos.esfuerzo(_diag([0.0] * 12), None, L, "Mz", -0.1)

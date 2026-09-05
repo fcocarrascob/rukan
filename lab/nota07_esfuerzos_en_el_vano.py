@@ -19,16 +19,21 @@ peso propio proyectado a los ejes de la barra da componente axial y transversal;
 una fuerza lateral de arrastre da la tercera— más un torsor de montaje en el
 extremo libre. Con eso los seis componentes están vivos a la vez.
 
-**Las funciones.** Con `S = eleResponse(tag, "localForces")` —las fuerzas que los
-nudos aplican a la barra— y `w = (wx, wy, wz)` en ejes locales::
+**Las funciones.** Escritas sobre los seis esfuerzos del **diagrama en el extremo
+i** —lo que Rukan publica— y `w = (wx, wy, wz)` en ejes locales::
 
-    N(x)  = −S₀ − wx·x                    Mz(x) = S₅ − S₁·x − wy·x²/2
-    Vy(x) = −S₁ − wy·x                    My(x) = S₄ + S₂·x + wz·x²/2
-    Vz(x) = −S₂ − wz·x
-    T(x)  = −S₃
+    N(x)  = N_i − wx·x                    Mz(x) = Mz_i + Vy_i·x − wy·x²/2
+    Vy(x) = Vy_i − wy·x                   My(x) = My_i − Vz_i·x + wz·x²/2
+    Vz(x) = Vz_i − wz·x
+    T(x)  = T_i
 
-La asimetría entre `Mz` y `My` —el `−S₁·x` contra el `+S₂·x`— no es un descuido:
-los ejes son dextrógiros, `ex × ey = ez` pero `ex × ez = −ey`.
+Con `S = eleResponse(tag, "localForces")` —las fuerzas que los nudos aplican a la
+barra— y el mapa `N_i = −S₀`, `Vy_i = −S₁`, `Vz_i = −S₂`, `T_i = −S₃`,
+`My_i = +S₄`, `Mz_i = +S₅`, es lo mismo que `Mz(x) = S₅ − S₁·x − wy·x²/2` y
+`My(x) = S₄ + S₂·x + wz·x²/2`.
+
+La asimetría entre `Mz` y `My` —el `+Vy_i·x` contra el `−Vz_i·x`— no es un
+descuido: los ejes son dextrógiros, `ex × ey = ez` pero `ex × ez = −ey`.
 
 **Los tres caminos.**
 
@@ -132,8 +137,18 @@ def modelo(n_elementos: int = 1) -> list[list[float]]:
     return [list(ops.eleResponse(k + 1, "localForces")) for k in range(n_elementos)]
 
 
+def diagrama_i(S: list[float]) -> list[float]:
+    """Las `localForces` crudas -> los seis esfuerzos del **diagrama** en el
+    extremo i, que es la convención que Rukan publica y la que `esfuerzos` toma.
+
+    ``N_i = −S₀``, ``Vy_i = −S₁``, ``Vz_i = −S₂``, ``T_i = −S₃``, ``My_i = +S₄``,
+    ``Mz_i = +S₅``.
+    """
+    return [-S[0], -S[1], -S[2], -S[3], S[4], S[5]]
+
+
 def cerrada(S: list[float], componente: str, x: float) -> float:
-    return esfuerzos.esfuerzo(S, W_LOCAL, L_, componente, x)
+    return esfuerzos.esfuerzo(diagrama_i(S), W_LOCAL, L_, componente, x)
 
 
 def _recta(S: list[float], componente: str, x: float) -> float:

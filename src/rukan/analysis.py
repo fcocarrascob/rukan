@@ -51,7 +51,7 @@ import openseespy.opensees as ops
 
 from . import esfuerzos, loads
 from .engine import build
-from .io import DOF, SONDAS_ESTATICAS, SONDAS_MODALES, Proyecto
+from .io import COMPONENTES, DOF, SONDAS_ESTATICAS, SONDAS_MODALES, Proyecto
 from .model import Model
 
 _DIR = {"X": 0, "Y": 1, "Z": 2}
@@ -171,8 +171,12 @@ def _extractor(clave: str, cargas: dict[int, tuple[float, float, float]]
         tag, comp = int(partes[1]), partes[2]
         x, largo = float(partes[3]), float(partes[4])
         w = cargas.get(tag)
-        return lambda: esfuerzos.esfuerzo(ops.eleResponse(tag, "localForces"),
-                                          w, largo, comp, x)
+
+        def _esfuerzo() -> float:
+            S = ops.eleResponse(tag, "localForces")
+            di = [signo_diagrama("i", c) * S[k] for k, c in enumerate(COMPONENTES)]
+            return esfuerzos.esfuerzo(di, w, largo, comp, x)
+        return _esfuerzo
     tag, extremo, comp = int(partes[1]), partes[2], partes[3]
     idx = _COMP[comp] + (0 if extremo == "i" else 6)
     signo = signo_diagrama(extremo, comp)
