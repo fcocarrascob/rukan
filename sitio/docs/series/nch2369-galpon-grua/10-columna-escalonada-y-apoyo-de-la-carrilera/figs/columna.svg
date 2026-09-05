@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 600" width="880" height="600" role="img" aria-label="Elevación comparada con la escala horizontal exagerada 2,64 veces: a la izquierda la columna escalonada de 10 500 mm con el escalón a 6 684,24 donde se sienta la carrilera de 684 bajo el riel de 131,76, el fuste de grúa de 400 a 1 000 mm del eje unido por placa de alma continua de 10 y una base de 1 725; a la derecha la ménsula descartada, con el mismo voladizo de 1 000 mm entregando 299,25983 kN, que son 67,27631 kips contra el tope de 50" font-family="ui-monospace,'IBM Plex Mono',Menlo,Consolas,monospace" font-size="11">
+<title>Columna escalonada contra ménsula</title>
+<rect width="880" height="600" fill="#fcfcfa"/>
+<text x="24.0" y="30.0" fill="#2b2a26" text-anchor="start" font-size="11.5" font-weight="600">La ménsula no cabe por cláusula, y el escalón que la reemplaza baja el axial de la grúa por un fuste propio</text>
+<text x="24.0" y="48.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">izquierda: columna escalonada de §5.9.1   ·   derecha: la ménsula de §5.9.2   ·   escala horizontal exagerada 2,64 veces</text>
+<polyline points="388.3,512.0 371.6,71.0 288.4,71.0 271.7,512.0 388.3,512.0" fill="#d5d7da" stroke="#2b2a26" stroke-width="1.4"/>
+<polyline points="241.2,512.0 271.7,512.0 282.3,231.3 241.2,231.3 241.2,512.0" fill="#e9e6de" stroke="#8a8578" stroke-width="1.1"/>
+<rect x="196.8" y="231.3" width="44.4" height="280.7" fill="#d5d7da" stroke="#2b2a26" stroke-width="1.4"/>
+<rect x="191.8" y="512.0" width="201.5" height="7.0" fill="#2b2a26" stroke="#2b2a26" stroke-width="1.0"/>
+<line x1="282.3" y1="231.3" x2="241.2" y2="231.3" stroke="#4a6b46" stroke-width="1.8"/>
+<rect x="205.1" y="202.5" width="27.8" height="28.7" fill="#eceff1" stroke="#2b2a26" stroke-width="1.2"/>
+<rect x="199.6" y="202.5" width="38.9" height="0.8" fill="#dfe4e7" stroke="#2b2a26" stroke-width="1.0"/>
+<rect x="214.0" y="197.0" width="10.0" height="5.5" fill="#2f5d7c" stroke="#2f5d7c" stroke-width="0.8"/>
+<line x1="434.3" y1="71.0" x2="434.3" y2="231.3" stroke="#8a8578" stroke-width="1"/>
+<polygon points="434.3,71.0 437.1,78.2 431.5,78.2" fill="#8a8578"/>
+<polygon points="434.3,231.3 431.5,224.1 437.1,224.1" fill="#8a8578"/>
+<text x="440.3" y="154.1" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">3 815,76</text>
+<line x1="434.3" y1="231.3" x2="434.3" y2="512.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="434.3,231.3 437.1,238.5 431.5,238.5" fill="#8a8578"/>
+<polygon points="434.3,512.0 431.5,504.8 437.1,504.8" fill="#8a8578"/>
+<text x="440.3" y="374.6" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">6 684,24</text>
+<line x1="530.3" y1="71.0" x2="530.3" y2="512.0" stroke="#2b2a26" stroke-width="1"/>
+<polygon points="530.3,71.0 533.1,78.2 527.5,78.2" fill="#2b2a26"/>
+<polygon points="530.3,512.0 527.5,504.8 533.1,504.8" fill="#2b2a26"/>
+<text x="536.3" y="294.5" fill="#2b2a26" text-anchor="start" font-size="10" font-weight="normal">10 500</text>
+<text x="536.3" y="309.5" fill="#2b2a26" text-anchor="start" font-size="9.5" font-weight="normal">a_r = 0,36341</text>
+<line x1="219.0" y1="542.0" x2="330.0" y2="542.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="219.0,542.0 226.2,539.2 226.2,544.8" fill="#8a8578"/>
+<polygon points="330.0,542.0 322.8,544.8 322.8,539.2" fill="#8a8578"/>
+<text x="274.5" y="536.0" fill="#8a8578" text-anchor="middle" font-size="10" font-weight="normal">1 000</text>
+<line x1="196.8" y1="570.0" x2="388.3" y2="570.0" stroke="#2b2a26" stroke-width="1"/>
+<polygon points="196.8,570.0 204.0,567.2 204.0,572.8" fill="#2b2a26"/>
+<polygon points="388.3,570.0 381.1,572.8 381.1,567.2" fill="#2b2a26"/>
+<text x="292.5" y="564.0" fill="#2b2a26" text-anchor="middle" font-size="10" font-weight="normal">1 725</text>
+<text x="330.0" y="590.0" fill="#8a8578" text-anchor="middle" font-size="9.5" font-weight="normal">eje de la columna del marco</text>
+<line x1="196.8" y1="193.2" x2="156.8" y2="193.2" stroke="#c9c4b5" stroke-width="0.8"/>
+<text x="155.2" y="197.2" fill="#2f5d7c" text-anchor="end" font-size="9.5" font-weight="normal">riel 131,76</text>
+<line x1="205.1" y1="216.9" x2="156.8" y2="216.9" stroke="#c9c4b5" stroke-width="0.8"/>
+<text x="155.2" y="220.9" fill="#2f5d7c" text-anchor="end" font-size="9.5" font-weight="normal">carrilera 684</text>
+<line x1="282.3" y1="231.3" x2="156.8" y2="231.3" stroke="#c9c4b5" stroke-width="0.8"/>
+<text x="155.2" y="228.8" fill="#4a6b46" text-anchor="end" font-size="9.5" font-weight="normal">escalón a la cota 6 684,24</text>
+<text x="155.2" y="241.8" fill="#4a6b46" text-anchor="end" font-size="9.5" font-weight="normal">canto ahí 859,02171</text>
+<line x1="219.0" y1="349.2" x2="156.8" y2="349.2" stroke="#c9c4b5" stroke-width="0.8"/>
+<text x="155.2" y="346.7" fill="#2b2a26" text-anchor="end" font-size="9.5" font-weight="normal">fuste de grúa</text>
+<text x="155.2" y="359.7" fill="#2b2a26" text-anchor="end" font-size="9.5" font-weight="normal">400 × 300</text>
+<line x1="250.1" y1="444.6" x2="156.8" y2="444.6" stroke="#c9c4b5" stroke-width="0.8"/>
+<text x="155.2" y="442.1" fill="#8a8578" text-anchor="end" font-size="9" font-weight="normal">placa de alma</text>
+<text x="155.2" y="455.1" fill="#8a8578" text-anchor="end" font-size="9" font-weight="normal">continua 10</text>
+<line x1="388.3" y1="512.0" x2="404.3" y2="512.0" stroke="#c9c4b5" stroke-width="0.8"/>
+<text x="408.3" y="515.0" fill="#2b2a26" text-anchor="start" font-size="9.5" font-weight="normal">1 050</text>
+<line x1="371.6" y1="71.0" x2="387.6" y2="71.0" stroke="#c9c4b5" stroke-width="0.8"/>
+<text x="391.6" y="74.0" fill="#2b2a26" text-anchor="start" font-size="9.5" font-weight="normal">750</text>
+<polyline points="786.3,512.0 769.6,71.0 686.4,71.0 669.7,512.0 786.3,512.0" fill="#eeece6" stroke="#8a8578" stroke-width="1.2"/>
+<rect x="664.7" y="512.0" width="126.5" height="7.0" fill="#8a8578" stroke="#8a8578" stroke-width="1.0"/>
+<polyline points="680.3,231.3 603.1,231.3 603.1,238.0 680.3,263.2 680.3,231.3" fill="#f3e2dd" stroke="#a4442c" stroke-width="1.6"/>
+<rect x="603.1" y="202.5" width="27.8" height="28.7" fill="#eceff1" stroke="#2b2a26" stroke-width="1.2"/>
+<rect x="612.0" y="197.0" width="10.0" height="5.5" fill="#2f5d7c" stroke="#2f5d7c" stroke-width="0.8"/>
+<line x1="617.0" y1="542.0" x2="728.0" y2="542.0" stroke="#a4442c" stroke-width="1"/>
+<polygon points="617.0,542.0 624.2,539.2 624.2,544.8" fill="#a4442c"/>
+<polygon points="728.0,542.0 720.8,544.8 720.8,539.2" fill="#a4442c"/>
+<text x="672.5" y="536.0" fill="#a4442c" text-anchor="middle" font-size="10" font-weight="normal">1 000</text>
+<line x1="617.0" y1="231.3" x2="617.0" y2="179.3" stroke="#a4442c" stroke-width="1.5"/>
+<polygon points="617.0,231.3 613.5,222.3 620.5,222.3" fill="#a4442c"/>
+<text x="607.0" y="189.3" fill="#a4442c" text-anchor="end" font-size="10" font-weight="600">299,25983 kN</text>
+<text x="594.8" y="125.6" fill="#a4442c" text-anchor="end" font-size="11" font-weight="600">67,27631 kips</text>
+<text x="594.8" y="141.6" fill="#a4442c" text-anchor="end" font-size="9.5" font-weight="normal">contra el tope de 50 de §5.9.2</text>
+<text x="594.8" y="155.6" fill="#8a8578" text-anchor="end" font-size="9.5" font-weight="normal">= 222,411 kN</text>
+<text x="728.0" y="590.0" fill="#8a8578" text-anchor="middle" font-size="9.5" font-weight="normal">el voladizo mide 0,95 cantos de columna</text>
+</svg>
