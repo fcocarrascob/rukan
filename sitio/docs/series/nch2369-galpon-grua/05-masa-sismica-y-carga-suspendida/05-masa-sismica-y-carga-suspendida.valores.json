@@ -1,0 +1,612 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 5,
+ "slug": "masa-sismica-y-carga-suspendida",
+ "titulo": "Masa sísmica y carga suspendida",
+ "normas": [
+  "NCh2369:2025",
+  "AIST TR-13:2021",
+  "NCh431:2010"
+ ],
+ "hereda_de": [
+  "01",
+  "02",
+  "03",
+  "04"
+ ],
+ "entra": {
+  "L_luz": {
+   "valor": 25.0,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "h_libre": {
+   "valor": 10.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "p_g": {
+   "valor": 1.5,
+   "unidad": "kN/m2",
+   "de": "02",
+   "paso": "A1"
+  },
+  "p_f": {
+   "valor": 1.26,
+   "unidad": "kN/m2",
+   "de": "02",
+   "paso": "B4"
+  },
+  "S_pend": {
+   "valor": 5.0,
+   "unidad": "—",
+   "de": "02",
+   "paso": "C2"
+  },
+  "Wb_puente": {
+   "valor": 190.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "S2"
+  },
+  "Wt_carro": {
+   "valor": 40.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "S2"
+  },
+  "A_r": {
+   "valor": 0.42,
+   "unidad": "g",
+   "de": "04",
+   "paso": "A1"
+  },
+  "S_suelo": {
+   "valor": 1.05,
+   "unidad": "—",
+   "de": "04",
+   "paso": "A2"
+  },
+  "r_s": {
+   "valor": 4.5,
+   "unidad": "—",
+   "de": "04",
+   "paso": "A2"
+  },
+  "T_1": {
+   "valor": 0.35,
+   "unidad": "s",
+   "de": "04",
+   "paso": "A2"
+  },
+  "f_xi": {
+   "valor": 1.4426999059072136,
+   "unidad": "—",
+   "de": "04",
+   "paso": "B1"
+  },
+  "Cr_T1": {
+   "valor": 0.27999999999999997,
+   "unidad": "s",
+   "de": "04",
+   "paso": "C2"
+  },
+  "T_star_X": {
+   "valor": 0.2,
+   "unidad": "s",
+   "de": "04",
+   "paso": "S2"
+  },
+  "T_star_Y": {
+   "valor": 0.4,
+   "unidad": "s",
+   "de": "04",
+   "paso": "S2"
+  },
+  "R_star_X": {
+   "valor": 4.0,
+   "unidad": "—",
+   "de": "04",
+   "paso": "C4"
+  },
+  "R_star_Y": {
+   "valor": 5.0,
+   "unidad": "—",
+   "de": "04",
+   "paso": "C5"
+  },
+  "Sa_dis_X": {
+   "valor": 0.36632609729276977,
+   "unidad": "g",
+   "de": "04",
+   "paso": "C6"
+  },
+  "Sa_dis_Y": {
+   "valor": 0.3499268621777947,
+   "unidad": "g",
+   "de": "04",
+   "paso": "C6"
+  }
+ },
+ "caso": {
+  "n_vanos": {
+   "valor": 4.0,
+   "unidad": "—"
+  },
+  "n_marcos": {
+   "valor": 5.0,
+   "unidad": "—"
+  },
+  "g_cubierta": {
+   "valor": 0.12,
+   "unidad": "kN/m2"
+  },
+  "g_muros": {
+   "valor": 0.1,
+   "unidad": "kN/m2"
+  },
+  "w_columna": {
+   "valor": 1.75,
+   "unidad": "kN/m"
+  },
+  "n_columnas": {
+   "valor": 10.0,
+   "unidad": "—"
+  },
+  "w_carrilera": {
+   "valor": 1.2,
+   "unidad": "kN/m"
+  },
+  "L_carrilera": {
+   "valor": 60.0,
+   "unidad": "m"
+  },
+  "g_techo_kg": {
+   "valor": 38.0,
+   "unidad": "kg/m2"
+  },
+  "P_eq": {
+   "valor": 12.0,
+   "unidad": "kN"
+  },
+  "g_grav": {
+   "valor": 9.81,
+   "unidad": "m/s2"
+  },
+  "I": {
+   "valor": 1.0,
+   "unidad": "—"
+  },
+  "R_T7": {
+   "valor": 5.0,
+   "unidad": "—"
+  },
+  "k_amp": {
+   "valor": 0.7,
+   "unidad": "—"
+  },
+  "r_D": {
+   "valor": 3.5,
+   "unidad": "—"
+  },
+  "p_nieve_lim": {
+   "valor": 1.44,
+   "unidad": "kN/m2"
+  },
+  "frac_nieve": {
+   "valor": 0.2,
+   "unidad": "—"
+  },
+  "p_g_normal": {
+   "valor": 0.25,
+   "unidad": "kN/m2"
+  },
+  "h_turno": {
+   "valor": 4.0,
+   "unidad": "h"
+  },
+  "h_dia_total": {
+   "valor": 24.0,
+   "unidad": "h"
+  },
+  "mu_roce": {
+   "valor": 0.6,
+   "unidad": "—"
+  },
+  "t32_tra": {
+   "valor": 0.2,
+   "unidad": "—"
+  },
+  "c_min": {
+   "valor": 0.25,
+   "unidad": "—"
+  },
+  "c_max": {
+   "valor": 2.75,
+   "unidad": "—"
+  },
+  "k_prel_Y_d": {
+   "valor": 4730.1,
+   "unidad": "kN/m"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "L_largo": {
+    "valor": 30.0,
+    "unidad": "m"
+   },
+   "h_cumb": {
+    "valor": 2.5,
+    "unidad": "m"
+   }
+  },
+  "A2": {
+   "A_planta": {
+    "valor": 750.0,
+    "unidad": "m2"
+   },
+   "A_muros": {
+    "valor": 1217.5,
+    "unidad": "m2"
+   },
+   "A_frontones": {
+    "valor": 62.5,
+    "unidad": "m2"
+   }
+  },
+  "A3": {
+   "g_techo": {
+    "valor": 0.37278000000000006,
+    "unidad": "kN/m2"
+   },
+   "W_edificio": {
+    "valor": 807.085,
+    "unidad": "kN"
+   }
+  },
+  "B1": {
+   "n_filas": {
+    "valor": 3.0,
+    "unidad": "—"
+   }
+  },
+  "B2": {
+   "raz_normal": {
+    "valor": 6.0,
+    "unidad": "—"
+   },
+   "raz_nieve": {
+    "valor": 0.875,
+    "unidad": "—"
+   },
+   "W_nieve": {
+    "valor": 189.0,
+    "unidad": "kN"
+   }
+  },
+  "C1": {
+   "frac_turno": {
+    "valor": 0.16666666666666666,
+    "unidad": "—"
+   }
+  },
+  "C2": {
+   "n_condiciones": {
+    "valor": 2.0,
+    "unidad": "—"
+   }
+  },
+  "C3": {
+   "Wgrua_sc": {
+    "valor": 230.0,
+    "unidad": "kN"
+   }
+  },
+  "C4": {
+   "P_sismico": {
+    "valor": 1037.085,
+    "unidad": "kN"
+   },
+   "frac_grua": {
+    "valor": 0.22177545717082012,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "Sa_dis_X_pub": {
+    "valor": 0.36633,
+    "unidad": "g"
+   },
+   "Sa_dis_Y_pub": {
+    "valor": 0.34993,
+    "unidad": "g"
+   },
+   "Q0_X_an": {
+    "valor": 379.91534805,
+    "unidad": "kN"
+   },
+   "Q0_Y_an": {
+    "valor": 362.90715405000003,
+    "unidad": "kN"
+   }
+  },
+  "D2": {
+   "Q0_min": {
+    "valor": 114.33862125,
+    "unidad": "kN"
+   },
+   "holgura_Y": {
+    "valor": 3.1739682539682543,
+    "unidad": "—"
+   },
+   "holgura_X": {
+    "valor": 3.3227210884353737,
+    "unidad": "—"
+   }
+  },
+  "D3": {
+   "forma_T0_C": {
+    "valor": 2.75,
+    "unidad": "—"
+   },
+   "f_xi_pub": {
+    "valor": 1.4427,
+    "unidad": "—"
+   },
+   "Q0_max": {
+    "valor": 302.4199362751875,
+    "unidad": "kN"
+   },
+   "C_dis": {
+    "valor": 0.2916057375,
+    "unidad": "—"
+   }
+  },
+  "D4": {
+   "forma_T0_D": {
+    "valor": 2.25,
+    "unidad": "—"
+   },
+   "exceso_D": {
+    "valor": 1.2222222222222223,
+    "unidad": "—"
+   }
+  },
+  "D5": {
+   "super_X": {
+    "valor": 1.256251002262944,
+    "unidad": "—"
+   },
+   "super_Y": {
+    "valor": 1.2000106822315182,
+    "unidad": "—"
+   },
+   "Q0_dis": {
+    "valor": 302.4199362751875,
+    "unidad": "kN"
+   }
+  },
+  "E1": {
+   "C_dis_pub": {
+    "valor": 0.29161,
+    "unidad": "—"
+   },
+   "F_grua": {
+    "valor": 67.07029999999999,
+    "unidad": "kN"
+   },
+   "T_trac": {
+    "valor": 46.0,
+    "unidad": "kN"
+   },
+   "T_roce": {
+    "valor": 138.0,
+    "unidad": "kN"
+   }
+  },
+  "E2": {
+   "exc_trac": {
+    "valor": 1.4580499999999998,
+    "unidad": "—"
+   },
+   "uso_roce": {
+    "valor": 0.4860166666666666,
+    "unidad": "—"
+   }
+  },
+  "F1": {
+   "R1_X": {
+    "valor": 4.0,
+    "unidad": "—"
+   },
+   "R1_Y": {
+    "valor": 5.0,
+    "unidad": "—"
+   }
+  },
+  "F2": {
+   "kcap_X": {
+    "valor": 2.8,
+    "unidad": "—"
+   },
+   "kcap_Y": {
+    "valor": 3.5,
+    "unidad": "—"
+   },
+   "Q0_dis_pub": {
+    "valor": 302.41994,
+    "unidad": "kN"
+   },
+   "Q_amp_Y": {
+    "valor": 1058.46979,
+    "unidad": "kN"
+   }
+  },
+  "F3": {
+   "k_req_Y": {
+    "valor": 5216.931029716491,
+    "unidad": "kN/m"
+   },
+   "raz_k": {
+    "valor": 1.1029219318231096,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "A_planta": {
+   "valor": 750.0,
+   "unidad": "m2",
+   "paso": "A2",
+   "heredan": [
+    "06",
+    "11"
+   ]
+  },
+  "A_muros": {
+   "valor": 1217.5,
+   "unidad": "m2",
+   "paso": "A2",
+   "heredan": [
+    "06"
+   ]
+  },
+  "W_edificio": {
+   "valor": 807.085,
+   "unidad": "kN",
+   "paso": "A3",
+   "heredan": [
+    "06",
+    "11",
+    "12"
+   ]
+  },
+  "Wgrua_sc": {
+   "valor": 230.0,
+   "unidad": "kN",
+   "paso": "C3",
+   "heredan": [
+    "06",
+    "12"
+   ]
+  },
+  "P_sismico": {
+   "valor": 1037.085,
+   "unidad": "kN",
+   "paso": "C4",
+   "heredan": [
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "C_dis": {
+   "valor": 0.2916057375,
+   "unidad": "—",
+   "paso": "D3",
+   "heredan": [
+    "06",
+    "11",
+    "12"
+   ]
+  },
+  "Q0_X": {
+   "valor": 302.4199362751875,
+   "unidad": "kN",
+   "paso": "D5",
+   "heredan": [
+    "06",
+    "11",
+    "12"
+   ]
+  },
+  "Q0_Y": {
+   "valor": 302.4199362751875,
+   "unidad": "kN",
+   "paso": "D5",
+   "heredan": [
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "R1_X": {
+   "valor": 4.0,
+   "unidad": "—",
+   "paso": "F1",
+   "heredan": [
+    "13"
+   ]
+  },
+  "R1_Y": {
+   "valor": 5.0,
+   "unidad": "—",
+   "paso": "F1",
+   "heredan": [
+    "07"
+   ]
+  },
+  "kcap_X": {
+   "valor": 2.8,
+   "unidad": "—",
+   "paso": "F2",
+   "heredan": [
+    "11",
+    "13"
+   ]
+  },
+  "kcap_Y": {
+   "valor": 3.5,
+   "unidad": "—",
+   "paso": "F2",
+   "heredan": [
+    "07"
+   ]
+  },
+  "k_prel_Y": {
+   "valor": 4730.1,
+   "unidad": "kN/m",
+   "paso": "F3",
+   "heredan": [
+    "07"
+   ]
+  },
+  "k_req_Y": {
+   "valor": 5216.931029716491,
+   "unidad": "kN/m",
+   "paso": "F3",
+   "heredan": [
+    "07"
+   ]
+  }
+ },
+ "publicado": {
+  "A_planta": "750,00000",
+  "A_muros": "1217,50000",
+  "W_edificio": "807,08500",
+  "Wgrua_sc": "230,00000",
+  "P_sismico": "1037,08500",
+  "C_dis": "0,29161",
+  "Q0_X": "302,41994",
+  "Q0_Y": "302,41994",
+  "R1_X": "4,00000",
+  "R1_Y": "5,00000",
+  "kcap_X": "2,80000",
+  "kcap_Y": "3,50000",
+  "k_prel_Y": "4730,10000",
+  "k_req_Y": "5216,9310"
+ },
+ "rukan": "0.1.0",
+ "commit": "0539e29",
+ "generado": "2026-09-05T10:56:38"
+}
