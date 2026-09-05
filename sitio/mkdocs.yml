@@ -43,10 +43,23 @@ markdown_extensions:
   - footnotes
   - toc:
       permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 extra_javascript:
   - path: visor/rukan-visor.js
     type: module
+  - visor/vendor/katex/katex.min.js
+  - visor/vendor/katex/contrib/auto-render.min.js
+  - js/katex.js
+
+extra_css:
+  - visor/vendor/katex/katex.min.css
 
 nav:
   - Inicio: index.md

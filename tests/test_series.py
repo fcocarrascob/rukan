@@ -242,3 +242,48 @@ def test_el_eslabon_publica_lo_que_sale_y_cita_con_pagina(serie, serie_id, carpe
     for svg in sorted((carpeta / "figs").glob("*.svg")) if (carpeta / "figs").exists() else []:
         faltan = serie.cotas_sin_respaldo(svg.read_text("utf-8"), d)
         assert not faltan, f"{svg.name}: cotas sin respaldo en los valores: {faltan[:8]}"
+
+
+# ============================ los macros de serie =====================
+def test_v_inyecta_desde_valores_y_busca_en_sale_pasos_entra_caso(raiz):
+    m = _mod("main")
+    assert m.v(raiz, "s1/02", "k_Y", 2) == "15 047,57"           # sale
+    assert m.v(raiz, "s1/02", "L_luz", 2, unidad=True) == "25,00 m"   # entra
+    assert m.v(raiz, "s1/01", "R", 0) == "5"                       # paso y sale
+    assert m.v(raiz, "s1/02", "d_alero", 2, factor=1000) == "66,46"
+    with pytest.raises(KeyError, match="nada.*02"):
+        m.v(raiz, "s1/02", "nada", 2)
+    with pytest.raises(FileNotFoundError, match="07"):
+        m.v(raiz, "s1/07", "k_Y", 2)
+
+
+def test_ficha_lista_entra_y_sale_con_enlaces(raiz):
+    m = _mod("main")
+    f = m.ficha(raiz, "s1/02")
+    assert "| `L_luz` | 25,00 | m | [01](../01-raiz/) · S1 |" in f
+    assert "| `d_alero` | 0,0664559 | m | modelo [m1](../../../modelos/m1/) · M2 |" in f
+    assert "| `k_Y` | 15 047,57290 | kN/m | B1 | — |" in f
+    assert "| `LR` | 125,00 | m | B2 | — |" in f
+    f1 = m.ficha(raiz, "s1/01")
+    assert "| `L_luz` | 25,00 | m | S1 | [02](../02-hijo/) |" in f1
+    assert "valores@1" in f1 and "abc1234" not in f1
+
+
+def test_tabla_serie_y_grafo_serie(raiz):
+    m = _mod("main")
+    t = m.tabla_serie(raiz, "s1")
+    assert "| 1 | [La raíz](01-raiz/) | NCh2369:2025 | 3 |" in t
+    assert "| 2 | [El hijo](02-hijo/) | NCh2369:2025 | 2 |" in t
+    g = m.grafo_serie(raiz, "s1")
+    assert g.startswith("```mermaid\ngraph TD") and g.rstrip().endswith("```")
+    assert 'E01["01 · La raíz"]' in g and "E01 -->|L_luz, R| E02" in g
+
+
+def test_figura_exige_que_el_svg_exista(raiz):
+    m = _mod("main")
+    c = raiz / "docs/series/s1/02-hijo/figs"
+    c.mkdir()
+    (c / "marco.svg").write_text("<svg/>", encoding="utf-8")
+    assert m.figura(raiz, "s1/02", "marco", "El marco") == "![El marco](figs/marco.svg)"
+    with pytest.raises(FileNotFoundError, match="planta"):
+        m.figura(raiz, "s1/02", "planta", "x")
