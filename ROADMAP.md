@@ -292,7 +292,7 @@ la carga distribuida sobre las fuerzas de extremo, la maquinaria de `lab/nota01`
 contra numpy y SAP2000, y con ellos color por esfuerzo y diagramas N/V/M en el visor;
 segundas entradas (galpón a dos aguas del caso 8, torre del caso 9).
 
-## ▶ Las series — la cadena `nch2369-galpon-grua` se muda al sitio (2026-09-05, lote A cerrado)
+## ▶ Las series — la cadena `nch2369-galpon-grua` se muda al sitio (2026-09-05, lotes A y B cerrados)
 
 Decisión: el sitio de Rukan es la casa de la serie; el repo de guías queda congelado como
 referencia. Lo que se conserva del régimen de memos: cada cifra nace en un paso o en un
@@ -307,11 +307,20 @@ frase. Lo que lo reemplaza: `_calculo.py` por eslabón (las cifras no se teclean
   las ocho letras de §12.2.1, once salidas, dos figuras portadas). El modelo a `nsub=16`.
 - Hallazgo del oráculo: el memo sustituye la cifra impresa (δ a 7 decimales) y su `k` solo se
   reproduce así; queda escrito en el paso B1 del 00.
+- **Lote B (02–06)**, un eslabón por commit: 02 nieve (NCh431, la fórmula del pie de la
+  Figura 4 que no reproduce sus curvas), 03 cargas de grúa (AIST/CMAA, el mayor de tres
+  reglas), 04 espectro y R* por dirección, 05 masa sísmica (visor de los nudos con masa y del
+  modo dominante), 06 combinaciones y derivas (visor de la deformada de `H_alero`). 71 filas
+  de `## Resumen` reproducidas en el 06, 36 en el 05, 31 en el 04, 28 en el 03 y en el 02.
+- Lo que el lote B agregó a la regla del oráculo: la sustitución de la cifra **impresa** es la
+  norma, y el 06 la aplica a todos sus pasos con redondeo **medio hacia arriba** (el
+  `Math.round` del arnés del memo, no el medio-al-par de Python). Dos dígitos del repo de
+  memos no reproducen —`k_req_Y` del 05 y el corte con nieve en la masa del 06— porque allá la
+  tolerancia era relativa; los dos quedan anotados en los `## Límites` de su página.
 
 **Lotes que siguen** (spec `docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md`):
-B = 02–06 con el visor actual; C = `escena@2`; D = 07–12 con esfuerzos en pantalla (el 12
-pide un caso con la grúa en el tope); E = el 13 nuevo, con el PDF abierto; F = la cascada
-04→13 con los períodos del 00.
+C = `escena@2`; D = 07–12 con esfuerzos en pantalla (el 12 pide un caso con la grúa en el
+tope); E = el 13 nuevo, con el PDF abierto; F = la cascada 04→13 con los períodos del 00.
 
 ---
 

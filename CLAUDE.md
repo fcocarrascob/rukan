@@ -115,17 +115,27 @@ valor redondeado a los decimales publicados (el 00 lo hizo con δ a 7 decimales)
 eslabón con `cotas()` leídas del JSON. KaTeX vendoreado. `tests/test_series.py`: cadena
 (`verificar_cadena`), `_calculo.py` reproduce el JSON, cada `sale` aparece en `index.md`
 con `v(`/`vt(`, sin `\d.\d` dentro de `$$`, citas con página, cotas de SVG con respaldo. Un
-`heredan` hacia un eslabón no migrado es promesa, no hallazgo. Migrados: **00 y 01**; el 02 al
-12 siguen el pipeline del spec (`docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md`
-§ 6): leer memo y `.check.js` → `_calculo.py` con `publicado` → `_figuras.py` → `index.md`
-con el molde (narración por pasos, visores donde entra el modelo, ficha, referencias) →
-build estricto y captura → commit. **Fidelidad primero**: la cascada 04→13 con los períodos
-del 00 se aplica después de migrar todo. El modelo del sitio tiene la malla del memo
-(`nsub=16`, 1 000 kN por marco).
+`heredan` hacia un eslabón no migrado es promesa, no hallazgo. Migrados: **00 a 06**
+(lotes A y B); el 07 al 12 siguen el pipeline del spec
+(`docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md` § 6): leer memo y
+`.check.js` → `_calculo.py` con `publicado` → `_figuras.py` → `index.md` con el molde
+(narración por pasos, visores donde entra el modelo, ficha, referencias) → build estricto y
+captura → commit. **La tabla de Referencias se migra literal**, celda por celda. **Fidelidad
+primero**: la cascada 04→13 con los períodos del 00 se aplica después de migrar todo. El
+modelo del sitio tiene la malla del memo (`nsub=16`, 1 000 kN por marco).
 
-**Próximo paso:** el lote B de la serie (eslabones 02 a 06), luego `escena@2` (esfuerzos por
-barra) y los eslabones 07 a 12; o **Fase 1** (chequeo de código AISC/NCh427); ver
-`ROADMAP.md`.
+**El lote B (2026-09-05) confirmó que la sustitución de la cifra impresa es la regla y no la
+excepción**: el 04 divide ordenadas impresas (con las exactas su razón daría 1,04686 y no
+1,04687), el 05 multiplica el peso por las ordenadas del 04 a cinco decimales, y el 06
+redondea **todos** sus pasos a cinco —con redondeo medio hacia **arriba**, el `Math.round` del
+arnés del memo y no el medio-al-par de `round()` de Python, que en el pico del espectro
+vertical dan dígitos distintos—. Dos dígitos del repo de memos no reproducen y quedan anotados
+en los `## Límites` de su página: el `k_req_Y` del 05 (5 216,93102 impreso contra 5 216,931030)
+y el corte con nieve en la masa del 06 (357,53340 contra 357,53342); los dos pasaban porque el
+arnés de allá comparaba con tolerancia **relativa** y el oráculo de acá es absoluto.
+
+**Próximo paso:** `escena@2` (esfuerzos por barra, lote C) y con ella los eslabones 07 a 12
+(lote D); o **Fase 1** (chequeo de código AISC/NCh427); ver `ROADMAP.md`.
 
 ## Principios de arquitectura
 
