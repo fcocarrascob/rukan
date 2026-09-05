@@ -22,6 +22,7 @@ cada tanto un hito largo cuando el tema lo pide.
 | 02 · Mp = Z·Fy es una asíntota que nunca se toca | `lab/nota02_momento_curvatura_acero.py` | [`lab-momento-plastico-asintota`](https://fcocarrascob.github.io/blog/lab-momento-plastico-asintota/) | 2026-08-03 |
 | 03 · El triángulo bajo la zapata no depende de la rigidez del suelo | `lab/nota03_zapata_sin_traccion.py` | [`lab-zapata-sin-traccion`](https://fcocarrascob.github.io/blog/lab-zapata-sin-traccion/) | 2026-08-05 |
 | 06 · Prismatizar o discretizar el peralte variable † | `lab/nota06_tapered_convergencia.py` | `rukan-verificacion-galpon-tapered` (post 2 de la serie del galpón) | 2026-08-13 |
+| 07 · El diagrama que la barra no reporta, ahora en 3D | `lab/nota07_esfuerzos_en_el_vano.py` | `lab-diagrama-en-3d` (por publicar) | 2026-09-06 |
 
 † **La 06 no es una nota de la serie Laboratorio.** El script vive acá porque es donde vive el
 trabajo con OpenSeesPy y donde está la referencia independiente, pero su destino es el post 2 de la
@@ -55,6 +56,7 @@ las columnas desaparecía del modelo sin dejar rastro.
 | # | Nota | Referencia independiente | Estado |
 |---|---|---|---|
 | B1 | `eleLoad` y los momentos de empotramiento que hay que devolverle a la barra | wL²/8 y 9wL²/128 de la viga apuntalada, a mano | ✅ nota 01 |
+| B1b | Los seis esfuerzos a lo largo de la barra en 3D, y quién fija el signo del corte | equilibrio del cuerpo libre integrado en numpy + malla ×16 en OpenSees | ✅ nota 07 |
 | B2 | Área de corte: cuándo Timoshenko se separa de Euler-Bernoulli | δ = PL³/3EI + PL/GAs, barrido L/d | ⬜ |
 | B3 | `vecxz` y la transformación geométrica en 3D: el error silencioso | matriz de rotación en numpy vs fuerzas locales de OpenSees | ⬜ |
 | B4 | Diafragma rígido: `rigidDiaphragm` vs `equalDOF` vs vigas rígidas | centro de rigidez a mano, piso con 3 marcos | ⬜ |

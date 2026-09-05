@@ -41,6 +41,8 @@ from dataclasses import dataclass, field
 import numpy as np
 
 __all__ = [
+    "COMPONENTES_LOCALES",
+    "diagrama_por_integracion",
     "Barra2D",
     "Portico2D",
     "Resultado2D",
@@ -57,6 +59,67 @@ __all__ = [
 ]
 
 GDL_POR_NODO = 3
+
+# Orden de los seis esfuerzos de una barra 3D en ejes locales. Se declara acá y
+# no se importa de ningún lado: este módulo no conoce `rukan`.
+COMPONENTES_LOCALES = ("N", "Vy", "Vz", "T", "My", "Mz")
+
+
+def diagrama_por_integracion(
+    S, w, L: float, xs, rebanadas: int = 512
+) -> np.ndarray:
+    """Los seis esfuerzos en cada `x`, por **equilibrio del cuerpo libre**.
+
+    Es la referencia independiente del diagrama de una barra: no escribe ninguna
+    expresión cerrada ni usa ``dM/dx = V``. Corta la barra en ``x``, reparte la
+    carga de vano en ``rebanadas`` cargas puntuales y suma fuerzas y momentos con
+    productos cruzados.
+
+    ``S`` son las doce fuerzas que los **nudos aplican a la barra** en ejes
+    locales, en el orden ``[Fxi, Fyi, Fzi, Mxi, Myi, Mzi, Fxj, …]`` —el de
+    ``localForces`` de OpenSees—; ``w = (wx, wy, wz)`` es la carga uniforme en
+    esos mismos ejes.
+
+    Derivación. El trozo ``[0, x]`` es un cuerpo en equilibrio cuyo extremo i es
+    el real y cuyo extremo j es el corte. Si ``P`` y ``Mo`` son la fuerza y el
+    momento que el resto de la barra aplica en el corte, medidos respecto del
+    punto de corte::
+
+        P  = −( F_i + w·x )
+        Mo = −( M_i + (−x·ex) × F_i + Σ_k (s_k − x)·ex × (w·Δs) )
+
+    y el corte se comporta exactamente como el extremo **j** de ese trozo, así
+    que el diagrama sale aplicándole el mapa de signos del extremo j —el mismo
+    que la convención verificada contra SAP2000 define— ::
+
+        N = P_x    Vy = P_y    Vz = P_z    T = Mo_x    My = −Mo_y    Mz = −Mo_z
+
+    La regla del medio punto es exacta para el integrando ``(s − x)``, que es
+    lineal: la coincidencia con la fórmula cerrada es a precisión de máquina y
+    eso es lo esperado. Lo independiente acá es la **derivación**, no un error de
+    truncamiento que tienda a cero.
+
+    Devuelve un arreglo ``(len(xs), 6)`` en el orden de `COMPONENTES_LOCALES`.
+    """
+    S = np.asarray(S, dtype=float)
+    F_i, M_i = S[:3], S[3:6]
+    wv = np.asarray(w, dtype=float) if w is not None else np.zeros(3)
+    ex = np.array([1.0, 0.0, 0.0])
+    if L <= 0.0:
+        raise ValueError(f"el largo de la barra tiene que ser positivo, no {L!r}")
+
+    filas = []
+    for x in xs:
+        if x < 0.0 or x > L * (1.0 + 1e-9):
+            raise ValueError(f"la estación x = {x!r} cae fuera de la barra (0 a {L!r})")
+        s = (np.arange(rebanadas) + 0.5) * x / rebanadas   # centroides
+        dP = wv * (x / rebanadas)                          # carga de una rebanada
+        brazos = (s - x)[:, None] * ex                     # (rebanadas, 3)
+
+        P = -(F_i + wv * x)
+        Mo = -(M_i + np.cross(-x * ex, F_i) + np.cross(brazos, dP).sum(axis=0))
+        filas.append([P[0], P[1], P[2], Mo[0], -Mo[1], -Mo[2]])
+    return np.array(filas)
 
 
 def k_local(E: float, A: float, I: float, L: float) -> np.ndarray:
