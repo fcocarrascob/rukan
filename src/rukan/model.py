@@ -33,6 +33,8 @@ class Node:
         False,
         False,
     )
+    # Nombre legible ("K1A_0", "R3_6"); vacío si no se usa. Único si se usa.
+    nombre: str = ""
 
 
 @dataclass
@@ -55,6 +57,7 @@ class Section:
     Iy: float  # inercia respecto al eje local y [m⁴]
     Iz: float  # inercia respecto al eje local z [m⁴]
     J: float   # constante torsional [m⁴]
+    nombre: str = ""
 
 
 @dataclass
@@ -75,6 +78,7 @@ class FrameElement:
     release_z_j: bool = False
     release_y_i: bool = False
     release_y_j: bool = False
+    nombre: str = ""
 
 
 @dataclass

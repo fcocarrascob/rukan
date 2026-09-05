@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rukan"
-version = "0.0.1"
+version = "0.1.0"
 description = "Análisis estructural opensource sobre OpenSeesPy — alternativa a SAP2000 para ingeniería chilena (NCh2369, NCh433)."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -15,6 +15,9 @@ dependencies = [
     "pint>=0.23",
     "numpy>=1.26",
 ]
+
+[project.scripts]
+rukan = "rukan.__main__:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
