@@ -194,3 +194,59 @@ def test_sha256_de_un_archivo(tmp_path):
     ruta.write_bytes(b"hola")
     assert io.sha256(ruta) == \
         "b221d9dbb083a7f33428d7c2a3c3198ae925614d70210e28716ccaa7cd4ddb79"
+
+
+# ------------------------------------------------------------ la sonda esfuerzo
+def _con_esfuerzo(proyecto, **campos):
+    d = io.to_dict(proyecto)
+    d["salidas"] = {"M": {"que": "esfuerzo", "barra": "VIGA",
+                          "componente": "Mz", "caso": "D", **campos}}
+    return d
+
+
+def test_la_sonda_esfuerzo_acepta_x_o_x_rel(proyecto):
+    p = io.from_dict(_con_esfuerzo(proyecto, x_rel=0.35))
+    assert p.salidas["M"]["x_rel"] == 0.35
+    p = io.from_dict(_con_esfuerzo(proyecto, x=2.0))
+    assert p.salidas["M"]["x"] == pytest.approx(2.0)
+
+
+@pytest.mark.parametrize("campos,trozo", [
+    ({}, "x"),                              # ni x ni x_rel
+    ({"x": 1.0, "x_rel": 0.5}, "uno"),      # los dos
+    ({"x_rel": 1.4}, "x_rel"),              # fuera de 0..1
+    ({"x_rel": -0.1}, "x_rel"),
+    ({"x": 99.0}, "largo"),                 # fuera de la barra
+    ({"x": -1.0}, "largo"),
+])
+def test_la_sonda_esfuerzo_valida_la_estacion(proyecto, campos, trozo):
+    with pytest.raises(io.ErrorDeEsquema, match=trozo):
+        io.from_dict(_con_esfuerzo(proyecto, **campos))
+
+
+def test_la_estacion_x_se_convierte_en_la_frontera(proyecto):
+    """`x` es una longitud: en un archivo en mm entra al núcleo en metros."""
+    d = _con_esfuerzo(proyecto, x=2000.0)
+    d["unidades"] = {"longitud": "mm", "fuerza": "N", "masa": "kg"}
+    for n in d["nudos"]:
+        n["x"], n["y"], n["z"] = n["x"] * 1e3, n["y"] * 1e3, n["z"] * 1e3
+    for s in d["secciones"]:
+        s["A"] *= 1e6
+        s["Iy"] *= 1e12
+        s["Iz"] *= 1e12
+        s["J"] *= 1e12
+    for m in d["materiales"]:
+        m["E"] *= 1e3 / 1e6
+        m["rho"] *= 1e3 / 1e9
+    for ms in d["masas"]:
+        ms["valores"] = [v * 1e3 for v in ms["valores"][:3]] + \
+                        [v * 1e3 * 1e6 for v in ms["valores"][3:]]
+    d["casos"]["H"]["nodales"][0]["F"] = [0, 1000.0, 0, 0, 0, 0]
+    p = io.from_dict(d)
+    assert p.salidas["M"]["x"] == pytest.approx(2.0)
+    assert io.to_dict(p)["salidas"]["M"]["x"] == pytest.approx(2.0)
+
+
+def test_largo_barra_resuelve_por_nombre_y_por_id(proyecto):
+    assert proyecto.largo_barra("VIGA") == pytest.approx(6.0)
+    assert proyecto.largo_barra(1) == pytest.approx(4.0)

@@ -17,7 +17,21 @@ signo. La convención verificada contra SAP2000 en los casos 6, 9 y 10:
     My, Mz            i: +Mi      j: -Mj
 
 Corte y torsión siguen la regla de las fuerzas (`i: -`, `j: +`) por analogía con
-la axial; **no se han verificado contra SAP2000 todavía**.
+la axial; **no se han verificado contra SAP2000 todavía**. Lo que sí quedó
+cerrado en la `nota07` del laboratorio es que el signo del **corte** no es una
+elección: con `Mz` anclado en sus dos extremos a la convención de momento de
+arriba, `dMz/dx = +Vy` y `dMy/dx = -Vz` lo determinan. La **torsión** es el único
+componente sin diagrama del cual derivarse, y sigue esperando el caso de
+verificación contra SAP2000 que `ROADMAP.md` encola.
+
+Esfuerzos a lo largo de la barra (`esfuerzo`)
+---------------------------------------------
+`localForces` solo entrega los dos extremos: entre ellos no hay nada, y el
+momento del vano no está. La sonda `esfuerzo` evalúa `esfuerzos.esfuerzo`, que
+superpone la carga de vano del caso (`cargas_de_vano`) sobre esas fuerzas de
+extremo. La estación se declara como `x` (metros desde el extremo i) o `x_rel`
+(0 a 1). Como el esfuerzo a `x` fijo es **lineal** en el caso, las combinaciones
+lo combinan como a cualquier otra respuesta.
 
 Participación modal
 -------------------
@@ -35,7 +49,7 @@ from typing import Callable
 
 import openseespy.opensees as ops
 
-from . import loads
+from . import esfuerzos, loads
 from .engine import build
 from .io import DOF, SONDAS_ESTATICAS, SONDAS_MODALES, Proyecto
 from .model import Model
@@ -110,6 +124,18 @@ def aplicar(p: Proyecto, caso: dict) -> Callable[[], None]:
     return aplicar
 
 
+def cargas_de_vano(p: Proyecto, caso: dict) -> dict[int, tuple[float, float, float]]:
+    """La carga uniforme en ejes locales de cada barra en `caso`, ``{id: w}``.
+
+    Solo el peso propio **distribuido** la produce: concentrado en los nudos no
+    carga el vano, y las cargas nodales tampoco. Es lo que `esfuerzos` necesita
+    para superponer sobre las fuerzas de extremo, y lo que la escena emite.
+    """
+    if caso.get("peso_propio") == "distribuido":
+        return loads.uniform_local_loads(p.model)
+    return {}
+
+
 def _clave(p: Proyecto, s: dict) -> str:
     """La respuesta primaria que una sonda estática necesita, sin el caso."""
     que = s["que"]
@@ -117,10 +143,23 @@ def _clave(p: Proyecto, s: dict) -> str:
         return f"d|{p.nudo_id(s['nudo'])}|{s['gdl']}"
     if que == "reaccion":
         return f"r|{p.nudo_id(s['nudo'])}|{s['gdl']}"
+    if que == "esfuerzo":
+        largo = p.largo_barra(s["barra"])
+        x = s["x"] if "x" in s else s["x_rel"] * largo
+        return f"e|{p.barra_id(s['barra'])}|{s['componente']}|{x!r}|{largo!r}"
     return f"f|{p.barra_id(s['barra'])}|{s['extremo']}|{s['componente']}"
 
 
-def _extractor(clave: str) -> Callable[[], float]:
+def _extractor(clave: str, cargas: dict[int, tuple[float, float, float]]
+               ) -> Callable[[], float]:
+    """El callable que lee una respuesta primaria del dominio ya resuelto.
+
+    `cargas` son las de vano **del caso que se está corriendo**: una sonda
+    `esfuerzo` las necesita para superponerlas sobre las fuerzas de extremo, y
+    por eso los extractores se arman por caso y no una sola vez. Las
+    combinaciones siguen siendo lineales sobre el resultado, que es exacto
+    porque el esfuerzo a `x` fijo es lineal en el caso.
+    """
     partes = clave.split("|")
     if partes[0] == "d":
         nid, dof = int(partes[1]), DOF.index(partes[2]) + 1
@@ -128,6 +167,12 @@ def _extractor(clave: str) -> Callable[[], float]:
     if partes[0] == "r":
         nid, dof = int(partes[1]), DOF.index(partes[2]) + 1
         return lambda: ops.nodeReaction(nid, dof)
+    if partes[0] == "e":
+        tag, comp = int(partes[1]), partes[2]
+        x, largo = float(partes[3]), float(partes[4])
+        w = cargas.get(tag)
+        return lambda: esfuerzos.esfuerzo(ops.eleResponse(tag, "localForces"),
+                                          w, largo, comp, x)
     tag, extremo, comp = int(partes[1]), partes[2], partes[3]
     idx = _COMP[comp] + (0 if extremo == "i" else 6)
     signo = signo_diagrama(extremo, comp)
@@ -168,11 +213,13 @@ def run(p: Proyecto) -> dict[str, float]:
         build(model)
         mr = modal(model, p.analisis["modal"]["n_modos"])
 
-    claves = {_clave(p, s) for s in p.salidas.values() if s["que"] in SONDAS_ESTATICAS}
-    extractores = {c: _extractor(c) for c in sorted(claves)}
+    claves = sorted({_clave(p, s) for s in p.salidas.values()
+                     if s["que"] in SONDAS_ESTATICAS})
     res_casos: dict[str, dict[str, float]] = {}
     for nombre in sorted(_casos_usados(p)):
-        res_casos[nombre] = loads.run_static_case(model, aplicar(p, p.casos[nombre]),
+        caso = p.casos[nombre]
+        extractores = {c: _extractor(c, cargas_de_vano(p, caso)) for c in claves}
+        res_casos[nombre] = loads.run_static_case(model, aplicar(p, caso),
                                                   extractores, rebuild=True)
     res_combos = {n: loads.combine(res_casos, f) for n, f in p.combinaciones.items()
                   if set(f) <= set(res_casos)}

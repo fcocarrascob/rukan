@@ -87,18 +87,38 @@ def total_weight(model: Model) -> float:
     return sum(element_weights(model).values())
 
 
+def uniform_local_loads(model: Model,
+                        gravity=(0.0, 0.0, -1.0)) -> dict[int, tuple[float, float, float]]:
+    """Peso propio de cada barra **proyectado a sus ejes locales**, ``kN/m``.
+
+    Devuelve ``{id de barra: (wx, wy, wz)}``, en el orden de los ejes locales
+    ``(x, y, z)`` y **no** en el de ``eleLoad -beamUniform``, que es
+    ``(Wy, Wz, Wx)``.
+
+    Es la misma proyección que ``self_weight_distributed`` le pasa a OpenSees,
+    pero **devuelta en vez de aplicada**: la escena la necesita para que el visor
+    pueda dibujar el esfuerzo a lo largo de la barra (ver ``esfuerzos.py``), y
+    las sondas ``esfuerzo`` para evaluarlo. Escribirla dos veces sería tener dos
+    definiciones de la carga de vano.
+    """
+    salida = {}
+    for e, pi, pj, _L, w in _element_geometry(model):
+        ex, ey, ez = local_axes(pi, pj, e.vecxz)
+        gvec = (gravity[0] * w, gravity[1] * w, gravity[2] * w)
+        salida[e.id] = (_dot(gvec, ex), _dot(gvec, ey), _dot(gvec, ez))
+    return salida
+
+
 def self_weight_distributed(model: Model, gravity=(0.0, 0.0, -1.0)) -> None:
     """Aplica el peso propio como carga distribuida (``eleLoad -beamUniform``).
 
     Debe llamarse con un ``ops.pattern`` activo (y tras ``engine.build``). La
-    gravedad global se proyecta a los ejes locales de cada barra.
+    gravedad global se proyecta a los ejes locales de cada barra, con
+    ``uniform_local_loads``.
     """
-    for e, pi, pj, _L, w in _element_geometry(model):
-        ex, ey, ez = local_axes(pi, pj, e.vecxz)
-        gvec = (gravity[0] * w, gravity[1] * w, gravity[2] * w)
-        Wx, Wy, Wz = _dot(gvec, ex), _dot(gvec, ey), _dot(gvec, ez)
+    for eid, (Wx, Wy, Wz) in uniform_local_loads(model, gravity).items():
         # OpenSees 3D: eleLoad -beamUniform Wy Wz <Wx> (cargas en ejes locales).
-        ops.eleLoad("-ele", e.id, "-type", "-beamUniform", Wy, Wz, Wx)
+        ops.eleLoad("-ele", eid, "-type", "-beamUniform", Wy, Wz, Wx)
 
 
 def self_mass_lumped(model: Model) -> list[NodalMass]:

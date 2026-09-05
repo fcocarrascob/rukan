@@ -34,6 +34,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -60,11 +61,15 @@ SONDAS: dict[str, tuple[str, ...]] = {
     "desplazamiento": ("nudo", "gdl", "caso"),
     "reaccion": ("nudo", "gdl", "caso"),
     "fuerza": ("barra", "extremo", "componente", "caso"),
+    "esfuerzo": ("barra", "componente", "caso"),
     "peso_total": (),
 }
+# Campos que una sonda admite pero no exige. `esfuerzo` pide la estacion como
+# `x` (metros desde el extremo i) o `x_rel` (0 a 1), exactamente una de las dos.
+SONDAS_OPCIONALES: dict[str, tuple[str, ...]] = {"esfuerzo": ("x", "x_rel")}
 SONDAS_MODALES = ("periodo", "periodo_dominante", "participacion_dominante",
                   "masa_acumulada")
-SONDAS_ESTATICAS = ("desplazamiento", "reaccion", "fuerza")
+SONDAS_ESTATICAS = ("desplazamiento", "reaccion", "fuerza", "esfuerzo")
 
 _CLAVES = ("esquema", "titulo", "unidades", "origen", "materiales", "secciones",
            "nudos", "barras", "masas", "casos", "combinaciones", "analisis", "salidas")
@@ -90,6 +95,15 @@ class Proyecto:
 
     def barra_id(self, ref: int | str) -> int:
         return _resolver(self.model.elements, ref, "barra")
+
+    def largo_barra(self, ref: int | str) -> float:
+        """Largo de la barra [m]. Lo necesita la sonda `esfuerzo` para traducir
+        `x_rel` a metros y para rechazar una estacion fuera de la barra."""
+        eid = self.barra_id(ref)
+        e = next(x for x in self.model.elements if x.id == eid)
+        nudos = {n.id: n for n in self.model.nodes}
+        ni, nj = nudos[e.node_i], nudos[e.node_j]
+        return math.dist((ni.x, ni.y, ni.z), (nj.x, nj.y, nj.z))
 
     def validar(self) -> None:
         """Lanza `ErrorDeEsquema` si casos, combinaciones, análisis o salidas
@@ -214,7 +228,8 @@ def _validar_salidas(p: Proyecto) -> None:
         faltan = [c for c in SONDAS[que] if c not in s]
         if faltan:
             raise ErrorDeEsquema(f"{pre} ({que}) no trae {', '.join(faltan)}")
-        sobran = [c for c in s if c != "que" and c not in SONDAS[que]]
+        permitidos = SONDAS[que] + SONDAS_OPCIONALES.get(que, ())
+        sobran = [c for c in s if c != "que" and c not in permitidos]
         if sobran:
             raise ErrorDeEsquema(f"{pre} ({que}) trae {', '.join(sobran)}, que no aplica")
         if que in SONDAS_MODALES and n_modos is None:
@@ -230,6 +245,8 @@ def _validar_salidas(p: Proyecto) -> None:
         if "componente" in s and s["componente"] not in COMPONENTES:
             raise ErrorDeEsquema(f"{pre}: componente = {s['componente']!r}; "
                                  f"vale {' | '.join(COMPONENTES)}")
+        if que == "esfuerzo":
+            _validar_estacion(p, simbolo, s, pre)
         if "extremo" in s and s["extremo"] not in EXTREMOS:
             raise ErrorDeEsquema(f"{pre}: extremo = {s['extremo']!r}; vale i | j")
         if "caso" in s and s["caso"] not in p.casos and s["caso"] not in p.combinaciones:
@@ -242,6 +259,26 @@ def _validar_salidas(p: Proyecto) -> None:
                 p.barra_id(s["barra"])
         except ErrorDeEsquema as exc:
             raise ErrorDeEsquema(f"{pre}: {exc}") from None
+
+
+def _validar_estacion(p: "Proyecto", simbolo: str, s: dict, pre: str) -> None:
+    """La estacion de una sonda `esfuerzo`: `x` o `x_rel`, y dentro de la barra."""
+    tiene_x, tiene_rel = "x" in s, "x_rel" in s
+    if tiene_x == tiene_rel:
+        raise ErrorDeEsquema(f"{pre} (esfuerzo) necesita `x` o `x_rel`, "
+                             "exactamente uno de los dos")
+    clave = "x" if tiene_x else "x_rel"
+    v = s[clave]
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        raise ErrorDeEsquema(f"{pre}: {clave} = {v!r} no es un numero")
+    if tiene_rel:
+        if not 0.0 <= v <= 1.0:
+            raise ErrorDeEsquema(f"{pre}: x_rel = {v!r} no esta entre 0 y 1")
+        return
+    largo = p.largo_barra(s["barra"])
+    if not 0.0 <= v <= largo * (1.0 + 1e-9):
+        raise ErrorDeEsquema(f"{pre}: x = {v!r} cae fuera del largo de la "
+                             f"barra ({largo:.6g} m)")
 
 
 # ============================ UNIDADES ================================
@@ -353,12 +390,19 @@ def from_dict(d: dict) -> Proyecto:
                 if isinstance(carga.get("F"), (list, tuple)) and len(carga["F"]) == 6:
                     carga["F"] = [float(v) * f for v, f in zip(carga["F"], ff)]
 
+    salidas = copy.deepcopy(d.get("salidas", {}))
+    if fL != 1.0:
+        # `x` de una sonda `esfuerzo` es una longitud: entra al nucleo en metros.
+        for s_ in salidas.values():
+            if isinstance(s_, dict) and s_.get("que") == "esfuerzo" and "x" in s_:
+                s_["x"] = float(s_["x"]) * fL
+
     p = Proyecto(model=Model(nodes=nudos, materials=mats, sections=secs,
                              elements=barras, masses=masas),
                  titulo=str(d.get("titulo", "")), casos=casos,
                  combinaciones=copy.deepcopy(d.get("combinaciones", {})),
                  analisis=copy.deepcopy(d.get("analisis", {})),
-                 salidas=copy.deepcopy(d.get("salidas", {})),
+                 salidas=salidas,
                  origen=copy.deepcopy(d.get("origen", {})))
     p.validar()
     return p
