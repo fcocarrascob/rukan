@@ -323,6 +323,6 @@ ruedas {{ v('nch2369-galpon-grua/03', 'wb_ruedas', 2) }} m, y el 09 los
 | CMAA-5 | CMAA 70:2010 | §3.3.2.1.4.2, el factor de carga de izaje y sus dos topes | PDF ídem, p. 16 | «shall be 0.5 percent of the hoisting speed in feet per minute, but not less than 15 percent nor more than 50 percent» |
 | CMAA-6 | CMAA 70:2010 | §3.3.2.1.4.1, el factor de carga muerta | PDF ídem, p. 16 | «This factor covers only the dead loads of the crane, trolley and its associated equipment» |
 | CMAA-7 | CMAA 70:2010 | §1.4.6, las flechas admisibles de la carrilera y el 10 % de servicio | PDF ídem, p. 8 | «The lateral deflection should not exceed» |
-| CMAA-8 | CMAA 70:2010 | §3.3.2.2.2, el *skewing* que este eslabón no evalúa | PDF ídem, p. 17 | «When two wheels (or two bogies) roll along a rail the horizontal forces normal to the rail» |
+| CMAA-8 | CMAA 70:2010 | §3.3.2.2.2, el *skewing* que este memo no evalúa | PDF ídem, p. 17 | «When two wheels (or two bogies) roll along a rail the horizontal forces normal to the rail» |
 | NCh-12 | NCh2369:2025 (3.ª ed.) | §12.1.3, §12.1.4 y §12.1.5, lo sísmico que CMAA devuelve | `referencias/NCh2369-2025/cap12-estructuras-especificas.md` | — |
 | ICHA | ICHA 2010, Manual de Diseño para Estructuras de Acero | Tabla 15.3.1, las flechas de portagrúas y su procedencia | `referencias/ICHA-2010/cap15-servicio-deformaciones-y-vibraciones.md` | — |
