@@ -63,5 +63,11 @@ extra_css:
 
 nav:
   - Inicio: index.md
+  - Series:
+      - Qué es una serie: series/index.md
+      - El galpón con puente grúa:
+          - La serie: series/nch2369-galpon-grua/index.md
+          - 00 · El modelo: series/nch2369-galpon-grua/00-el-modelo/index.md
+          - 01 · El umbral de las 20 t: series/nch2369-galpon-grua/01-el-umbral-de-las-20-t/index.md
   - Modelos:
       - El galpón con puente grúa: modelos/galpon-grua/index.md

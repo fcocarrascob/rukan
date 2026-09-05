@@ -230,7 +230,7 @@ def test_el_eslabon_publica_lo_que_sale_y_cita_con_pagina(serie, serie_id, carpe
     d = json.loads((carpeta / f"{carpeta.name}.valores.json").read_text("utf-8"))
     nn = carpeta.name[:2]
     for simbolo in d["sale"]:
-        assert re.search(rf"v\(\s*'{serie_id}/{nn}'\s*,\s*'{simbolo}'", md), \
+        assert re.search(rf"\bvt?\(\s*'{serie_id}/{nn}'\s*,\s*'{simbolo}'", md), \
             f"{simbolo} sale del {nn} y ninguna cifra de index.md lo publica"
     for tex in re.findall(r"\$\$(.+?)\$\$", md, flags=re.S):
         assert not re.search(r"\d\.\d", re.sub(r"\\text\{[^}]*\}", "", tex)), \

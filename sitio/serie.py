@@ -323,8 +323,8 @@ def verificar_cadena(raiz: Path, serie: str) -> list[str]:
             for hn in s.get("heredan", []):
                 c = por_nn.get(hn)
                 if c is None:
-                    h.append(f"{nn}: {simbolo} dice que lo hereda el {hn}, que no existe")
-                elif simbolo not in c["entra"] or c["entra"][simbolo]["de"] != nn:
+                    continue        # un consumidor que todavía no se migró: promesa, no hallazgo
+                if simbolo not in c["entra"] or c["entra"][simbolo]["de"] != nn:
                     h.append(f"{nn}: {simbolo} dice que lo hereda el {hn}, y el {hn} no lo declara")
     return h
 

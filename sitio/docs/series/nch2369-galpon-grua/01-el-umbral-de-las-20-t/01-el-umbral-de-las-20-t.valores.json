@@ -1,0 +1,380 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 1,
+ "slug": "el-umbral-de-las-20-t",
+ "titulo": "El umbral de las 20 t: una sola letra de §12.2.1",
+ "normas": [
+  "NCh2369:2025"
+ ],
+ "hereda_de": [],
+ "entra": {},
+ "caso": {
+  "L_luz": {
+   "valor": 25.0,
+   "unidad": "m"
+  },
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m"
+  },
+  "n_vanos": {
+   "valor": 4.0,
+   "unidad": "—"
+  },
+  "L_total": {
+   "valor": 30.0,
+   "unidad": "m"
+  },
+  "h_libre": {
+   "valor": 10.5,
+   "unidad": "m"
+  },
+  "pend": {
+   "valor": 20.0,
+   "unidad": "%"
+  },
+  "h_cumb": {
+   "valor": 2.5,
+   "unidad": "m"
+  },
+  "Qn_grua": {
+   "valor": 200.0,
+   "unidad": "kN"
+  },
+  "Lg_grua": {
+   "valor": 23.0,
+   "unidad": "m"
+  },
+  "h_riel": {
+   "valor": 7.5,
+   "unidad": "m"
+  },
+  "g_techo": {
+   "valor": 38.0,
+   "unidad": "kg/m2"
+  },
+  "P_eq": {
+   "valor": 12.0,
+   "unidad": "kN"
+  },
+  "n_altillos": {
+   "valor": 0.0,
+   "unidad": "—"
+  },
+  "zona": {
+   "valor": 2.0,
+   "unidad": "—"
+  },
+  "n_naves": {
+   "valor": 1.0,
+   "unidad": "—"
+  },
+  "n_estanterias": {
+   "valor": 0.0,
+   "unidad": "—"
+  },
+  "h_lim": {
+   "valor": 23.0,
+   "unidad": "m"
+  },
+  "L_lim": {
+   "valor": 75.0,
+   "unidad": "m"
+  },
+  "L_lim_par": {
+   "valor": 45.0,
+   "unidad": "m"
+  },
+  "g_lim": {
+   "valor": 70.0,
+   "unidad": "kg/m2"
+  },
+  "Qn_lim": {
+   "valor": 100.0,
+   "unidad": "kN"
+  },
+  "Qn_lim_cab": {
+   "valor": 50.0,
+   "unidad": "kN"
+  },
+  "P_eq_lim": {
+   "valor": 50.0,
+   "unidad": "kN"
+  },
+  "H_alt_lim": {
+   "valor": 15.0,
+   "unidad": "kN"
+  },
+  "R_liv": {
+   "valor": 4.0,
+   "unidad": "—"
+  },
+  "R_55": {
+   "valor": 5.0,
+   "unidad": "—"
+  },
+  "R_gen": {
+   "valor": 3.0,
+   "unidad": "—"
+  },
+  "xi_55": {
+   "valor": 0.02,
+   "unidad": "—"
+  },
+  "k_amp_liv": {
+   "valor": 0.5,
+   "unidad": "—"
+  },
+  "k_amp_gen": {
+   "valor": 0.7,
+   "unidad": "—"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "I": {
+    "valor": 1.0,
+    "unidad": "—"
+   }
+  },
+  "B2": {
+   "u_h": {
+    "valor": 0.45652173913043476,
+    "unidad": "—"
+   }
+  },
+  "B3": {
+   "u_L": {
+    "valor": 0.3333333333333333,
+    "unidad": "—"
+   }
+  },
+  "B4": {
+   "u_d": {
+    "valor": 0.5428571428571428,
+    "unidad": "—"
+   }
+  },
+  "B5": {
+   "u_e": {
+    "valor": 2.0,
+    "unidad": "—"
+   },
+   "u_e_cab": {
+    "valor": 4.0,
+    "unidad": "—"
+   }
+  },
+  "B7": {
+   "u_g": {
+    "valor": 0.24,
+    "unidad": "—"
+   }
+  },
+  "B8": {
+   "u_h_alt": {
+    "valor": 0.0,
+    "unidad": "—"
+   }
+  },
+  "C1": {
+   "n_cumplen": {
+    "valor": 7.0,
+    "unidad": "—"
+   },
+   "n_fallan": {
+    "valor": 1.0,
+    "unidad": "—"
+   }
+  },
+  "C3": {
+   "k_amp": {
+    "valor": 0.7,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "R_T7": {
+    "valor": 5.0,
+    "unidad": "—"
+   },
+   "xi": {
+    "valor": 0.02,
+    "unidad": "—"
+   }
+  },
+  "D3": {
+   "amp_55": {
+    "valor": 3.5,
+    "unidad": "—"
+   },
+   "amp_liv": {
+    "valor": 2.0,
+    "unidad": "—"
+   },
+   "raz_amp": {
+    "valor": 1.75,
+    "unidad": "—"
+   }
+  },
+  "D4": {
+   "raz_no_fusible": {
+    "valor": 1.4,
+    "unidad": "—"
+   }
+  },
+  "D5": {
+   "raz_fusible": {
+    "valor": 0.8,
+    "unidad": "—"
+   }
+  },
+  "D6": {
+   "raz_sin_ductil": {
+    "valor": 1.6666666666666665,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "I": {
+   "valor": 1.0,
+   "unidad": "—",
+   "paso": "A1",
+   "heredan": [
+    "02",
+    "04",
+    "06",
+    "07",
+    "12"
+   ]
+  },
+  "L_luz": {
+   "valor": 25.0,
+   "unidad": "m",
+   "paso": "S1",
+   "heredan": [
+    "02",
+    "05",
+    "07",
+    "10",
+    "11",
+    "12"
+   ]
+  },
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m",
+   "paso": "S1",
+   "heredan": [
+    "02",
+    "03",
+    "04",
+    "05",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12"
+   ]
+  },
+  "h_libre": {
+   "valor": 10.5,
+   "unidad": "m",
+   "paso": "S1",
+   "heredan": [
+    "04",
+    "05",
+    "06",
+    "07",
+    "10",
+    "11",
+    "12"
+   ]
+  },
+  "g_techo": {
+   "valor": 38.0,
+   "unidad": "kg/m2",
+   "paso": "S4",
+   "heredan": [
+    "11"
+   ]
+  },
+  "Qn_grua": {
+   "valor": 200.0,
+   "unidad": "kN",
+   "paso": "S3",
+   "heredan": [
+    "03",
+    "08",
+    "09",
+    "10"
+   ]
+  },
+  "Lg_grua": {
+   "valor": 23.0,
+   "unidad": "m",
+   "paso": "S3",
+   "heredan": [
+    "03",
+    "10"
+   ]
+  },
+  "h_riel": {
+   "valor": 7.5,
+   "unidad": "m",
+   "paso": "S3",
+   "heredan": [
+    "06",
+    "07",
+    "10",
+    "12"
+   ]
+  },
+  "R_T7": {
+   "valor": 5.0,
+   "unidad": "—",
+   "paso": "D1",
+   "heredan": [
+    "04",
+    "06",
+    "12"
+   ]
+  },
+  "xi": {
+   "valor": 0.02,
+   "unidad": "—",
+   "paso": "D1",
+   "heredan": [
+    "04",
+    "12"
+   ]
+  },
+  "k_amp": {
+   "valor": 0.7,
+   "unidad": "—",
+   "paso": "C3",
+   "heredan": [
+    "04"
+   ]
+  }
+ },
+ "publicado": {
+  "I": "1,00",
+  "L_luz": "25,00",
+  "s_marco": "7,50",
+  "h_libre": "10,50",
+  "g_techo": "38,00",
+  "Qn_grua": "200,00",
+  "Lg_grua": "23,00",
+  "h_riel": "7,50",
+  "R_T7": "5",
+  "xi": "0,02",
+  "k_amp": "0,70"
+ },
+ "rukan": "0.1.0",
+ "commit": "f69e87e",
+ "generado": "2026-09-05T10:15:12"
+}

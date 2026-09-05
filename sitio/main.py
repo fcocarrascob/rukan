@@ -13,6 +13,7 @@ markdown invoca con `{{ … }}`. Sobre un **modelo** (`docs/modelos/<slug>/`):
 Sobre un **eslabón de una serie** (`docs/series/<serie>/<NN-slug>/`, ver `serie.py`):
 
     {{ v('nch2369-galpon-grua/04', 'R_star_Y', 5) }}   → 5,00000  (sale, pasos, entra o caso)
+    {{ vt('nch2369-galpon-grua/04', 'R_star_Y', 5) }}  → 5{,}00000  (para dentro de $$…$$)
     {{ ficha('nch2369-galpon-grua/04') }}              → las tablas Entra y Sale, con enlaces
     {{ tabla_serie('nch2369-galpon-grua') }}           → la tabla de eslabones del índice
     {{ grafo_serie('nch2369-galpon-grua') }}           → el grafo de herencias, en mermaid
@@ -149,6 +150,13 @@ def v(raiz: Path, eslabon: str, simbolo: str, cifras: int | None = None,
     return s
 
 
+def vt(raiz: Path, eslabon: str, simbolo: str, cifras: int | None = None,
+       factor: float = 1.0) -> str:
+    """Como `v`, pero lista para ir dentro de `$$…$$`: coma decimal como `{,}` y
+    espacio de miles como `\,`, la notación de los memos."""
+    return v(raiz, eslabon, simbolo, cifras, factor).replace(",", "{,}").replace(" ", "\,")
+
+
 def _como_publicado(d: dict, simbolo: str, valor_: float) -> str:
     """El valor con los decimales que el memo publicó; si no hay publicado,
     con los que el float trae."""
@@ -157,8 +165,12 @@ def _como_publicado(d: dict, simbolo: str, valor_: float) -> str:
     return fmt(valor_, dec)
 
 
-def _carpeta_de(raiz: Path, serie_id: str, nn: str) -> str:
-    return S.carpeta_eslabon(raiz, serie_id, nn).name
+def _enlace(raiz: Path, serie_id: str, nn: str) -> str:
+    """`[04](../04-slug/)`, o `04` a secas si ese eslabón todavía no está migrado."""
+    try:
+        return f"[{nn}](../{S.carpeta_eslabon(raiz, serie_id, nn).name}/)"
+    except FileNotFoundError:
+        return nn
 
 
 def ficha(raiz: Path, eslabon: str) -> str:
@@ -174,7 +186,7 @@ def ficha(raiz: Path, eslabon: str) -> str:
             origen = f"modelo [{slug}](../../../modelos/{slug}/)"
             texto = fmt(x["valor"], S.decimales(x["valor"]))
         else:
-            origen = f"[{de}](../{_carpeta_de(raiz, serie_id, de)}/)"
+            origen = _enlace(raiz, serie_id, de)
             texto = _como_publicado(S.cargar(raiz, serie_id, de), simbolo, x["valor"])
         paso = f" · {x['paso']}" if x.get("paso") else ""
         out.append(f"| `{simbolo}` | {texto} | {x['unidad']} | {origen}{paso} |")
@@ -184,8 +196,7 @@ def ficha(raiz: Path, eslabon: str) -> str:
     out += ["", f"**Sale** — lo que este eslabón publica, y el paso en que nace.", "",
             "| Símbolo | Valor | Unidad | Nace en | Lo heredan |", "|---|---:|---|---|---|"]
     for simbolo, x in d["sale"].items():
-        her = " · ".join(f"[{h}](../{_carpeta_de(raiz, serie_id, h)}/)" for h in x["heredan"]) \
-            or "—"
+        her = " · ".join(_enlace(raiz, serie_id, h) for h in x["heredan"]) or "—"
         out.append(f"| `{simbolo}` | {_como_publicado(d, simbolo, x['valor'])} | "
                    f"{x['unidad']} | {x['paso']} | {her} |")
     out += ["", f"Esquema `{d['esquema']}` · generado {d.get('generado', '—')} · "
@@ -250,6 +261,8 @@ def define_env(env) -> None:
     env.macro(lambda modelo: procedencia(raiz, modelo), "procedencia")
     env.macro(lambda eslabon, simbolo, cifras=None, factor=1.0, unidad=False:
               v(raiz, eslabon, simbolo, cifras, factor, unidad), "v")
+    env.macro(lambda eslabon, simbolo, cifras=None, factor=1.0:
+              vt(raiz, eslabon, simbolo, cifras, factor), "vt")
     env.macro(lambda eslabon: ficha(raiz, eslabon), "ficha")
     env.macro(lambda serie_id: tabla_serie(raiz, serie_id), "tabla_serie")
     env.macro(lambda serie_id: grafo_serie(raiz, serie_id), "grafo_serie")

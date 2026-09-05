@@ -1,0 +1,352 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 0,
+ "slug": "el-modelo",
+ "titulo": "El modelo: el galpón entero corre por primera vez",
+ "normas": [
+  "NCh2369:2025"
+ ],
+ "hereda_de": [],
+ "entra": {
+  "T_star_X": {
+   "valor": 0.20602295282991928,
+   "unidad": "s",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  },
+  "T_star_Y": {
+   "valor": 0.2487844324913255,
+   "unidad": "s",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  },
+  "Ux": {
+   "valor": 0.6910919555206783,
+   "unidad": "—",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  },
+  "Uy": {
+   "valor": 0.9432965113917069,
+   "unidad": "—",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  },
+  "macum_X": {
+   "valor": 0.9973133538526573,
+   "unidad": "—",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  },
+  "macum_Y": {
+   "valor": 0.9938672056412892,
+   "unidad": "—",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  },
+  "macum_Z": {
+   "valor": 0.372869547384159,
+   "unidad": "—",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  },
+  "d_alero": {
+   "valor": 0.06645588422948112,
+   "unidad": "m",
+   "de": "modelo:galpon-grua",
+   "paso": "M2"
+  },
+  "d_riel": {
+   "valor": 0.023629202986390294,
+   "unidad": "m",
+   "de": "modelo:galpon-grua",
+   "paso": "M2"
+  },
+  "peso_total": {
+   "valor": 621.9026329907382,
+   "unidad": "kN",
+   "de": "modelo:galpon-grua",
+   "paso": "M1"
+  }
+ },
+ "caso": {
+  "L_luz": {
+   "valor": 25.0,
+   "unidad": "m"
+  },
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m"
+  },
+  "h_libre": {
+   "valor": 10.5,
+   "unidad": "m"
+  },
+  "h_riel": {
+   "valor": 7.5,
+   "unidad": "m"
+  },
+  "h_asiento": {
+   "valor": 6.68424,
+   "unidad": "m"
+  },
+  "P_sismico": {
+   "valor": 1037.085,
+   "unidad": "kN"
+  },
+  "Wgrua_sc": {
+   "valor": 230.0,
+   "unidad": "kN"
+  },
+  "A_diag_techo": {
+   "valor": 2400.0,
+   "unidad": "mm2"
+  },
+  "A_punt_techo": {
+   "valor": 4656.0,
+   "unidad": "mm2"
+  },
+  "n_marcos": {
+   "valor": 5.0,
+   "unidad": "—"
+  },
+  "H_marco": {
+   "valor": 1000.0,
+   "unidad": "kN"
+  },
+  "E_acero": {
+   "valor": 200000.0,
+   "unidad": "MPa"
+  },
+  "k_Y_07": {
+   "valor": 5612.11747,
+   "unidad": "kN/m"
+  },
+  "k_riel_07": {
+   "valor": 15057.33721,
+   "unidad": "kN/m"
+  },
+  "k_esc_10": {
+   "valor": 2.24801,
+   "unidad": "—"
+  },
+  "T_Y_10": {
+   "valor": 0.25722,
+   "unidad": "s"
+  },
+  "T_X_04": {
+   "valor": 0.2,
+   "unidad": "s"
+  },
+  "T_Y_nsub4": {
+   "valor": 0.2489536,
+   "unidad": "s"
+  },
+  "T_Y_nsub8": {
+   "valor": 0.2488182,
+   "unidad": "s"
+  },
+  "A_panel": {
+   "valor": 2400.0,
+   "unidad": "mm2"
+  },
+  "n_paneles": {
+   "valor": 4.0,
+   "unidad": "—"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "m_total": {
+    "valor": 105.71712538226299,
+    "unidad": "t"
+   }
+  },
+  "A3": {
+   "razon_conv": {
+    "valor": 0.24939075830487148,
+    "unidad": "—"
+   },
+   "err_richardson": {
+    "valor": 1.1255836224827176e-05,
+    "unidad": "s"
+   },
+   "T_Y_conv": {
+    "valor": 0.24877317665510068,
+    "unidad": "s"
+   }
+  },
+  "B1": {
+   "d_alero_H": {
+    "valor": 0.0664559,
+    "unidad": "m"
+   },
+   "k_Y_3D": {
+    "valor": 15047.572901728816,
+    "unidad": "kN/m"
+   },
+   "raz_kY_07": {
+    "valor": 2.6812647778965353,
+    "unidad": "—"
+   },
+   "raz_kY_esc": {
+    "valor": 1.1927281363946491,
+    "unidad": "—"
+   }
+  },
+  "B2": {
+   "d_riel_H": {
+    "valor": 0.0236292,
+    "unidad": "m"
+   },
+   "k_riel_3D": {
+    "valor": 42320.518680276946,
+    "unidad": "kN/m"
+   },
+   "raz_kriel_07": {
+    "valor": 2.810624354761126,
+    "unidad": "—"
+   }
+  },
+  "C1": {
+   "raz_TY_10": {
+    "valor": 0.9672048537879072,
+    "unidad": "—"
+   }
+  },
+  "C2": {
+   "raz_TX_04": {
+    "valor": 1.0301147641495962,
+    "unidad": "—"
+   }
+  },
+  "C3": {
+   "raz_macum_X": {
+    "valor": 1.1081259487251747,
+    "unidad": "—"
+   },
+   "raz_macum_Y": {
+    "valor": 1.104296895156988,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "m_marco": {
+    "valor": 21.143425076452598,
+    "unidad": "t"
+   },
+   "T1_Y": {
+    "valor": 0.2355235348979753,
+    "unidad": "s"
+   },
+   "raz_T1_Y": {
+    "valor": 1.0563039171397228,
+    "unidad": "—"
+   },
+   "T1_Y_07": {
+    "valor": 0.38565961421241063,
+    "unidad": "s"
+   }
+  },
+  "D2": {
+   "L_diag_panel": {
+    "valor": 12903.48790056394,
+    "unidad": "mm"
+   },
+   "cos2_panel": {
+    "valor": 0.3378378378378379,
+    "unidad": "—"
+   },
+   "k_pan": {
+    "valor": 25134.624593258228,
+    "unidad": "kN/m"
+   },
+   "T1_X": {
+    "valor": 0.20374471107822087,
+    "unidad": "s"
+   },
+   "raz_T1_X": {
+    "valor": 1.0111818448667547,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "T_star_X": {
+   "valor": 0.20602295282991928,
+   "unidad": "s",
+   "paso": "M1",
+   "heredan": []
+  },
+  "T_star_Y": {
+   "valor": 0.2487844324913255,
+   "unidad": "s",
+   "paso": "M1",
+   "heredan": []
+  },
+  "Ux_star": {
+   "valor": 0.6910919555206783,
+   "unidad": "—",
+   "paso": "M1",
+   "heredan": []
+  },
+  "Uy_star": {
+   "valor": 0.9432965113917069,
+   "unidad": "—",
+   "paso": "M1",
+   "heredan": []
+  },
+  "macum_X": {
+   "valor": 0.9973133538526573,
+   "unidad": "—",
+   "paso": "M1",
+   "heredan": []
+  },
+  "macum_Y": {
+   "valor": 0.9938672056412892,
+   "unidad": "—",
+   "paso": "M1",
+   "heredan": []
+  },
+  "d_alero_H": {
+   "valor": 0.06645588422948112,
+   "unidad": "m",
+   "paso": "M2",
+   "heredan": []
+  },
+  "d_riel_H": {
+   "valor": 0.023629202986390294,
+   "unidad": "m",
+   "paso": "M2",
+   "heredan": []
+  },
+  "k_Y_3D": {
+   "valor": 15047.572901728816,
+   "unidad": "kN/m",
+   "paso": "B1",
+   "heredan": []
+  },
+  "k_riel_3D": {
+   "valor": 42320.518680276946,
+   "unidad": "kN/m",
+   "paso": "B2",
+   "heredan": []
+  }
+ },
+ "publicado": {
+  "T_star_X": "0,20602",
+  "T_star_Y": "0,24878",
+  "Ux_star": "0,69109",
+  "Uy_star": "0,94330",
+  "macum_X": "0,99731",
+  "macum_Y": "0,99387",
+  "d_alero_H": "0,0664559",
+  "d_riel_H": "0,0236292",
+  "k_Y_3D": "15047,57290",
+  "k_riel_3D": "42320,51868"
+ },
+ "rukan": "0.1.0",
+ "commit": "f69e87e",
+ "generado": "2026-09-05T10:14:01"
+}
