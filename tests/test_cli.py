@@ -71,7 +71,7 @@ def test_escena_escribe_la_escena_junto_al_proyecto(ruta_proyecto, capsys):
     salida = ruta_proyecto.with_name("voladizo.escena.json")
     assert salida.exists()
     doc = json.loads(salida.read_text(encoding="utf-8"))
-    assert doc["esquema"] == "rukan/escena@1"
+    assert doc["esquema"] == "rukan/escena@2"
     assert doc["sha256_proyecto"] == io.sha256(ruta_proyecto)
     assert len(doc["modos"]) == 1 and set(doc["casos"]) == {"P"}
     assert "escrito" in capsys.readouterr().out
