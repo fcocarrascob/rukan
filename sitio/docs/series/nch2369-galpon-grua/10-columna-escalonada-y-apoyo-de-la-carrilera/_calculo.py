@@ -24,7 +24,7 @@ Cuatro cosas que este eslabón hace y conviene no perder de vista al leerlo:
   serie, y no la compresión ni la flexión.
 
 **Todos los pasos se redondean a cinco decimales**, que es lo que el memo imprime
-y con lo que sustituye. De las 164 filas del `## Resumen`, 161 van en
+y con lo que sustituye. De las 165 filas del `## Resumen`, 162 van en
 `E.resumen()`; las otras tres están en `## Límites` y son la misma especie que
 las del 07 y el 08: el memo imprime un dígito que su propia aritmética sobre las
 cifras impresas no da.
@@ -517,7 +517,7 @@ E.publicado({
 })
 
 E.resumen({
-    "R_u_reob": "299,26048", "cierre_07": "0,00065", "tope_kips": "222,41100",
+    "c_R": "1,54667", "R_u_reob": "299,26048", "cierre_07": "0,00065", "tope_kips": "222,41100",
     "R_kips": "67,27631", "uso_mensula": "1,34553",
     "e_col_riel": "1000,00000", "h_asiento": "6684,24000",
     "M_u_raiz": "478,81573", "R_fat_apoyo": "249,38373",
