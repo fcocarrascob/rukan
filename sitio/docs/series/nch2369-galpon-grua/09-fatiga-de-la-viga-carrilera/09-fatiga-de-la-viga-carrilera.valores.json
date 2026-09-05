@@ -1,0 +1,1058 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 9,
+ "slug": "fatiga-de-la-viga-carrilera",
+ "titulo": "La fatiga de la viga carrilera",
+ "normas": [
+  "AISC 360-22",
+  "AIST TR-13:2021",
+  "NCh2369:2025"
+ ],
+ "hereda_de": [
+  "01",
+  "03",
+  "08"
+ ],
+ "entra": {
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  },
+  "Qn_grua": {
+   "valor": 200.0,
+   "unidad": "kN",
+   "de": "01",
+   "paso": "S3"
+  },
+  "Wb_puente": {
+   "valor": 190.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "S2"
+  },
+  "Wt_carro": {
+   "valor": 40.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "S2"
+  },
+  "wb_ruedas": {
+   "valor": 3.4,
+   "unidad": "m",
+   "de": "03",
+   "paso": "S2"
+  },
+  "Rw_max": {
+   "valor": 161.23913043478262,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "B2"
+  },
+  "Rv_max": {
+   "valor": 193.48695652173913,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "C1"
+  },
+  "SS_carril": {
+   "valor": 30.0,
+   "unidad": "kN",
+   "de": "03",
+   "paso": "D3"
+  },
+  "N_ciclos": {
+   "valor": 75000.0,
+   "unidad": "ciclos",
+   "de": "03",
+   "paso": "A1"
+  },
+  "vida_grua": {
+   "valor": 25.0,
+   "unidad": "años",
+   "de": "03",
+   "paso": "S4"
+  },
+  "bfs_carril": {
+   "valor": 350.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "S2"
+  },
+  "tfs_carril": {
+   "valor": 20.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "S2"
+  },
+  "hw_carril": {
+   "valor": 650.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "S2"
+  },
+  "tw_carril": {
+   "valor": 8.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "S2"
+  },
+  "bfi_carril": {
+   "valor": 250.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "S2"
+  },
+  "tfi_carril": {
+   "valor": 14.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "S2"
+  },
+  "d_carril": {
+   "valor": 684.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "C1"
+  },
+  "Ix_carril": {
+   "valor": 1265593407.0,
+   "unidad": "mm4",
+   "de": "08",
+   "paso": "C2"
+  },
+  "Sxc_carril": {
+   "valor": 4693473.0,
+   "unidad": "mm3",
+   "de": "08",
+   "paso": "C2"
+  },
+  "Sxt_carril": {
+   "valor": 3054404.0,
+   "unidad": "mm3",
+   "de": "08",
+   "paso": "C2"
+  },
+  "ybar_carril": {
+   "valor": 269.64968,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "C2"
+  },
+  "w_carril": {
+   "valor": 1.62262,
+   "unidad": "kN/m",
+   "de": "08",
+   "paso": "C4"
+  },
+  "M_serv": {
+   "valor": 361.60455,
+   "unidad": "kN·m",
+   "de": "08",
+   "paso": "D1"
+  },
+  "e_riel": {
+   "valor": 6.0,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "D3"
+  },
+  "ev_carril": {
+   "valor": 141.76,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "D3"
+  },
+  "lef_carril": {
+   "valor": 303.52,
+   "unidad": "mm",
+   "de": "08",
+   "paso": "E6"
+  },
+  "N_50": {
+   "valor": 150000.0,
+   "unidad": "ciclos",
+   "de": "08",
+   "paso": "B2"
+  }
+ },
+ "caso": {
+  "Fy": {
+   "valor": 345.0,
+   "unidad": "MPa"
+  },
+  "Fexx": {
+   "valor": 490.0,
+   "unidad": "MPa"
+  },
+  "phi_w": {
+   "valor": 0.75,
+   "unidad": "—"
+  },
+  "cos45": {
+   "valor": 0.70711,
+   "unidad": "—"
+  },
+  "a_filete": {
+   "valor": 6.0,
+   "unidad": "mm"
+  },
+  "a_min_J24": {
+   "valor": 5.0,
+   "unidad": "mm"
+  },
+  "frac_exc_08": {
+   "valor": 0.35315,
+   "unidad": "—"
+  },
+  "uso_inf_dec": {
+   "valor": 0.39695,
+   "unidad": "—"
+  },
+  "Cf_B": {
+   "valor": 12.0,
+   "unidad": "—"
+  },
+  "Cf_Bp": {
+   "valor": 6.1,
+   "unidad": "—"
+  },
+  "Cf_C": {
+   "valor": 4.4,
+   "unidad": "—"
+  },
+  "Cf_E": {
+   "valor": 1.1,
+   "unidad": "—"
+  },
+  "Cf_Ep": {
+   "valor": 0.39,
+   "unidad": "—"
+  },
+  "Cf_F": {
+   "valor": 1.5,
+   "unidad": "—"
+  },
+  "k_SN": {
+   "valor": 6900.0,
+   "unidad": "MPa"
+  },
+  "k_SN_F": {
+   "valor": 690.0,
+   "unidad": "MPa"
+  },
+  "exp_SN": {
+   "valor": 0.333,
+   "unidad": "—"
+  },
+  "exp_SN_F": {
+   "valor": 0.167,
+   "unidad": "—"
+  },
+  "thr_A": {
+   "valor": 170.0,
+   "unidad": "MPa"
+  },
+  "thr_B": {
+   "valor": 110.0,
+   "unidad": "MPa"
+  },
+  "thr_Bp": {
+   "valor": 83.0,
+   "unidad": "MPa"
+  },
+  "thr_C": {
+   "valor": 69.0,
+   "unidad": "MPa"
+  },
+  "thr_E": {
+   "valor": 31.0,
+   "unidad": "MPa"
+  },
+  "thr_F": {
+   "valor": 55.0,
+   "unidad": "MPa"
+  },
+  "eje_100": {
+   "valor": 100.0,
+   "unidad": "MPa"
+  },
+  "ciclos_techoC": {
+   "valor": 100000.0,
+   "unidad": "ciclos"
+  },
+  "ciclos_pisoC": {
+   "valor": 20000.0,
+   "unidad": "ciclos"
+  },
+  "vida_aist": {
+   "valor": 50.0,
+   "unidad": "años"
+  },
+  "dias_ano": {
+   "valor": 365.0,
+   "unidad": "días"
+  },
+  "ciclos_rueda": {
+   "valor": 2.0,
+   "unidad": "—"
+  },
+  "turnos": {
+   "valor": 3.0,
+   "unidad": "—"
+  },
+  "levantes": {
+   "valor": 4.0,
+   "unidad": "—"
+  },
+  "dias_op": {
+   "valor": 250.0,
+   "unidad": "días"
+  },
+  "c_pico": {
+   "valor": 0.66,
+   "unidad": "—"
+  },
+  "destalone": {
+   "valor": 6.0,
+   "unidad": "mm"
+  },
+  "k_corte_at": {
+   "valor": 6.0,
+   "unidad": "—"
+  },
+  "f_D": {
+   "valor": 1.2,
+   "unidad": "—"
+  },
+  "f_L": {
+   "valor": 1.6,
+   "unidad": "—"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "apl_diarias": {
+    "valor": 5.47945,
+    "unidad": "—"
+   },
+   "regimen_dia": {
+    "valor": 8.21918,
+    "unidad": "—"
+   },
+   "veces_base": {
+    "valor": 1.5,
+    "unidad": "—"
+   }
+  },
+  "A2": {
+   "frac_techoC": {
+    "valor": 0.75,
+    "unidad": "—"
+   },
+   "veces_umbral": {
+    "valor": 3.75,
+    "unidad": "—"
+   }
+  },
+  "A3": {
+   "Nfat_carril": {
+    "valor": 150000.0,
+    "unidad": "ciclos"
+   },
+   "razon_vidas": {
+    "valor": 2.0,
+    "unidad": "—"
+   },
+   "dos_150k": {
+    "valor": 1.0,
+    "unidad": "—"
+   }
+  },
+  "A4": {
+   "kappa": {
+    "valor": 0.94783,
+    "unidad": "—"
+   },
+   "C_ds": {
+    "valor": 66.4566,
+    "unidad": "kN"
+   },
+   "C_vs": {
+    "valor": 94.783,
+    "unidad": "kN"
+   },
+   "P_fat": {
+    "valor": 161.2396,
+    "unidad": "kN"
+   },
+   "cierre_03": {
+    "valor": 0.00047,
+    "unidad": "kN"
+   },
+   "H_fat": {
+    "valor": 7.5,
+    "unidad": "kN"
+   },
+   "menos_mayorada": {
+    "valor": 1.91999,
+    "unidad": "—"
+   },
+   "menos_impacto": {
+    "valor": 1.2,
+    "unidad": "—"
+   }
+  },
+  "B1": {
+   "x1_mm": {
+    "valor": 2900.0,
+    "unidad": "mm"
+   },
+   "coef_077": {
+    "valor": 0.77333,
+    "unidad": "—"
+   },
+   "coef_M": {
+    "valor": 2.24266,
+    "unidad": "m"
+   },
+   "M_fat": {
+    "valor": 361.6056,
+    "unidad": "kN·m"
+   },
+   "cierre_08": {
+    "valor": 0.00105,
+    "unidad": "kN·m"
+   }
+  },
+  "B2": {
+   "sr_inf_carril": {
+    "valor": 118.38827,
+    "unidad": "MPa"
+   },
+   "sr_sup_carril": {
+    "valor": 77.04436,
+    "unidad": "MPa"
+   },
+   "razon_modulos": {
+    "valor": 1.53662,
+    "unidad": "—"
+   },
+   "y_inf": {
+    "valor": 414.35032,
+    "unidad": "mm"
+   }
+  },
+  "B3": {
+   "h_o": {
+    "valor": 667.0,
+    "unidad": "mm"
+   },
+   "T_empuje_fat": {
+    "valor": 1063.2,
+    "unidad": "kN·mm"
+   },
+   "T_exc_fat": {
+    "valor": 967.4376,
+    "unidad": "kN·mm"
+   },
+   "T_fat": {
+    "valor": 2030.6376,
+    "unidad": "kN·mm"
+   },
+   "frac_exc_fat": {
+    "valor": 0.47642,
+    "unidad": "—"
+   },
+   "sube_frac": {
+    "valor": 1.34906,
+    "unidad": "—"
+   },
+   "F_par_fat": {
+    "valor": 3.04443,
+    "unidad": "kN"
+   },
+   "H_ala_fat": {
+    "valor": 10.54443,
+    "unidad": "kN"
+   },
+   "amplif_fat": {
+    "valor": 1.40592,
+    "unidad": "—"
+   },
+   "S_y": {
+    "valor": 408333.0,
+    "unidad": "mm3"
+   },
+   "M_uy_fat": {
+    "valor": 23.64757,
+    "unidad": "kN·m"
+   },
+   "sigma_y_fat": {
+    "valor": 57.91246,
+    "unidad": "MPa"
+   },
+   "sr_punta": {
+    "valor": 134.95682,
+    "unidad": "MPa"
+   }
+  },
+  "B4": {
+   "M_pp": {
+    "valor": 11.40905,
+    "unidad": "kN·m"
+   },
+   "sigma_max": {
+    "valor": 122.12355,
+    "unidad": "MPa"
+   },
+   "tope_pico": {
+    "valor": 227.7,
+    "unidad": "MPa"
+   },
+   "uso_pico": {
+    "valor": 0.53634,
+    "unidad": "—"
+   }
+  },
+  "C1": {
+   "cuesta_umbral": {
+    "valor": 1.3253,
+    "unidad": "—"
+   },
+   "cuesta_adm": {
+    "valor": 1.25272,
+    "unidad": "—"
+   }
+  },
+  "C2": {
+   "uso_umbral_inf": {
+    "valor": 1.07626,
+    "unidad": "—"
+   },
+   "n_agota_B": {
+    "valor": 2404941.0,
+    "unidad": "ciclos"
+   },
+   "veces_conteo": {
+    "valor": 16.03294,
+    "unidad": "—"
+   }
+  },
+  "C3": {
+   "uso_umbral_sup": {
+    "valor": 0.7004,
+    "unidad": "—"
+   },
+   "uso_umbral_punta": {
+    "valor": 0.79386,
+    "unidad": "—"
+   }
+  },
+  "C4": {
+   "FSR_B150": {
+    "valor": 298.24835,
+    "unidad": "MPa"
+   },
+   "uso_inf": {
+    "valor": 0.39695,
+    "unidad": "—"
+   },
+   "uso_sup": {
+    "valor": 0.25832,
+    "unidad": "—"
+   }
+  },
+  "C5": {
+   "n300": {
+    "valor": 300000.0,
+    "unidad": "ciclos"
+   },
+   "FSR_B300": {
+    "valor": 236.77458,
+    "unidad": "MPa"
+   },
+   "uso_inf_B": {
+    "valor": 0.5,
+    "unidad": "—"
+   },
+   "factor_sens": {
+    "valor": 1.25963,
+    "unidad": "—"
+   },
+   "razon_usos": {
+    "valor": 1.2596,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "a_equiv": {
+    "valor": 5.65683,
+    "unidad": "mm"
+   }
+  },
+  "D2": {
+   "Q_s": {
+    "valor": 1817548.0,
+    "unidad": "mm3"
+   },
+   "c_R": {
+    "valor": 1.54667,
+    "unidad": "—"
+   },
+   "V_fat": {
+    "valor": 249.38445,
+    "unidad": "kN"
+   },
+   "q_s": {
+    "valor": 358.14678,
+    "unidad": "N/mm"
+   },
+   "Q_i": {
+    "valor": 1425726.0,
+    "unidad": "mm3"
+   },
+   "q_i": {
+    "valor": 280.93848,
+    "unidad": "N/mm"
+   },
+   "menos_flujo": {
+    "valor": 0.78442,
+    "unidad": "—"
+   }
+  },
+  "D3": {
+   "w_loc": {
+    "valor": 531.23221,
+    "unidad": "N/mm"
+   },
+   "supera_contacto": {
+    "valor": 1.48328,
+    "unidad": "—"
+   }
+  },
+  "D4": {
+   "q_t": {
+    "valor": 10.03041,
+    "unidad": "N/mm"
+   }
+  },
+  "D5": {
+   "R_result": {
+    "valor": 640.76313,
+    "unidad": "N/mm"
+   },
+   "R_soldadura": {
+    "valor": 320.38157,
+    "unidad": "N/mm"
+   },
+   "frac_par": {
+    "valor": 0.01565,
+    "unidad": "—"
+   },
+   "ve_inferior": {
+    "valor": 0.43844,
+    "unidad": "—"
+   }
+  },
+  "D6": {
+   "FSR_F150": {
+    "valor": 100.89023,
+    "unidad": "MPa"
+   },
+   "FSR_F300": {
+    "valor": 89.86221,
+    "unidad": "MPa"
+   },
+   "a_fat_C": {
+    "valor": 4.49088,
+    "unidad": "mm"
+   },
+   "a_fat_B": {
+    "valor": 5.04201,
+    "unidad": "mm"
+   },
+   "tau_SR": {
+    "valor": 75.51432,
+    "unidad": "MPa"
+   },
+   "uso_garg_C": {
+    "valor": 0.74848,
+    "unidad": "—"
+   },
+   "uso_garg_B": {
+    "valor": 0.84033,
+    "unidad": "—"
+   },
+   "tau_SR_5": {
+    "valor": 90.61718,
+    "unidad": "MPa"
+   },
+   "uso_min_J24": {
+    "valor": 1.0084,
+    "unidad": "—"
+   },
+   "a_alma_ala": {
+    "valor": 6.0,
+    "unidad": "mm"
+   }
+  },
+  "D7": {
+   "R_u": {
+    "valor": 299.26048,
+    "unidad": "kN"
+   },
+   "cierre_08_R": {
+    "valor": 0.00065,
+    "unidad": "kN"
+   },
+   "P_nch_p": {
+    "valor": 309.57914,
+    "unidad": "kN"
+   },
+   "V_u": {
+    "valor": 486.11856,
+    "unidad": "kN"
+   },
+   "q_u": {
+    "valor": 698.12612,
+    "unidad": "N/mm"
+   },
+   "w_loc_u": {
+    "valor": 1019.9629,
+    "unidad": "N/mm"
+   },
+   "T_u": {
+    "valor": 5259.71484,
+    "unidad": "kN·mm"
+   },
+   "F_par_u": {
+    "valor": 7.88563,
+    "unidad": "kN"
+   },
+   "q_t_u": {
+    "valor": 25.98059,
+    "unidad": "N/mm"
+   },
+   "R_u_result": {
+    "valor": 618.13821,
+    "unidad": "N/mm"
+   },
+   "phi_Fnw": {
+    "valor": 155.91775,
+    "unidad": "N/mm2"
+   },
+   "a_resistencia": {
+    "valor": 3.96451,
+    "unidad": "mm"
+   },
+   "uso_estatico": {
+    "valor": 0.66075,
+    "unidad": "—"
+   }
+  },
+  "E1": {
+   "FSR_catE": {
+    "valor": 134.58432,
+    "unidad": "MPa"
+   },
+   "uso_acc_C": {
+    "valor": 0.87966,
+    "unidad": "—"
+   },
+   "FSR_E300": {
+    "valor": 106.84433,
+    "unidad": "MPa"
+   },
+   "uso_acc_B": {
+    "valor": 1.10804,
+    "unidad": "—"
+   }
+  },
+  "E2": {
+   "FSR_catEp": {
+    "valor": 95.28734,
+    "unidad": "MPa"
+   },
+   "uso_acc_Ep": {
+    "valor": 1.24243,
+    "unidad": "—"
+   }
+  },
+  "E3": {
+   "n_cond": {
+    "valor": 1.0,
+    "unidad": "—"
+   },
+   "costo_intermitente": {
+    "valor": 2.21607,
+    "unidad": "—"
+   }
+  },
+  "E4": {
+   "FSR_catC": {
+    "valor": 213.54059,
+    "unidad": "MPa"
+   },
+   "y_st": {
+    "valor": 346.35032,
+    "unidad": "mm"
+   },
+   "sigma_st": {
+    "valor": 98.95929,
+    "unidad": "MPa"
+   },
+   "uso_atiesador": {
+    "valor": 0.46342,
+    "unidad": "—"
+   },
+   "uso_si_llega": {
+    "valor": 0.55441,
+    "unidad": "—"
+   },
+   "rebaja_cortar": {
+    "valor": 0.83589,
+    "unidad": "—"
+   },
+   "uso_umbral_pie": {
+    "valor": 1.43419,
+    "unidad": "—"
+   },
+   "n_agota_C": {
+    "valor": 1510657.0,
+    "unidad": "ciclos"
+   },
+   "veces_conteo_C": {
+    "valor": 10.07105,
+    "unidad": "—"
+   }
+  },
+  "F1": {
+   "FSR_B75": {
+    "valor": 375.68257,
+    "unidad": "MPa"
+   },
+   "uso_sin_rueda": {
+    "valor": 0.31513,
+    "unidad": "—"
+   },
+   "razon_conteos": {
+    "valor": 1.25964,
+    "unidad": "—"
+   },
+   "FSR_F75": {
+    "valor": 113.27162,
+    "unidad": "MPa"
+   },
+   "a_sin_rueda": {
+    "valor": 3.99999,
+    "unidad": "mm"
+   }
+  },
+  "F2": {
+   "FSR_Bp150": {
+    "valor": 238.08144,
+    "unidad": "MPa"
+   },
+   "uso_respaldo": {
+    "valor": 0.49726,
+    "unidad": "—"
+   },
+   "parecido_B": {
+    "valor": 0.99452,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "Nfat_carril": {
+   "valor": 150000.0,
+   "unidad": "ciclos",
+   "paso": "A3",
+   "heredan": [
+    "10"
+   ]
+  },
+  "sr_sup_carril": {
+   "valor": 77.04436,
+   "unidad": "MPa",
+   "paso": "B2",
+   "heredan": [
+    "10"
+   ]
+  },
+  "sr_inf_carril": {
+   "valor": 118.38827,
+   "unidad": "MPa",
+   "paso": "B2",
+   "heredan": [
+    "10"
+   ]
+  },
+  "a_alma_ala": {
+   "valor": 6.0,
+   "unidad": "mm",
+   "paso": "D6",
+   "heredan": [
+    "10"
+   ]
+  },
+  "FSR_catC": {
+   "valor": 213.54059,
+   "unidad": "MPa",
+   "paso": "E4",
+   "heredan": [
+    "10"
+   ]
+  },
+  "FSR_catE": {
+   "valor": 134.58432,
+   "unidad": "MPa",
+   "paso": "E1",
+   "heredan": [
+    "10"
+   ]
+  },
+  "FSR_catEp": {
+   "valor": 95.28734,
+   "unidad": "MPa",
+   "paso": "E2",
+   "heredan": [
+    "10"
+   ]
+  }
+ },
+ "publicado": {
+  "Nfat_carril": "150000",
+  "sr_sup_carril": "77,04436",
+  "sr_inf_carril": "118,38827",
+  "a_alma_ala": "6",
+  "FSR_catC": "213,54059",
+  "FSR_catE": "134,58432",
+  "FSR_catEp": "95,28734"
+ },
+ "resumen": {
+  "apl_diarias": "5,47945",
+  "regimen_dia": "8,21918",
+  "veces_base": "1,50000",
+  "frac_techoC": "0,75000",
+  "veces_umbral": "3,75000",
+  "Nfat_carril": "150000,00000",
+  "razon_vidas": "2,00000",
+  "dos_150k": "1,00000",
+  "kappa": "0,94783",
+  "C_ds": "66,45660",
+  "C_vs": "94,78300",
+  "P_fat": "161,23960",
+  "cierre_03": "0,00047",
+  "H_fat": "7,50000",
+  "menos_mayorada": "1,91999",
+  "menos_impacto": "1,20000",
+  "x1_mm": "2900,00000",
+  "coef_077": "0,77333",
+  "coef_M": "2,24266",
+  "M_fat": "361,60560",
+  "cierre_08": "0,00105",
+  "sr_inf_carril": "118,38827",
+  "sr_sup_carril": "77,04436",
+  "razon_modulos": "1,53662",
+  "y_inf": "414,35032",
+  "h_o": "667,00000",
+  "T_fat": "2030,63760",
+  "T_empuje_fat": "1063,20000",
+  "T_exc_fat": "967,43760",
+  "frac_exc_fat": "0,47642",
+  "sube_frac": "1,34906",
+  "F_par_fat": "3,04443",
+  "H_ala_fat": "10,54443",
+  "amplif_fat": "1,40592",
+  "S_y": "408333,00000",
+  "M_uy_fat": "23,64757",
+  "sigma_y_fat": "57,91246",
+  "sr_punta": "134,95682",
+  "M_pp": "11,40905",
+  "sigma_max": "122,12355",
+  "tope_pico": "227,70000",
+  "uso_pico": "0,53634",
+  "cuesta_umbral": "1,32530",
+  "cuesta_adm": "1,25272",
+  "uso_umbral_inf": "1,07626",
+  "n_agota_B": "2404941,00000",
+  "veces_conteo": "16,03294",
+  "uso_umbral_sup": "0,70040",
+  "uso_umbral_punta": "0,79386",
+  "FSR_B150": "298,24835",
+  "uso_inf": "0,39695",
+  "uso_sup": "0,25832",
+  "FSR_B300": "236,77458",
+  "uso_inf_B": "0,50000",
+  "factor_sens": "1,25963",
+  "razon_usos": "1,25960",
+  "a_equiv": "5,65683",
+  "Q_s": "1817548,00000",
+  "c_R": "1,54667",
+  "V_fat": "249,38445",
+  "q_s": "358,14678",
+  "Q_i": "1425726,00000",
+  "q_i": "280,93848",
+  "menos_flujo": "0,78442",
+  "w_loc": "531,23221",
+  "supera_contacto": "1,48328",
+  "q_t": "10,03041",
+  "R_result": "640,76313",
+  "R_soldadura": "320,38157",
+  "frac_par": "0,01565",
+  "ve_inferior": "0,43844",
+  "FSR_F150": "100,89023",
+  "FSR_F300": "89,86221",
+  "a_fat_C": "4,49088",
+  "a_fat_B": "5,04201",
+  "tau_SR": "75,51432",
+  "uso_garg_C": "0,74848",
+  "uso_garg_B": "0,84033",
+  "tau_SR_5": "90,61718",
+  "uso_min_J24": "1,00840",
+  "R_u": "299,26048",
+  "cierre_08_R": "0,00065",
+  "V_u": "486,11856",
+  "q_u": "698,12612",
+  "w_loc_u": "1019,96290",
+  "T_u": "5259,71484",
+  "F_par_u": "7,88563",
+  "q_t_u": "25,98059",
+  "R_u_result": "618,13821",
+  "phi_Fnw": "155,91775",
+  "a_resistencia": "3,96451",
+  "uso_estatico": "0,66075",
+  "FSR_catE": "134,58432",
+  "uso_acc_C": "0,87966",
+  "FSR_E300": "106,84433",
+  "uso_acc_B": "1,10804",
+  "FSR_catEp": "95,28734",
+  "uso_acc_Ep": "1,24243",
+  "n_cond": "1,00000",
+  "costo_intermitente": "2,21607",
+  "FSR_catC": "213,54059",
+  "y_st": "346,35032",
+  "sigma_st": "98,95929",
+  "uso_atiesador": "0,46342",
+  "uso_si_llega": "0,55441",
+  "rebaja_cortar": "0,83589",
+  "uso_umbral_pie": "1,43419",
+  "n_agota_C": "1510657,00000",
+  "veces_conteo_C": "10,07105",
+  "FSR_B75": "375,68257",
+  "uso_sin_rueda": "0,31513",
+  "razon_conteos": "1,25964",
+  "FSR_F75": "113,27162",
+  "a_sin_rueda": "3,99999",
+  "FSR_Bp150": "238,08144",
+  "uso_respaldo": "0,49726",
+  "parecido_B": "0,99452"
+ },
+ "rukan": "0.1.0",
+ "commit": "3847bd4",
+ "generado": "2026-09-05T18:44:48"
+}

@@ -539,7 +539,7 @@ que desplaza el marco de lado.
 | NCh-p3 | NCh2369:2025 (3.ª ed.) | §8.7.3, la Tabla 9 para las vigas de MRM | PDF ídem, p. 99 | «Las secciones transversales de vigas de marcos resistentes a momento sismorresistentes deben contar con razones ancho/espesor» |
 | NCh-p3b | NCh2369:2025 (3.ª ed.) | §8.7.3, la exención por $0{,}7R_1 \ge 1{,}0$ que E2 decide no tomar | PDF ídem, p. 99 | «Se pueden exceptuar de esta exigencia aquellos elementos en que la resistencia requerida para todos los esfuerzos sea determinada» |
 | NCh-p4 | NCh2369:2025 (3.ª ed.) | §8.7.4, la recomendación de columna fuerte-viga débil y **su alcance a estructuras de varios niveles** | PDF ídem, p. 100 | «En estructuras de varios niveles, se recomienda que la suma de las capacidades flexurales esperadas reducidas por carga axial» |
-| NCh-p5 | NCh2369:2025 (3.ª ed.) | C8.7.4, por qué dejó de ser obligatorio: el $0{,}7R_1$ ya protege a toda columna | PDF ídem, p. 100 | «el requisito tradicional se hace innecesario desde un punto de vista obligatorio» |
+| NCh-p5 | NCh2369:2025 (3.ª ed.) | C8.7.4, por qué dejó de ser obligatorio= el $0{,}7R_1$ ya protege a toda columna | PDF ídem, p. 100 | «el requisito tradicional se hace innecesario desde un punto de vista obligatorio» |
 | NCh-p5b | NCh2369:2025 (3.ª ed.) | C8.7.4, la sugerencia que sí queda en pie | PDF ídem, p. 100 | «se sugiere que una potencial plastificación del sistema sea estable» |
 | NCh-p6 | NCh2369:2025 (3.ª ed.) | §8.7.7, la separación máxima entre arriostramientos laterales de vigas de MRM | PDF ídem, p. 102 | «Los arriostramientos deben estar separados a una distancia no mayor a» |
 | NCh-p6b | NCh2369:2025 (3.ª ed.) | §8.7.7, la resistencia requerida del arriostramiento lateral | PDF ídem, p. 102 | «La resistencia requerida de los arriostramientos laterales debe ser de» |
@@ -562,7 +562,7 @@ que desplaza el marco de lado.
 | NCh431-1 | NCh431:2010 | §8.2, la carga sin balancear en las dos zonas y su extensión desde la cumbrera — **PDF escaneado, leído a ojo** | `Normas/nch-431-2010.pdf`, p. 16 | «Para el resto de los techos triangulares, la carga sin balancear debe ser considerada 0,3 x ps en la zona de barlovento» |
 | AISC341-1 | ANSI/AISC 341-22 | §A3.1, el techo de 345 MPa al $F_y$ especificado de un miembro con incursión inelástica | `referencias/AISC341-22/capA-requisitos-generales.md` | — |
 | AISC341-2 | ANSI/AISC 341-22 | Tabla A3.2, $R_y = 1{,}1$ y $R_t = 1{,}2$ para plancha ASTM A572 Gr. 50 | `referencias/AISC341-22/capA-requisitos-generales.md` | — |
-| AISC341-3 | ANSI/AISC 341-22 | §E3.4a y Ecs. E3-1 a E3-4: columna fuerte-viga débil obligatoria y la excepción (a)(1) del edificio de un piso | `referencias/AISC341-22/capE3-marcos-momento-especiales.md` | — |
+| AISC341-3 | ANSI/AISC 341-22 | §E3.4a y Ecs. E3-1 a E3-4= columna fuerte-viga débil obligatoria y la excepción (a)(1) del edificio de un piso | `referencias/AISC341-22/capE3-marcos-momento-especiales.md` | — |
 | AISC341-4 | ANSI/AISC 341-22 | §E3.5a, las columnas de un SMF como miembros altamente dúctiles | `referencias/AISC341-22/capE3-marcos-momento-especiales.md` | — |
 | AISC341-5 | ANSI/AISC 341-22 | §D1.2a, la resistencia requerida $0{,}02\,M_r/h_o$ del arriostramiento lateral de vigas | `referencias/AISC341-22/capD-miembros-y-conexiones.md` | — |
 | AISC360-1 | ANSI/AISC 360-22 | §B4, las propiedades de sección de un perfil I soldado | `referencias/AISC360-22/capB-requisitos-de-diseno.md` | — |
