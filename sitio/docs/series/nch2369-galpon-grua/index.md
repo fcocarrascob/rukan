@@ -18,10 +18,9 @@ tridimensional en pantalla en el punto donde cada uno lo necesita. El modelo viv
 
 {{ tabla_serie('nch2369-galpon-grua') }}
 
-Los que faltan, en el orden en que se migran: 07 el marco de momento a dos aguas, 08 la viga
-carrilera, 09 su fatiga, 10 la columna escalonada y el apoyo de la carrilera, 11 el
-arriostramiento continuo de techo, 12 los dos vanos libres, y 13 diagonales longitudinales y
-anclaje, que todavía no se ha escrito.
+Los que faltan, en el orden en que se migran: 08 la viga carrilera, 09 su fatiga, 10 la columna
+escalonada y el apoyo de la carrilera, 11 el arriostramiento continuo de techo, 12 los dos vanos
+libres, y 13 diagonales longitudinales y anclaje, que todavía no se ha escrito.
 
 ## La cadena
 
@@ -33,12 +32,15 @@ cada origen sea anterior a su consumidor.
 
 ## Dónde quedó
 
-- **Migrados**: 00 a 06, el lote completo del andamiaje. Cada uno reproduce, a la precisión que el memo original publicó,
-  las cifras de ese memo; un assert en su script lo garantiza.
+- **Migrados**: 00 a 07. Cada uno reproduce, a la precisión que el memo original publicó, las
+  cifras de ese memo; un assert en su script lo garantiza, y desde el 07 el oráculo cubre además
+  las filas del `## Resumen` y no solo las salidas.
 - **La cascada pendiente.** El 00 publica períodos que el 04 todavía no hereda: el 04 usa
   los declarados (0,20 y 0,40 s). Cuando los tome, cambiará de rama en Y y de ahí bajan R₁,
   el amplificador de capacidad, la componente vertical del 06, los M_pe del 07 y el anclaje
   del 13. Se aplica después de migrar la serie completa, como un cambio explícito.
-- **Esfuerzos en pantalla.** Los eslabones 07 en adelante leen momentos y axiales en barras;
-  el visor los mostrará sobre el modelo cuando exista la segunda versión de la escena, con
-  los esfuerzos a lo largo de cada barra verificados.
+- **Esfuerzos en pantalla.** Los eslabones 07 en adelante leen momentos y axiales en barras, y
+  el visor ya los dibuja a lo largo de cada una. El 07 lo usa para mostrar que los tres números
+  que declara —la rigidez del alero, la razón entre los dos momentos y el punto de inflexión—
+  salen de un empuje en **un solo alero**, mientras la rigidez del riel del mismo memo sale del
+  *sway*: dos convenciones distintas en la misma página.

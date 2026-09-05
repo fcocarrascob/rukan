@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" width="720" height="300" role="img" aria-label="Las tres demandas laterales del marco contra los dos limites de deriva: el empuje de la grua es la barra mas corta y es la que el limite mas estricto mira, la nieve desbalanceada es mayor y ningun limite la mira, y el sismo pasa la clausula 6.3" font-family="ui-monospace,'IBM Plex Mono',Menlo,Consolas,monospace" font-size="11">
+<title>El límite más estricto es el menos exigido</title>
+<rect width="720" height="300" fill="#fcfcfa"/>
+<text x="24.0" y="28.0" fill="#2b2a26" text-anchor="start" font-size="11.5" font-weight="600">El límite seis veces más estricto es el que queda menos exigido</text>
+<line x1="294.7" y1="56" x2="294.7" y2="236" stroke="#a4442c" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="300.7" y="50.0" fill="#a4442c" text-anchor="start" font-size="10" font-weight="normal">grúa · AIST §5.3</text>
+<text x="300.7" y="254.0" fill="#a4442c" text-anchor="start" font-size="10" font-weight="normal">18,75</text>
+<line x1="610.5" y1="56" x2="610.5" y2="236" stroke="#4a6b46" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="604.5" y="50.0" fill="#4a6b46" text-anchor="end" font-size="10" font-weight="normal">§6.3 · 0,015 h</text>
+<text x="604.5" y="254.0" fill="#4a6b46" text-anchor="end" font-size="10" font-weight="normal">157,50</text>
+<rect x="252" y="76" width="7.0" height="24" fill="#a4442c" opacity="0.85"/>
+<text x="242.0" y="92.0" fill="#2b2a26" text-anchor="end" font-size="10.5" font-weight="normal">empuje de grúa · al riel</text>
+<text x="308.7" y="92.0" fill="#a4442c" text-anchor="start" font-size="10.5" font-weight="normal">3,08155</text>
+<text x="382.7" y="92.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">uso 0,164</text>
+<rect x="252" y="130" width="3.9" height="24" fill="#8a8578" opacity="0.85"/>
+<text x="242.0" y="146.0" fill="#2b2a26" text-anchor="end" font-size="10.5" font-weight="normal">nieve desbalanceada · al riel</text>
+<text x="308.7" y="146.0" fill="#8a8578" text-anchor="start" font-size="10.5" font-weight="normal">1,70543</text>
+<text x="382.7" y="146.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">0,55 de la grúa</text>
+<rect x="252" y="184" width="148.5" height="24" fill="#2f5d7c" opacity="0.85"/>
+<text x="242.0" y="200.0" fill="#2b2a26" text-anchor="end" font-size="10.5" font-weight="normal">sismo de §6.1 · al alero</text>
+<text x="408.5" y="200.0" fill="#2f5d7c" text-anchor="start" font-size="10.5" font-weight="normal">65,22861</text>
+<text x="482.5" y="200.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">uso 0,414</text>
+<line x1="252" y1="56" x2="252" y2="242" stroke="#2b2a26" stroke-width="1"/>
+<text x="242.0" y="254.0" fill="#8a8578" text-anchor="end" font-size="10" font-weight="normal">mm</text>
+<text x="24.0" y="282.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">el sismo no es un estado de servicio: por eso lo mide el otro límite</text>
+</svg>
