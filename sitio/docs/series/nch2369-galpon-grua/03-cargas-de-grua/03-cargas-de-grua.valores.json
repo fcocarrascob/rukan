@@ -1,0 +1,408 @@
+{
+ "esquema": "rukan/valores@1",
+ "serie": "nch2369-galpon-grua",
+ "orden": 3,
+ "slug": "cargas-de-grua",
+ "titulo": "Cargas de puente grúa",
+ "normas": [
+  "AIST TR-13:2021",
+  "CMAA 70:2010",
+  "NCh2369:2025"
+ ],
+ "hereda_de": [
+  "01"
+ ],
+ "entra": {
+  "Qn_grua": {
+   "valor": 200.0,
+   "unidad": "kN",
+   "de": "01",
+   "paso": "S3"
+  },
+  "Lg_grua": {
+   "valor": 23.0,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S3"
+  },
+  "s_marco": {
+   "valor": 7.5,
+   "unidad": "m",
+   "de": "01",
+   "paso": "S1"
+  }
+ },
+ "caso": {
+  "Wb_d": {
+   "valor": 190.0,
+   "unidad": "kN"
+  },
+  "Wt_d": {
+   "valor": 40.0,
+   "unidad": "kN"
+  },
+  "wb_d": {
+   "valor": 3.4,
+   "unidad": "m"
+  },
+  "a_gancho": {
+   "valor": 1.2,
+   "unidad": "m"
+  },
+  "n_ruedas": {
+   "valor": 4.0,
+   "unidad": "—"
+  },
+  "v_izaje": {
+   "valor": 4.0,
+   "unidad": "m/min"
+  },
+  "v_tras": {
+   "valor": 30.0,
+   "unidad": "m/min"
+  },
+  "izajes_h": {
+   "valor": 3.0,
+   "unidad": "1/h"
+  },
+  "h_dia": {
+   "valor": 4.0,
+   "unidad": "h/d"
+  },
+  "dias_ano": {
+   "valor": 250.0,
+   "unidad": "d/a"
+  },
+  "vida_d": {
+   "valor": 25.0,
+   "unidad": "años"
+  },
+  "t32_imp": {
+   "valor": 0.2,
+   "unidad": "—"
+  },
+  "t32_emp": {
+   "valor": 0.3,
+   "unidad": "—"
+  },
+  "t32_tra": {
+   "valor": 0.2,
+   "unidad": "—"
+  },
+  "mill_imp": {
+   "valor": 0.25,
+   "unidad": "—"
+  },
+  "mill_emp": {
+   "valor": 0.4,
+   "unidad": "—"
+  },
+  "HLF_piso": {
+   "valor": 0.15,
+   "unidad": "—"
+  },
+  "DLF_piso": {
+   "valor": 1.1,
+   "unidad": "—"
+  },
+  "cmaa_lat": {
+   "valor": 0.1,
+   "unidad": "—"
+  }
+ },
+ "pasos": {
+  "A1": {
+   "N_ciclos": {
+    "valor": 75000.0,
+    "unidad": "ciclos"
+   }
+  },
+  "A3": {
+   "N_jornada": {
+    "valor": 400000.0,
+    "unidad": "ciclos"
+   }
+  },
+  "B1": {
+   "W_tot": {
+    "valor": 430.0,
+    "unidad": "kN"
+   },
+   "R_test": {
+    "valor": 322.47826086956525,
+    "unidad": "kN"
+   }
+  },
+  "B2": {
+   "Rw_max": {
+    "valor": 161.23913043478262,
+    "unidad": "kN"
+   }
+  },
+  "B3": {
+   "R_test_min": {
+    "valor": 107.52173913043478,
+    "unidad": "kN"
+   },
+   "Rw_min": {
+    "valor": 53.76086956521739,
+    "unidad": "kN"
+   },
+   "R_suma": {
+    "valor": 430.0,
+    "unidad": "kN"
+   },
+   "raz_ruedas": {
+    "valor": 2.999191265669228,
+    "unidad": "—"
+   }
+  },
+  "C1": {
+   "Rv_max": {
+    "valor": 193.48695652173913,
+    "unidad": "kN"
+   }
+  },
+  "C2": {
+   "v_izaje_fpm": {
+    "valor": 13.123359580052492,
+    "unidad": "ft/min"
+   },
+   "HLF_bruto": {
+    "valor": 0.06561679790026247,
+    "unidad": "—"
+   },
+   "HLF": {
+    "valor": 0.15,
+    "unidad": "—"
+   }
+  },
+  "C3": {
+   "v_tras_fpm": {
+    "valor": 98.42519685039369,
+    "unidad": "ft/min"
+   },
+   "DLF_bruto": {
+    "valor": 1.0992125984251968,
+    "unidad": "—"
+   },
+   "DLF": {
+    "valor": 1.1,
+    "unidad": "—"
+   }
+  },
+  "D1": {
+   "SS_1": {
+    "valor": 60.0,
+    "unidad": "kN"
+   },
+   "SS_2": {
+    "valor": 48.0,
+    "unidad": "kN"
+   },
+   "SS_3": {
+    "valor": 43.0,
+    "unidad": "kN"
+   }
+  },
+  "D2": {
+   "SS_total": {
+    "valor": 60.0,
+    "unidad": "kN"
+   },
+   "raz_SS12": {
+    "valor": 1.25,
+    "unidad": "—"
+   },
+   "raz_SS13": {
+    "valor": 1.3953488372093024,
+    "unidad": "—"
+   }
+  },
+  "D3": {
+   "SS_carril": {
+    "valor": 30.0,
+    "unidad": "kN"
+   }
+  },
+  "E1": {
+   "T_long": {
+    "valor": 86.0,
+    "unidad": "kN"
+   }
+  },
+  "E2": {
+   "raz_TS": {
+    "valor": 1.4333333333333333,
+    "unidad": "—"
+   }
+  },
+  "F1": {
+   "n_sismo_cmaa": {
+    "valor": 0.0,
+    "unidad": "cláusulas"
+   }
+  },
+  "F2": {
+   "n_clausulas": {
+    "valor": 3.0,
+    "unidad": "cláusulas"
+   }
+  },
+  "L1": {
+   "flecha_v": {
+    "valor": 12.5,
+    "unidad": "mm"
+   },
+   "flecha_l": {
+    "valor": 18.75,
+    "unidad": "mm"
+   }
+  },
+  "L2": {
+   "lat_servicio": {
+    "valor": 16.123913043478264,
+    "unidad": "kN"
+   },
+   "raz_aist_cmaa": {
+    "valor": 2.9999999999999996,
+    "unidad": "—"
+   }
+  },
+  "L3": {
+   "raz_luz_base": {
+    "valor": 6.764705882352941,
+    "unidad": "—"
+   }
+  }
+ },
+ "sale": {
+  "Wb_puente": {
+   "valor": 190.0,
+   "unidad": "kN",
+   "paso": "S2",
+   "heredan": [
+    "05",
+    "08",
+    "09",
+    "12"
+   ]
+  },
+  "Wt_carro": {
+   "valor": 40.0,
+   "unidad": "kN",
+   "paso": "S2",
+   "heredan": [
+    "05",
+    "08",
+    "09",
+    "12"
+   ]
+  },
+  "wb_ruedas": {
+   "valor": 3.4,
+   "unidad": "m",
+   "paso": "S2",
+   "heredan": [
+    "06",
+    "07",
+    "08",
+    "09",
+    "12"
+   ]
+  },
+  "Rw_max": {
+   "valor": 161.23913043478262,
+   "unidad": "kN",
+   "paso": "B2",
+   "heredan": [
+    "08",
+    "09",
+    "10",
+    "12"
+   ]
+  },
+  "Rw_min": {
+   "valor": 53.76086956521739,
+   "unidad": "kN",
+   "paso": "B3",
+   "heredan": [
+    "08",
+    "12"
+   ]
+  },
+  "Rv_max": {
+   "valor": 193.48695652173913,
+   "unidad": "kN",
+   "paso": "C1",
+   "heredan": [
+    "07",
+    "08",
+    "09",
+    "10"
+   ]
+  },
+  "SS_total": {
+   "valor": 60.0,
+   "unidad": "kN",
+   "paso": "D1",
+   "heredan": [
+    "07",
+    "08"
+   ]
+  },
+  "SS_carril": {
+   "valor": 30.0,
+   "unidad": "kN",
+   "paso": "D3",
+   "heredan": [
+    "07",
+    "08",
+    "09"
+   ]
+  },
+  "T_long": {
+   "valor": 86.0,
+   "unidad": "kN",
+   "paso": "E1",
+   "heredan": [
+    "08",
+    "12"
+   ]
+  },
+  "N_ciclos": {
+   "valor": 75000.0,
+   "unidad": "ciclos",
+   "paso": "A1",
+   "heredan": [
+    "08",
+    "09"
+   ]
+  },
+  "vida_grua": {
+   "valor": 25.0,
+   "unidad": "años",
+   "paso": "S4",
+   "heredan": [
+    "08",
+    "09"
+   ]
+  }
+ },
+ "publicado": {
+  "Wb_puente": "190,00",
+  "Wt_carro": "40,00",
+  "wb_ruedas": "3,40",
+  "Rw_max": "161,23913",
+  "Rw_min": "53,76087",
+  "Rv_max": "193,48696",
+  "SS_total": "60,00000",
+  "SS_carril": "30,00000",
+  "T_long": "86,00000",
+  "N_ciclos": "75000",
+  "vida_grua": "25"
+ },
+ "rukan": "0.1.0",
+ "commit": "1f2c86d",
+ "generado": "2026-09-05T10:42:06"
+}
