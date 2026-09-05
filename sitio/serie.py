@@ -20,6 +20,12 @@ Lo que hereda del régimen de memos de `Guias_Interactivas`, y lo que cambia:
   algún `sale` se aparta más de media unidad del último decimal impreso: la
   misma tolerancia con que `verify_serie.js` cruzaba dos memos. Un decimal de más
   es una promesa de más.
+* **Y el mismo oráculo sobre el `## Resumen`.** `publicado()` cubre la tabla
+  `## Sale`, que en un memo grande es una fracción de lo que su prosa imprime: el
+  07 publica 24 salidas y verifica 140 filas. `resumen()` recibe esas filas —el
+  símbolo del paso que las produce contra la cifra que el memo imprimió— y se
+  valida igual. Sin él, una cifra que la página inyecta con `v()` desde un `paso`
+  puede apartarse del memo sin que nada lo diga.
 * **Primario y derivado.** El modelo emite desplazamientos; `k = H/δ` es un
   `paso()` de este eslabón, con su símbolo propio. El arnés nunca convierte.
 
@@ -148,6 +154,7 @@ class Eslabon:
         self._pasos: dict[str, dict[str, dict]] = {}
         self._sale: dict[str, dict] = {}
         self._publicado: dict[str, str] = {}
+        self._resumen: dict[str, str] = {}
 
     @property
     def nn(self) -> str:
@@ -197,6 +204,30 @@ class Eslabon:
         self._publicado = {k: (v if isinstance(v, str) else repr(float(v)).replace(".", ","))
                            for k, v in valores.items()}
 
+    def resumen(self, valores: dict[str, str | float]) -> None:
+        """El oráculo de la tabla `## Resumen` del memo, sobre cualquier símbolo.
+
+        `publicado()` cubre el `## Sale`; esto cubre las filas que el memo
+        verifica y que su prosa imprime, y que en un memo grande son muchas más.
+        Se busca el símbolo en `sale`, `pasos`, `entra` y `caso`, en ese orden
+        —el mismo que usa el macro `v()`—, así que la fila queda atada a la misma
+        cifra que la página va a mostrar.
+        """
+        self._resumen = {k: (v if isinstance(v, str) else repr(float(v)).replace(".", ","))
+                         for k, v in valores.items()}
+
+    def _buscar(self, simbolo: str) -> float | None:
+        """El valor de un símbolo, en el orden en que lo busca el macro `v()`."""
+        if simbolo in self._sale:
+            return float(self._sale[simbolo]["valor"])
+        for paso in self._pasos.values():
+            if simbolo in paso:
+                return float(paso[simbolo]["valor"])
+        for grupo in (self._entra, self._caso):
+            if simbolo in grupo:
+                return float(grupo[simbolo]["valor"])
+        return None
+
     # --- salida ----------------------------------------------------------
     @property
     def hereda_de(self) -> list[str]:
@@ -210,6 +241,9 @@ class Eslabon:
             "hereda_de": self.hereda_de,
             "entra": self._entra, "caso": self._caso, "pasos": self._pasos,
             "sale": self._sale, "publicado": self._publicado,
+            # Se omite entero si el eslabón no declara `## Resumen`: así los que
+            # se migraron antes de que existiera no cambian ni un byte.
+            **({"resumen": self._resumen} if self._resumen else {}),
             **_cabecera(),
         }
 
@@ -222,6 +256,15 @@ class Eslabon:
                 raise ValueError(f"{simbolo}: el cálculo da {v!r} y el memo publicó {texto} "
                                  f"(tolerancia {tolerancia(texto):g}); no se ajusta el oráculo, "
                                  "se investiga")
+        for simbolo, texto in self._resumen.items():
+            v = self._buscar(simbolo)
+            if v is None:
+                raise ValueError(f"resumen {simbolo!r} no es un símbolo de este eslabón")
+            p = num(texto)
+            if abs(v - p) > tolerancia(texto):
+                raise ValueError(f"{simbolo}: el cálculo da {v!r} y el `## Resumen` del memo "
+                                 f"trae {texto} (tolerancia {tolerancia(texto):g}); no se "
+                                 "ajusta el oráculo, se investiga")
 
     def escribir(self, ruta: str | Path | None = None) -> Path:
         self._validar_oraculo()
@@ -237,6 +280,9 @@ class Eslabon:
             pub = self._publicado.get(s, "")
             print(f"  {s:{ancho}s}  {x['valor']:16.8g}  {x['unidad']:6s}  {x['paso']:4s}"
                   f"  {('memo ' + pub) if pub else ''}")
+        if self._resumen:
+            print(f"  … y {len(self._resumen)} filas del `## Resumen` del memo, "
+                  "cada una contra el paso que la produce")
 
 
 def _cabecera() -> dict:

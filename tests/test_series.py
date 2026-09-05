@@ -121,6 +121,40 @@ def test_publicado_atrapa_una_unidad_del_ultimo_decimal(raiz, serie):
         E.escribir()
 
 
+def test_resumen_es_el_mismo_oraculo_sobre_los_pasos(raiz, serie):
+    """El `## Sale` de un memo grande es una fracción de lo que su prosa imprime.
+
+    `resumen()` ata las filas del `## Resumen` al paso que las produce, con la
+    misma tolerancia, y busca el símbolo en el mismo orden que el macro `v()`.
+    """
+    c = raiz / "docs/series/s1/04-resumen"
+    c.mkdir()
+    E = serie.Eslabon("s1", orden=4, slug="resumen", titulo="t", carpeta=c)
+    E.caso("d", 7.5, "m")
+    E.paso("A1", "b", 0.98044, "—")
+    E.sale("a", 1.23456, "m", paso="A1")
+    E.publicado({"a": "1,2346"})
+    E.resumen({"a": "1,2346", "b": "0,98044", "d": "7,50"})   # los tres grupos
+    ruta = E.escribir()
+    assert json.loads(ruta.read_text("utf-8"))["resumen"]["b"] == "0,98044"
+
+    E.resumen({"b": "0,98045"})               # una unidad del último decimal: falla
+    with pytest.raises(ValueError, match="b.*0,98045"):
+        E.escribir()
+    E.resumen({"z": "1,0"})                   # un símbolo que no existe: falla
+    with pytest.raises(ValueError, match="z"):
+        E.escribir()
+
+
+def test_resumen_vacio_no_toca_el_json(raiz, serie):
+    """Los eslabones migrados antes de que `resumen` existiera no cambian un byte."""
+    c = raiz / "docs/series/s1/05-sin-resumen"
+    c.mkdir()
+    E = serie.Eslabon("s1", orden=5, slug="sin-resumen", titulo="t", carpeta=c)
+    E.sale("a", 1.0, "m", paso="A1")
+    assert "resumen" not in json.loads(E.escribir().read_text("utf-8"))
+
+
 def test_decimales_y_tolerancia(serie):
     assert serie.decimales("15047,57290") == 5
     assert serie.decimales("5,00000") == 5
