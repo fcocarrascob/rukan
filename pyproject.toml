@@ -21,6 +21,7 @@ rukan = "rukan.__main__:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
+sitio = ["mkdocs-material>=9.6", "mkdocs-macros-plugin>=1.3"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

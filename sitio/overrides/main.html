@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{#
+  El importmap tiene que estar en <head> antes de cualquier módulo: OrbitControls
+  importa el especificador desnudo 'three' y el navegador lo resuelve acá. Las
+  rutas van con base_url porque en GitHub Pages el sitio cuelga de /rukan/.
+#}
+{% block extrahead %}
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "{{ base_url }}/visor/vendor/three.module.min.js",
+      "three/addons/": "{{ base_url }}/visor/vendor/addons/"
+    }
+  }
+  </script>
+{% endblock %}

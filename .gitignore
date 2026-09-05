@@ -11,6 +11,9 @@ dist/
 venv/
 env/
 
+# El sitio construido
+sitio/_build/
+
 # Herramientas
 .pytest_cache/
 .mypy_cache/

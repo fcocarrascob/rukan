@@ -1,0 +1,37 @@
+{
+  "esquema": "rukan/resultados@1",
+  "proyecto": "galpon-grua.proyecto.json",
+  "sha256_proyecto": "20a59f2a7b395ecd09dadbe6a875a98611064566a82404e29cb24ceb5bed7d13",
+  "rukan": "0.1.0",
+  "commit": "553f06f",
+  "openseespy": "3.8.0.0",
+  "generado": "2026-09-05T03:24:07",
+  "unidades": {
+    "T_star_X": "s",
+    "T_star_Y": "s",
+    "Ux": "—",
+    "Uy": "—",
+    "macum_X": "—",
+    "macum_Y": "—",
+    "macum_Z": "—",
+    "d_alero": "m",
+    "d_alero_uno": "m",
+    "d_riel": "m",
+    "d_cumbrera_D": "m",
+    "peso_total": "kN"
+  },
+  "valores": {
+    "T_star_X": 0.20603403957684754,
+    "T_star_Y": 0.2489535612410456,
+    "Ux": 0.691407157333042,
+    "Uy": 0.9433822880669889,
+    "macum_X": 0.9973139138275013,
+    "macum_Y": 0.9938900064286637,
+    "macum_Z": 0.3730152912003128,
+    "d_alero": 6.655537114805753e-05,
+    "d_alero_uno": 2.17567477620067e-05,
+    "d_riel": 2.3677897558715015e-05,
+    "d_cumbrera_D": -0.00877871228482703,
+    "peso_total": 621.9026329907382
+  }
+}

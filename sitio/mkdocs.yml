@@ -1,0 +1,52 @@
+site_name: Rukan
+site_description: Modelos OpenSees y su narración en 3D — el repo de modelos de Rukan
+site_url: https://fcocarrascob.github.io/rukan/
+repo_url: https://github.com/fcocarrascob/rukan
+repo_name: fcocarrascob/rukan
+edit_uri: ""
+
+docs_dir: docs
+site_dir: _build
+
+# Lo que empieza con `_` es maquinaria (generadores), no contenido.
+exclude_docs: |
+  _*
+
+theme:
+  name: material
+  language: es
+  custom_dir: overrides
+  palette:
+    scheme: default
+    primary: black
+    accent: deep orange
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  features:
+    - navigation.sections
+    - navigation.footer
+    - content.code.copy
+    - toc.integrate
+
+plugins:
+  - search:
+      lang: es
+  - macros:
+      module_name: main
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - tables
+  - admonition
+  - footnotes
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - path: visor/rukan-visor.js
+    type: module
+
+nav:
+  - Inicio: index.md
