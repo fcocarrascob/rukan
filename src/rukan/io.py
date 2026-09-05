@@ -43,6 +43,7 @@ from .model import DOF, FrameElement, Material, Model, NodalMass, Node, Section
 
 ESQUEMA_PROYECTO = "rukan/proyecto@1"
 ESQUEMA_RESULTADOS = "rukan/resultados@1"
+ESQUEMA_ESCENA = "rukan/escena@1"
 UNIDADES_INTERNAS = {"longitud": "m", "fuerza": "kN", "masa": "t"}
 
 DIRECCIONES = ("X", "Y", "Z")
@@ -426,19 +427,28 @@ def sha256(ruta: str | Path) -> str:
     return hashlib.sha256(Path(ruta).read_bytes()).hexdigest()
 
 
-def ruta_resultados(ruta_proyecto: str | Path) -> Path:
-    """`x.proyecto.json` → `x.resultados.json`; `x.json` → `x.resultados.json`."""
+def _stem(ruta_proyecto: str | Path) -> tuple[Path, str]:
     r = Path(ruta_proyecto)
     stem = r.name[:-len(".proyecto.json")] if r.name.endswith(".proyecto.json") \
         else r.stem
+    return r, stem
+
+
+def ruta_resultados(ruta_proyecto: str | Path) -> Path:
+    """`x.proyecto.json` → `x.resultados.json`; `x.json` → `x.resultados.json`."""
+    r, stem = _stem(ruta_proyecto)
     return r.with_name(stem + ".resultados.json")
 
 
-def resultados(ruta_proyecto: str | Path, valores: dict[str, float],
-               unidades: dict[str, str]) -> dict:
-    """El documento de resultados, con la procedencia completa: qué proyecto
-    (por nombre **y** por hash), qué rukan, qué commit, qué openseespy, cuándo.
-    Es lo que `_kit/verify_modelo.py` del repo de memos cruza contra `## Sale`."""
+def ruta_escena(ruta_proyecto: str | Path) -> Path:
+    """`x.proyecto.json` → `x.escena.json`, la que dibuja el visor del sitio."""
+    r, stem = _stem(ruta_proyecto)
+    return r.with_name(stem + ".escena.json")
+
+
+def cabecera(ruta_proyecto: str | Path) -> dict:
+    """La procedencia que comparten resultados y escena: qué proyecto (por
+    nombre **y** por hash), qué rukan, qué commit, qué openseespy, cuándo."""
     import datetime
     import subprocess
     from importlib import metadata
@@ -457,13 +467,18 @@ def resultados(ruta_proyecto: str | Path, valores: dict[str, float],
     except metadata.PackageNotFoundError:
         ops_version = None
     return {
-        "esquema": ESQUEMA_RESULTADOS,
         "proyecto": Path(ruta_proyecto).name,
         "sha256_proyecto": sha256(ruta_proyecto),
         "rukan": __version__,
         "commit": commit,
         "openseespy": ops_version,
         "generado": datetime.datetime.now().isoformat(timespec="seconds"),
-        "unidades": dict(unidades),
-        "valores": dict(valores),
     }
+
+
+def resultados(ruta_proyecto: str | Path, valores: dict[str, float],
+               unidades: dict[str, str]) -> dict:
+    """El documento de resultados. Es lo que `_kit/verify_modelo.py` del repo
+    de memos cruza contra `## Sale`."""
+    return {"esquema": ESQUEMA_RESULTADOS, **cabecera(ruta_proyecto),
+            "unidades": dict(unidades), "valores": dict(valores)}

@@ -95,7 +95,8 @@ def modal(model: Model, n_modos: int) -> ModalResult:
 
 
 # ============================ ESTÁTICO ================================
-def _aplicar(p: Proyecto, caso: dict) -> Callable[[], None]:
+def aplicar(p: Proyecto, caso: dict) -> Callable[[], None]:
+    """El callable que carga un caso del proyecto con un `ops.pattern` activo."""
     model = p.model
 
     def aplicar() -> None:
@@ -129,9 +130,17 @@ def _extractor(clave: str) -> Callable[[], float]:
         return lambda: ops.nodeReaction(nid, dof)
     tag, extremo, comp = int(partes[1]), partes[2], partes[3]
     idx = _COMP[comp] + (0 if extremo == "i" else 6)
-    flector = comp in _ES_MOMENTO_FLECTOR
-    signo = (1.0 if flector else -1.0) if extremo == "i" else (-1.0 if flector else 1.0)
+    signo = signo_diagrama(extremo, comp)
     return lambda: signo * ops.eleResponse(tag, "localForces")[idx]
+
+
+def signo_diagrama(extremo: str, componente: str) -> float:
+    """Fuerza nodal sobre la barra → esfuerzo del diagrama (convención del
+    docstring). Es la única definición: la escena y las sondas la comparten."""
+    flector = componente in _ES_MOMENTO_FLECTOR
+    if extremo == "i":
+        return 1.0 if flector else -1.0
+    return -1.0 if flector else 1.0
 
 
 def _casos_usados(p: Proyecto) -> set[str]:
@@ -163,7 +172,7 @@ def run(p: Proyecto) -> dict[str, float]:
     extractores = {c: _extractor(c) for c in sorted(claves)}
     res_casos: dict[str, dict[str, float]] = {}
     for nombre in sorted(_casos_usados(p)):
-        res_casos[nombre] = loads.run_static_case(model, _aplicar(p, p.casos[nombre]),
+        res_casos[nombre] = loads.run_static_case(model, aplicar(p, p.casos[nombre]),
                                                   extractores, rebuild=True)
     res_combos = {n: loads.combine(res_casos, f) for n, f in p.combinaciones.items()
                   if set(f) <= set(res_casos)}

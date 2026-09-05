@@ -64,3 +64,20 @@ def test_un_proyecto_roto_devuelve_1_y_nombra_el_campo(ruta_proyecto, capsys):
     ruta_proyecto.write_text(json.dumps(d), encoding="utf-8")
     assert cli.main(["validar", str(ruta_proyecto)]) == 1
     assert "Z9" in capsys.readouterr().err
+
+
+def test_escena_escribe_la_escena_junto_al_proyecto(ruta_proyecto, capsys):
+    assert cli.main(["escena", str(ruta_proyecto)]) == 0
+    salida = ruta_proyecto.with_name("voladizo.escena.json")
+    assert salida.exists()
+    doc = json.loads(salida.read_text(encoding="utf-8"))
+    assert doc["esquema"] == "rukan/escena@1"
+    assert doc["sha256_proyecto"] == io.sha256(ruta_proyecto)
+    assert len(doc["modos"]) == 1 and set(doc["casos"]) == {"P"}
+    assert "escrito" in capsys.readouterr().out
+
+
+def test_escena_con_salida_explicita(ruta_proyecto, tmp_path):
+    otra = tmp_path / "otra.escena.json"
+    assert cli.main(["escena", str(ruta_proyecto), "--salida", str(otra)]) == 0
+    assert otra.exists()

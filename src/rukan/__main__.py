@@ -1,12 +1,14 @@
-"""`python -m rukan` — correr o validar un archivo de proyecto.
+"""`python -m rukan` — correr, validar o dibujar un archivo de proyecto.
 
     python -m rukan run     <proyecto.json> [--salida RUTA]
     python -m rukan validar <proyecto.json>
+    python -m rukan escena  <proyecto.json> [--salida RUTA]
 
-`run` no toma ninguna opción de análisis, por diseño: qué se corre y qué se
-reporta lo dice el archivo, y así el arnés del repo de memos puede leerlo. El
-resultado va junto al proyecto como `<nombre>.resultados.json`, con el hash del
-proyecto adentro para que nadie lo cite después de cambiar el modelo.
+`run` y `escena` no toman ninguna opción de análisis, por diseño: qué se corre
+y qué se reporta lo dice el archivo, y así el arnés del repo de memos puede
+leerlo. El resultado va junto al proyecto como `<nombre>.resultados.json` y la
+escena como `<nombre>.escena.json`, ambos con el hash del proyecto adentro para
+que nadie los cite después de cambiar el modelo.
 """
 
 from __future__ import annotations
@@ -15,7 +17,7 @@ import argparse
 import json
 import sys
 
-from . import analysis, io
+from . import analysis, escena, io
 
 
 def _cargar(ruta: str) -> io.Proyecto | None:
@@ -39,6 +41,9 @@ def main(argv: list[str] | None = None) -> int:
                                     "(por omisión, junto al proyecto)")
     v = sub.add_parser("validar", help="valida el esquema sin correr nada")
     v.add_argument("proyecto")
+    e = sub.add_parser("escena", help="corre todo y escribe la escena que dibuja el visor")
+    e.add_argument("proyecto")
+    e.add_argument("--salida", help="ruta del JSON de escena (por omisión, junto al proyecto)")
     a = ap.parse_args(argv)
 
     p = _cargar(a.proyecto)
@@ -50,6 +55,14 @@ def main(argv: list[str] | None = None) -> int:
           f"{len(p.salidas)} salidas")
     if a.cmd == "validar":
         print("esquema OK")
+        return 0
+    if a.cmd == "escena":
+        doc = escena.armar(p, a.proyecto)
+        salida = a.salida or io.ruta_escena(a.proyecto)
+        escena.escribir(doc, salida)
+        print(f"escrito  {salida}  ({len(doc['modos'])} modos, {len(doc['casos'])} casos, "
+              f"{len(doc['combinaciones'])} combinaciones, rukan {doc['rukan']} "
+              f"@ {doc['commit']})")
         return 0
 
     valores = analysis.run(p)
