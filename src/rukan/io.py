@@ -44,7 +44,7 @@ from .model import DOF, FrameElement, Material, Model, NodalMass, Node, Section
 
 ESQUEMA_PROYECTO = "rukan/proyecto@1"
 ESQUEMA_RESULTADOS = "rukan/resultados@1"
-ESQUEMA_ESCENA = "rukan/escena@1"
+ESQUEMA_ESCENA = "rukan/escena@2"
 UNIDADES_INTERNAS = {"longitud": "m", "fuerza": "kN", "masa": "t"}
 
 DIRECCIONES = ("X", "Y", "Z")

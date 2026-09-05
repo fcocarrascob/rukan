@@ -1,15 +1,16 @@
 """Rukan — la escena: lo que un visor necesita para dibujar, en JSON.
 
 Es la versión numérica de `vista.escena()`, que solo sabe llegar a SVG. Esquema
-``rukan/escena@1``:
+``rukan/escena@2``:
 
     esquema, proyecto, sha256_proyecto, rukan, commit, openseespy, generado
     titulo, unidades
     nudos[]        {id, nombre, xyz[3], fijo[6]?}
-    barras[]       {id, nombre, i, j, seccion}
+    barras[]       {id, nombre, i, j, seccion, vecxz[3]}
     masas[]        {nudo, m[3]}
     modos[]        {n, T, participacion{X,Y,Z}, phi[n_nudos][3]}
-    casos          {nombre: {u[n_nudos][6], reacciones{nudo: [6]}, fuerzas[n_barras][12]}}
+    casos          {nombre: {u[n_nudos][6], reacciones{nudo: [6]},
+                             fuerzas[n_barras][12], w[n_barras][3]?}}
     combinaciones  {nombre: lo mismo}
 
 Reglas:
@@ -21,6 +22,15 @@ Reglas:
 * `phi` en el orden de `nudos`, normalizado a `max|phi| = 1`; el visor escala.
 * `fuerzas` lleva el **signo del diagrama**, con `analysis.signo_diagrama`, que
   es la misma función que usan las sondas: no hay dos convenciones.
+* `w` es la **carga de vano en ejes locales** de cada barra, `(wx, wy, wz)` —el
+  orden de los ejes, no el de `eleLoad -beamUniform`, que es `(Wy, Wz, Wx)`—. Con
+  ella y las seis primeras de `fuerzas` (el extremo i), `esfuerzos.esfuerzo`
+  entrega el diagrama en cualquier punto: por eso la escena guarda **magnitudes
+  primarias** en vez de muestrear el diagrama en n estaciones, que pesaría
+  treinta y cinco veces más y sería una magnitud derivada. La clave se omite
+  entera en los casos sin carga distribuida: la escena no gasta bytes en ceros.
+* `vecxz` viaja con cada barra porque el visor necesita sus ejes locales para
+  dibujar el diagrama normal al eje. Es dato del modelo, no derivado.
 * Floats con `CIFRAS` cifras significativas, para que el galpón de 965 nudos
   quepa en un archivo razonable. Es una escena, no un resultado que se cita.
 """
@@ -66,7 +76,8 @@ def armar(p: Proyecto, ruta_proyecto: str | Path) -> dict:
         nudos.append(x)
     doc["nudos"] = nudos
     doc["barras"] = [{"id": e.id, "nombre": e.nombre, "i": e.node_i, "j": e.node_j,
-                      "seccion": secciones[e.section]} for e in m.elements]
+                      "seccion": secciones[e.section], "vecxz": _rl(e.vecxz)}
+                     for e in m.elements]
     doc["masas"] = [{"nudo": nm.node, "m": _rl(nm.values[:3])} for nm in m.masses]
 
     doc["modos"] = []
@@ -89,8 +100,13 @@ def armar(p: Proyecto, ruta_proyecto: str | Path) -> dict:
         "fuerzas": lambda: [[s * f for s, f in zip(_SIGNOS, ops.eleResponse(t, "localForces"))]
                             for t in tags],
     }
-    crudos = {nombre: loads.run_static_case(m, analysis.aplicar(p, caso), extractores)
-              for nombre, caso in p.casos.items()}
+    crudos = {}
+    for nombre, caso in p.casos.items():
+        r = loads.run_static_case(m, analysis.aplicar(p, caso), extractores)
+        cargas = analysis.cargas_de_vano(p, caso)
+        if cargas:
+            r["w"] = [list(cargas[e.id]) for e in m.elements]
+        crudos[nombre] = r
     doc["casos"] = {nombre: _redondear(r) for nombre, r in crudos.items()}
     doc["combinaciones"] = {nombre: _redondear(_lineal(crudos, factores))
                             for nombre, factores in p.combinaciones.items()}
@@ -98,11 +114,16 @@ def armar(p: Proyecto, ruta_proyecto: str | Path) -> dict:
 
 
 def _lineal(casos: dict, factores: dict[str, float]) -> dict:
-    """`Σ f_c · caso_c`, componente a componente, sobre `u`, `reacciones` y `fuerzas`."""
+    """`Σ f_c · caso_c`, componente a componente, sobre `u`, `reacciones`,
+    `fuerzas` y la carga de vano `w`. Que `w` se combine igual que lo demás no es
+    una comodidad: es lo que hace que el diagrama de una combinación salga de la
+    fórmula sin ningún caso especial."""
     base = casos[next(iter(factores))]
     out = {"u": [[0.0] * 6 for _ in base["u"]],
            "reacciones": {n: [0.0] * 6 for n in base["reacciones"]},
            "fuerzas": [[0.0] * 12 for _ in base["fuerzas"]]}
+    if any("w" in casos[c] for c in factores):
+        out["w"] = [[0.0] * 3 for _ in base["fuerzas"]]
     for c, f in factores.items():
         r = casos[c]
         for k, v in enumerate(r["u"]):
@@ -111,13 +132,18 @@ def _lineal(casos: dict, factores: dict[str, float]) -> dict:
             out["reacciones"][n] = [a + f * b for a, b in zip(out["reacciones"][n], v)]
         for k, v in enumerate(r["fuerzas"]):
             out["fuerzas"][k] = [a + f * b for a, b in zip(out["fuerzas"][k], v)]
+        for k, v in enumerate(r.get("w", [])):
+            out["w"][k] = [a + f * b for a, b in zip(out["w"][k], v)]
     return out
 
 
 def _redondear(r: dict) -> dict:
-    return {"u": [_rl(v) for v in r["u"]],
-            "reacciones": {n: _rl(v) for n, v in r["reacciones"].items()},
-            "fuerzas": [_rl(v) for v in r["fuerzas"]]}
+    d = {"u": [_rl(v) for v in r["u"]],
+         "reacciones": {n: _rl(v) for n, v in r["reacciones"].items()},
+         "fuerzas": [_rl(v) for v in r["fuerzas"]]}
+    if "w" in r:
+        d["w"] = [_rl(v) for v in r["w"]]
+    return d
 
 
 def escribir(doc: dict, ruta: str | Path) -> None:

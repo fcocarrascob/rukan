@@ -1,4 +1,4 @@
-"""`escena.py` — el esquema `rukan/escena@1`: lo que un visor necesita para
+"""`escena.py` — el esquema `rukan/escena@2`: lo que un visor necesita para
 dibujar, con la misma procedencia que los resultados.
 
 No compara dibujos: comprueba que cada cantidad de la escena sea **la misma**
@@ -13,7 +13,7 @@ import math
 
 import pytest
 
-from rukan import analysis, engine, escena, io, loads
+from rukan import analysis, engine, escena, esfuerzos, io, loads
 from rukan.model import FrameElement, Material, Model, NodalMass, Node, Section
 
 
@@ -44,7 +44,9 @@ def portico() -> io.Proyecto:
                          "componente": "N", "caso": "D"},
                  "M_j": {"que": "fuerza", "barra": "c1", "extremo": "j",
                          "componente": "Mz", "caso": "P"},
-                 "Ry": {"que": "reaccion", "nudo": "A", "gdl": "Uy", "caso": "P"}})
+                 "Ry": {"que": "reaccion", "nudo": "A", "gdl": "Uy", "caso": "P"},
+                 "M_med": {"que": "esfuerzo", "barra": "v", "componente": "Mz",
+                           "x_rel": 0.5, "caso": "D"}})
 
 
 @pytest.fixture
@@ -59,7 +61,7 @@ def _idx(doc, coleccion, nombre):
 
 
 def test_cabecera_y_geometria(doc, portico):
-    assert doc["esquema"] == "rukan/escena@1"
+    assert doc["esquema"] == "rukan/escena@2"
     assert doc["proyecto"] == "portico.proyecto.json"
     assert len(doc["sha256_proyecto"]) == 64
     assert doc["rukan"] and "generado" in doc and "openseespy" in doc
@@ -68,7 +70,8 @@ def test_cabecera_y_geometria(doc, portico):
     assert [n["id"] for n in doc["nudos"]] == [1, 2, 3, 4]
     assert doc["nudos"][3] == {"id": 4, "nombre": "D", "xyz": [0.0, 6.0, 4.0]}
     assert doc["nudos"][0]["fijo"] == [1, 1, 1, 1, 1, 1]
-    assert doc["barras"][2] == {"id": 3, "nombre": "v", "i": 3, "j": 4, "seccion": "COL"}
+    assert doc["barras"][2] == {"id": 3, "nombre": "v", "i": 3, "j": 4,
+                                "seccion": "COL", "vecxz": [1.0, 0.0, 0.0]}
     assert doc["masas"] == [{"nudo": 3, "m": [1.0, 1.0, 1.0]}, {"nudo": 4, "m": [1.0, 1.0, 1.0]}]
 
 
@@ -143,3 +146,45 @@ def test_el_json_es_plano_y_no_pierde_nada(doc, tmp_path):
 def test_ruta_escena():
     assert io.ruta_escena("x/g.proyecto.json").name == "g.escena.json"
     assert io.ruta_escena("x/g.json").name == "g.escena.json"
+
+
+# ===================== escena@2: la carga de vano ============================
+def test_solo_los_casos_con_carga_distribuida_traen_w(doc, portico):
+    """`w` es lo que le falta a las fuerzas de extremo para que el visor pueda
+    dibujar el diagrama. Un caso de cargas nodales no la tiene, y la clave no
+    aparece: la escena no gasta bytes en ceros."""
+    assert "w" not in doc["casos"]["P"]
+    w = doc["casos"]["D"]["w"]
+    assert len(w) == len(doc["barras"])
+    esperado = loads.uniform_local_loads(portico.model)
+    for k, b in enumerate(doc["barras"]):
+        assert w[k] == pytest.approx(esperado[b["id"]], rel=1e-6, abs=1e-12)
+
+
+def test_la_carga_de_vano_de_una_combinacion_es_lineal(doc):
+    D, C = doc["casos"]["D"], doc["combinaciones"]["1.2D+P"]
+    for k in range(len(doc["barras"])):
+        for g in range(3):
+            assert C["w"][k][g] == pytest.approx(1.2 * D["w"][k][g], rel=1e-5, abs=1e-12)
+
+
+def test_con_la_escena_sola_se_reproduce_la_sonda_esfuerzo(doc, portico):
+    """La prueba de que `escena@2` basta: con `fuerzas`, `w` y la geometría que
+    el JSON trae —y nada más— sale el mismo número que publica el runner. Es
+    exactamente lo que el visor va a hacer en JavaScript."""
+    r = analysis.run(portico)
+    k = _idx(doc, "barras", "v")
+    b = doc["barras"][k]
+    xyz = {n["id"]: n["xyz"] for n in doc["nudos"]}
+    largo = math.dist(xyz[b["i"]], xyz[b["j"]])
+    caso = doc["casos"]["D"]
+    assert esfuerzos.esfuerzo(caso["fuerzas"][k], caso["w"][k], largo,
+                              "Mz", 0.5 * largo) == pytest.approx(r["M_med"], rel=1e-6)
+
+
+def test_sin_casos_la_escena_no_trae_carga_de_vano(portico, tmp_path):
+    p = io.Proyecto(model=portico.model)
+    ruta = tmp_path / "geo.proyecto.json"
+    io.save(p, ruta)
+    d = escena.armar(io.load(ruta), ruta)
+    assert all("vecxz" in b for b in d["barras"])
