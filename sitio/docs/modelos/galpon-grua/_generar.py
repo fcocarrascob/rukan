@@ -75,6 +75,12 @@ def proyecto() -> io.Proyecto:
                        "caso": "H_riel"},
             "d_cumbrera_D": {"que": "desplazamiento", "nudo": "R3_%d" % (D.NJ // 2),
                              "gdl": "Uz", "caso": "D"},
+            # Dos esfuerzos **dentro** de la barra, no en sus extremos: es lo que
+            # la escena@2 agrega y lo que el visor dibuja.
+            "Mz_raf3": {"que": "esfuerzo", "barra": "RAF3_1", "componente": "Mz",
+                        "x_rel": 0.5, "caso": "D"},
+            "N_col3": {"que": "esfuerzo", "barra": "COL3A_1", "componente": "N",
+                       "x_rel": 0.5, "caso": "D"},
             "peso_total": {"que": "peso_total"},
         })
 

@@ -22421,6 +22421,20 @@
       "gdl": "Uz",
       "caso": "D"
     },
+    "Mz_raf3": {
+      "que": "esfuerzo",
+      "barra": "RAF3_1",
+      "componente": "Mz",
+      "x_rel": 0.5,
+      "caso": "D"
+    },
+    "N_col3": {
+      "que": "esfuerzo",
+      "barra": "COL3A_1",
+      "componente": "N",
+      "x_rel": 0.5,
+      "caso": "D"
+    },
     "peso_total": {
       "que": "peso_total"
     }

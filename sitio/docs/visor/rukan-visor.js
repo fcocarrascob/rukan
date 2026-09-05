@@ -1,14 +1,18 @@
 /*
- * <rukan-visor> — el visor 3D de una escena `rukan/escena@1`.
+ * <rukan-visor> — el visor 3D de una escena `rukan/escena@2`.
  *
  *   <rukan-visor src="galpon-grua.escena.json" modo="1"></rukan-visor>
  *   <rukan-visor src="galpon-grua.escena.json" caso="H_alero" vista="transversal"></rukan-visor>
+ *   <rukan-visor src="galpon-grua.escena.json" caso="D" esfuerzo="Mz"
+ *                filtro="RAF3_*,COL3A_*"></rukan-visor>
  *
  * Atributos: `src` (obligatorio, relativo a la página), `modo` (número de modo),
- * `caso` (nombre de caso o combinación; excluyente con `modo`), `vista`
- * (iso | planta | transversal | longitudinal; por omisión iso), `escala`
- * (factor sobre la escala automática, por omisión 1), `animar` (presente =
- * arranca animando), `alto` (px, por omisión 460).
+ * `caso` (nombre de caso o combinación; excluyente con `modo`), `esfuerzo`
+ * (N | Vy | Vz | T | My | Mz; pide `caso`), `filtro` (globs sobre el nombre de
+ * barra, separados por coma), `vista` (iso | planta | transversal |
+ * longitudinal; por omisión iso), `escala` (factor sobre la escala automática,
+ * por omisión 1), `animar` (presente = arranca animando), `alto` (px, por
+ * omisión 460).
  *
  * Qué dibuja: barras sin deformar en trazo tenue, la deformada en acento,
  * apoyos como cubos, nudos con masa como puntos. Cámara ortográfica con
@@ -16,24 +20,41 @@
  * de líneas ocultas ni sombreado: es un reticulado de líneas, y en una
  * estructura de barras eso se lee mejor que lo contrario.
  *
- * La escala automática hace que el desplazamiento máximo sea un 5 % de la
- * diagonal del modelo; el deslizador la multiplica. El rótulo bajo el lienzo
- * dice siempre qué se está viendo y con qué factor: una deformada sin escala
- * declarada es una figura que miente.
+ * Con `esfuerzo` puesto, cada barra se pinta con una rampa divergente según el
+ * valor del componente elegido —frío negativo, acento positivo— y, **solo para
+ * las barras que `filtro` selecciona**, se dibuja además el diagrama normal al
+ * eje. La regla es una sola: sin `filtro` no hay diagrama, porque mil barras con
+ * su diagrama en una axonometría son una maraña ilegible (la misma razón por la
+ * que `vista.escena()` tiene `filtro`). La ordenada va sobre el eje local `y`
+ * para N, Vy, T y Mz, y sobre el `z` para Vz y My, con su signo tal cual y no
+ * sobre la cara traccionada, que sería una segunda convención sin justificar.
  *
- * Única dependencia: three.js, vendoreado en `vendor/` (ver `vendor/VERSION`)
- * y resuelto por el importmap de `overrides/main.html`.
+ * La escala automática hace que el desplazamiento —o la ordenada del diagrama—
+ * máximo sea un 5 % de la diagonal del modelo; el deslizador la multiplica. El
+ * rótulo bajo el lienzo dice siempre qué se está viendo y con qué factor: una
+ * deformada, o un diagrama, sin escala declarada es una figura que miente.
+ *
+ * Dependencias: three.js, vendoreado en `vendor/` (ver `vendor/VERSION`) y
+ * resuelto por el importmap de `overrides/main.html`, y `./esfuerzos.js`, que es
+ * el gemelo de `rukan/esfuerzos.py` y no importa nada (ver su cabecera).
  */
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { COMPONENTES, esfuerzo, ejesLocales } from './esfuerzos.js';
 
+const ESQUEMA = 'rukan/escena@2';
 const PALETA = {            // = rukan.vista.PALETA
   tinta: '#2b2a26', suave: '#8a8578', linea: '#c9c4b5',
   fondo: '#fcfcfa', acento: '#a4442c', frio: '#2f5d7c',
 };
 const FRACCION = 0.05;      // δ_max / diagonal del modelo, escala automática
 const PERIODO_ANIM = 2.4;   // s por ciclo de animación
+const NSUB_COLOR = 8;       // tramos por barra al pintar: la parábola se ve
+const NSUB_DIAG = 12;       // estaciones del diagrama normal al eje
+// El eje local sobre el que sale la ordenada de cada componente: `y` para lo que
+// vive en el plano local x-y, `z` para lo que vive en el x-z.
+const EJE_ORDENADA = { N: 1, Vy: 1, T: 1, Mz: 1, Vz: 2, My: 2 };
 const VISTAS = {
   iso:          { dir: [Math.cos(rad(25)) * Math.sin(rad(35)), -Math.cos(rad(25)) * Math.cos(rad(35)), Math.sin(rad(25))], up: [0, 0, 1] },
   planta:       { dir: [0, 0, 1],  up: [0, 1, 0] },
@@ -55,6 +76,25 @@ function sci(v) {
   return (a >= 1e-3 && a < 1e4) ? num(v) : v.toExponential(3).replace('.', ',');
 }
 function pct(v) { return num(100 * v, 1) + ' %'; }
+function unidadDe(c) { return (c === 'N' || c === 'Vy' || c === 'Vz') ? 'kN' : 'kN·m'; }
+
+// `filtro="RAF3_*,COL3A_*"` -> expresiones regulares sobre el nombre de barra.
+function globs(s) {
+  return (s || '').split(',').map(t => t.trim()).filter(Boolean).map(t =>
+    new RegExp('^' + t.replace(/[.+^${}()|[\]\\]/g, '\\$&')
+                      .replace(/\*/g, '.*').replace(/\?/g, '.') + '$'));
+}
+
+const C_FRIO = new THREE.Color(PALETA.frio);
+const C_ACENTO = new THREE.Color(PALETA.acento);
+const C_CERO = new THREE.Color(PALETA.linea);   // en cero, una barra normal
+const _c = new THREE.Color();
+// Rampa divergente: frío para lo negativo, acento para lo positivo, casi neutro
+// en cero. `t` viene normalizado por el máximo absoluto del componente.
+function rampa(t) {
+  _c.copy(C_CERO);
+  return t < 0 ? _c.lerp(C_FRIO, Math.min(1, -t)) : _c.lerp(C_ACENTO, Math.min(1, t));
+}
 
 let cssPuesto = false;
 function ponerCss() {
@@ -74,6 +114,9 @@ function ponerCss() {
     rukan-visor .rk-tip { position:absolute; pointer-events:none; background:${PALETA.fondo}; border:1px solid ${PALETA.suave}; border-radius:3px; padding:.35em .55em; white-space:pre; line-height:1.35; box-shadow:0 1px 4px rgba(0,0,0,.12); display:none; z-index:2; }
     rukan-visor .rk-pie { padding:.4em .6em; border:1px solid ${PALETA.linea}; border-top:0; border-radius:0 0 4px 4px; color:${PALETA.suave}; background:#f7f6f2; }
     rukan-visor .rk-pie b { color:${PALETA.tinta}; font-weight:600; }
+    rukan-visor .rk-rampa { display:inline-block; width:5.5em; height:.7em; vertical-align:-.05em; border:1px solid ${PALETA.linea}; border-radius:2px; background:linear-gradient(to right, ${PALETA.frio}, ${PALETA.linea}, ${PALETA.acento}); }
+    rukan-visor .rk-barra button:disabled { color:${PALETA.suave}; cursor:default; }
+    rukan-visor .rk-barra select:disabled { color:${PALETA.suave}; background:#f1efe8; }
   `;
   document.head.appendChild(st);
 }
@@ -106,6 +149,8 @@ class RukanVisor extends HTMLElement {
     this.selVista = this._select('Vista', Object.keys(VISTAS).map(k => [k, k]));
     this.selModo = this._select('Modo', [['', '—']]);
     this.selCaso = this._select('Caso', [['', '—']]);
+    this.selEsf = this._select('Esfuerzo',
+      [['', '—']].concat(COMPONENTES.map(c => [c, c])));
     this.rango = el('input'); this.rango.type = 'range';
     this.rango.min = -1; this.rango.max = 1; this.rango.step = 0.05; this.rango.value = 0;
     const lr = el('label'); lr.append('Escala', this.rango); this.barra.append(lr);
@@ -130,6 +175,11 @@ class RukanVisor extends HTMLElement {
 
   // ------------------------------------------------------------ escena
   _arrancar(esc) {
+    if (esc.esquema !== ESQUEMA) {
+      throw new Error(`la escena es ${esc.esquema || 'de esquema desconocido'} y ` +
+                      `este visor dibuja ${ESQUEMA}; hay que regenerarla con ` +
+                      '`python -m rukan escena`');
+    }
     this.esc = esc;
     this.setAttribute('aria-label', esc.titulo || 'Modelo');
     const idx = new Map(esc.nudos.map((n, k) => [n.id, k]));
@@ -139,6 +189,21 @@ class RukanVisor extends HTMLElement {
     esc.nudos.forEach((n, k) => { this.base.set(n.xyz, k * 3); });
     this.pares = new Uint32Array(esc.barras.length * 2);
     esc.barras.forEach((b, k) => { this.pares[2 * k] = idx.get(b.i); this.pares[2 * k + 1] = idx.get(b.j); });
+    // Geometría de cada barra: extremos, largo y ejes locales. Los ejes salen de
+    // `vecxz` con la misma función que `loads.local_axes`, cruzada contra ella
+    // en `tests/test_esfuerzos_js.py`.
+    this.geoBarra = esc.barras.map(b => {
+      const pi = esc.nudos[idx.get(b.i)].xyz, pj = esc.nudos[idx.get(b.j)].xyz;
+      return { pi, pj, L: Math.hypot(pj[0] - pi[0], pj[1] - pi[1], pj[2] - pi[2]),
+               ejes: ejesLocales(pi, pj, b.vecxz) };
+    });
+    this.filtro = globs(this.getAttribute('filtro'));
+    this.barrasFiltradas = this.filtro.length
+      ? esc.barras.map((b, k) => k).filter(k => {
+          const nm = String(esc.barras[k].nombre || esc.barras[k].id);
+          return this.filtro.some(rx => rx.test(nm));
+        })
+      : [];
 
     // caja y diagonal
     const bb = new THREE.Box3();
@@ -179,6 +244,36 @@ class RukanVisor extends HTMLElement {
     this.lineasDef.visible = false;
     this.scene.add(this.lineasDef);
 
+    // Barras subdivididas para pintar el esfuerzo: las posiciones son fijas (el
+    // color va sobre la geometría sin deformar), los colores se recalculan.
+    const S = NSUB_COLOR, M = esc.barras.length;
+    const posC = new Float32Array(M * S * 2 * 3);
+    this.colC = new Float32Array(M * S * 2 * 3);
+    let o = 0;
+    for (const g of this.geoBarra) {
+      for (let s = 0; s < S; s++) {
+        for (const t of [s / S, (s + 1) / S]) {
+          posC[o++] = g.pi[0] + t * (g.pj[0] - g.pi[0]);
+          posC[o++] = g.pi[1] + t * (g.pj[1] - g.pi[1]);
+          posC[o++] = g.pi[2] + t * (g.pj[2] - g.pi[2]);
+        }
+      }
+    }
+    const gCol = new THREE.BufferGeometry();
+    gCol.setAttribute('position', new THREE.BufferAttribute(posC, 3));
+    this.attrCol = new THREE.BufferAttribute(this.colC, 3);
+    this.attrCol.setUsage(THREE.DynamicDrawUsage);
+    gCol.setAttribute('color', this.attrCol);
+    this.lineasCol = new THREE.LineSegments(
+      gCol, new THREE.LineBasicMaterial({ vertexColors: true }));
+    this.lineasCol.visible = false;
+    this.scene.add(this.lineasCol);
+
+    // El diagrama normal al eje se rehace cada vez que cambia algo: son pocas
+    // barras (las que `filtro` selecciona), así que no vale la pena preasignar.
+    this.gDiag = new THREE.Group();
+    this.scene.add(this.gDiag);
+
     // nudos (para el tooltip) y masas
     const gPts = new THREE.BufferGeometry();
     gPts.setAttribute('position', new THREE.BufferAttribute(this.base, 3));
@@ -214,6 +309,7 @@ class RukanVisor extends HTMLElement {
     this.selVista.addEventListener('change', () => this._vista(this.selVista.value));
     this.selModo.addEventListener('change', () => { if (this.selModo.value) this.selCaso.value = ''; this._estado(); });
     this.selCaso.addEventListener('change', () => { if (this.selCaso.value) this.selModo.value = ''; this._estado(); });
+    this.selEsf.addEventListener('change', () => this._estado());
     this.rango.addEventListener('input', () => this._estado());
     this.btnAnim.addEventListener('click', () => this._animar(!this.animando));
     this.renderer.domElement.addEventListener('mousemove', e => this._hover(e));
@@ -227,6 +323,8 @@ class RukanVisor extends HTMLElement {
     if (modo && esc.modos.some(m => String(m.n) === modo)) this.selModo.value = modo;
     else if (caso && esc.casos[caso]) this.selCaso.value = 'c:' + caso;
     else if (caso && esc.combinaciones[caso]) this.selCaso.value = 'k:' + caso;
+    const esf = this.getAttribute('esfuerzo');
+    if (esf && COMPONENTES.includes(esf)) this.selEsf.value = esf;
     const escala = parseFloat(this.getAttribute('escala') || '1');
     if (escala > 0) this.rango.value = Math.max(-1, Math.min(1, Math.log10(escala)));
     this.selVista.value = VISTAS[this.getAttribute('vista')] ? this.getAttribute('vista') : 'iso';
@@ -289,6 +387,27 @@ class RukanVisor extends HTMLElement {
     const esc = this.esc, N = esc.nudos.length;
     this.campo = null; this.rotulo = '';
     const mult = Math.pow(10, parseFloat(this.rango.value));
+    // Un modo no tiene esfuerzos, y sin caso no hay nada que evaluar.
+    this.selEsf.disabled = !!this.selModo.value || !this.selCaso.value;
+    if (this.selEsf.disabled) this.selEsf.value = '';
+    this.comp = this.selEsf.value;
+    if (this.comp) {
+      // Un diagrama no se anima: es un campo estático, no una forma que oscile.
+      if (this.animando) this._animar(false);
+      this.btnAnim.disabled = true;
+      this._esfuerzos(this.comp, mult);
+      this.lineasDef.visible = false;
+      this.lineasBase.visible = false;
+      this.lineasCol.visible = true;
+      this.gDiag.visible = true;
+      this.pie.innerHTML = this.rotulo;
+      this._render();
+      return;
+    }
+    this.lineasCol.visible = false;
+    this.gDiag.visible = false;
+    this.lineasBase.visible = true;
+    this.btnAnim.disabled = false;
     if (this.selModo.value) {
       const m = esc.modos.find(x => String(x.n) === this.selModo.value);
       this.campo = new Float32Array(N * 3);
@@ -312,6 +431,91 @@ class RukanVisor extends HTMLElement {
     this.pie.innerHTML = this.rotulo;
     this._deformar(1);
     this._render();
+  }
+
+  // ------------------------------------------------------------ esfuerzos
+  /** El esfuerzo `comp` de la barra `k` a distancia `x` de su extremo i. */
+  _valor(comp, k, x) {
+    const r = this._resultado().r, g = this.geoBarra[k];
+    return esfuerzo(r.fuerzas[k], r.w ? r.w[k] : null, g.L, comp, x);
+  }
+
+  /** Pinta las barras, arma el diagrama del filtro y escribe el rótulo. */
+  _esfuerzos(comp, mult) {
+    const { nombre, r } = this._resultado();
+    const M = this.esc.barras.length, S = NSUB_COLOR;
+    // Una sola pasada: el máximo absoluto normaliza el color y fija la escala
+    // del diagrama, así los dos hablan de la misma cifra.
+    let vmax = 0, arg = { k: 0, x: 0 };
+    const vals = new Array(M);
+    for (let k = 0; k < M; k++) {
+      const g = this.geoBarra[k], fila = new Array(S + 1);
+      for (let s = 0; s <= S; s++) {
+        const v = esfuerzo(r.fuerzas[k], r.w ? r.w[k] : null, g.L, comp, s * g.L / S);
+        fila[s] = v;
+        if (Math.abs(v) > vmax) { vmax = Math.abs(v); arg = { k, x: s / S }; }
+      }
+      vals[k] = fila;
+    }
+    const esc0 = vmax > 0 ? vmax : 1;
+    let o = 0;
+    for (let k = 0; k < M; k++) {
+      for (let s = 0; s < S; s++) {
+        for (const v of [vals[k][s], vals[k][s + 1]]) {
+          const c = rampa(v / esc0);
+          this.colC[o++] = c.r; this.colC[o++] = c.g; this.colC[o++] = c.b;
+        }
+      }
+    }
+    this.attrCol.needsUpdate = true;
+
+    const factor = vmax > 0 ? FRACCION * this.diag / vmax * mult : 0;
+    this._diagrama(comp, factor);
+
+    const b = this.esc.barras[arg.k];
+    const u = unidadDe(comp);
+    this.rotulo =
+      `<b>${comp}</b> · <b>${nombre}</b> · máx |${comp}| = ${sci(vmax)} ${u} ` +
+      `en ${b.nombre || b.id} (x/L = ${num(arg.x, 2)}) · ` +
+      `<span class="rk-rampa"></span> ${sci(-vmax)} … ${sci(vmax)} ${u}` +
+      (this.barrasFiltradas.length
+        ? ` · diagrama sobre ${this.barrasFiltradas.length} barras, ordenada máx = ` +
+          `${num(FRACCION * mult * 100, 0)} % de la diagonal`
+        : ' · sin <code>filtro</code> no se dibuja el diagrama');
+  }
+
+  /**
+   * El diagrama normal al eje, solo para las barras de `filtro`: el contorno y
+   * las dos costillas de extremo de cada barra.
+   *
+   * Solo las de extremo, y no una por estación como se dibuja a mano, porque un
+   * miembro de este modelo está mallado en dieciséis tramos: una costilla por
+   * estación son mil y pico líneas que se apelmazan en una mancha y tapan el
+   * color de las barras. El contorno se lee igual y deja ver lo que hay debajo.
+   */
+  _diagrama(comp, factor) {
+    for (const hijo of this.gDiag.children) hijo.geometry.dispose();
+    this.gDiag.clear();
+    if (!this.barrasFiltradas.length || !factor) return;
+    const eje = EJE_ORDENADA[comp], n = NSUB_DIAG;
+    const pts = [];
+    for (const k of this.barrasFiltradas) {
+      const g = this.geoBarra[k], nrm = g.ejes[eje];
+      let ant = null;
+      for (let s = 0; s <= n; s++) {
+        const t = s / n, x = t * g.L;
+        const v = this._valor(comp, k, x) * factor;
+        const p = [0, 1, 2].map(c => g.pi[c] + t * (g.pj[c] - g.pi[c]));
+        const d = [0, 1, 2].map(c => p[c] + v * nrm[c]);
+        if (s === 0 || s === n) pts.push(...p, ...d);   // la costilla de extremo
+        if (ant) pts.push(...ant, ...d);                // el contorno
+        ant = d;
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
+    this.gDiag.add(new THREE.LineSegments(
+      geo, new THREE.LineBasicMaterial({ color: PALETA.tinta })));
   }
 
   _deformar(fase) {
@@ -352,7 +556,15 @@ class RukanVisor extends HTMLElement {
     let texto = null;
     const hp = this.raycaster.intersectObject(this.puntos, false);
     if (hp.length) texto = this._textoNudo(hp[0].index);
-    else {
+    else if (this.comp) {
+      // Con el color puesto se apuntan las barras subdivididas: el índice de
+      // vértice dice qué barra, y el punto del impacto, en qué estación.
+      const hl = this.raycaster.intersectObject(this.lineasCol, false);
+      if (hl.length) {
+        const k = Math.floor(hl[0].index / (2 * NSUB_COLOR));
+        texto = this._textoBarra(k, hl[0].point);
+      }
+    } else {
       const hl = this.raycaster.intersectObject(this.lineasBase, false);
       if (hl.length) texto = this._textoBarra(Math.floor(hl[0].index / 2));
     }
@@ -389,10 +601,12 @@ class RukanVisor extends HTMLElement {
     return s;
   }
 
-  _textoBarra(k) {
+  _textoBarra(k, punto) {
     const b = this.esc.barras[k];
     const ni = this.esc.nudos[this.idx.get(b.i)], nj = this.esc.nudos[this.idx.get(b.j)];
-    let s = `barra ${b.nombre || b.id}  ${b.seccion}\n${ni.nombre || ni.id} → ${nj.nombre || nj.id}`;
+    const g = this.geoBarra[k];
+    let s = `barra ${b.nombre || b.id}  ${b.seccion}\n${ni.nombre || ni.id} → ${nj.nombre || nj.id}` +
+            `   L = ${num(g.L, 3)} m`;
     const res = this._resultado();
     if (res) {
       const f = res.r.fuerzas[k];
@@ -400,6 +614,14 @@ class RukanVisor extends HTMLElement {
       s += `\n  i: ${f.slice(0, 6).map(v => sci(v).padStart(7)).join('')}`;
       s += `\n  j: ${f.slice(6, 12).map(v => sci(v).padStart(7)).join('')}`;
       s += `\n  (kN, kN·m; signo del diagrama)`;
+      if (this.comp && punto) {
+        // La estación bajo el cursor: la proyección del impacto sobre el eje.
+        const ex = g.ejes[0];
+        const d = [punto.x - g.pi[0], punto.y - g.pi[1], punto.z - g.pi[2]];
+        const x = Math.max(0, Math.min(g.L, d[0] * ex[0] + d[1] * ex[1] + d[2] * ex[2]));
+        s += `\n  ${this.comp}(x = ${num(x, 3)} m; x/L = ${num(x / g.L, 2)}) = ` +
+             `${sci(this._valor(this.comp, k, x))} ${unidadDe(this.comp)}`;
+      }
     }
     return s;
   }

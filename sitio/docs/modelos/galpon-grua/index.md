@@ -55,9 +55,42 @@ por áreas y pesa más. Bajo ese peso la cumbrera del marco 3 baja
 
 <rukan-visor src="galpon-grua.escena.json" caso="D" vista="transversal"></rukan-visor>
 
-Al pasar el cursor por una barra en un caso aparecen sus fuerzas de extremo con el signo del
-diagrama: axial y momentos están verificados contra SAP2000 en la escalera de Rukan; corte y
-torsión siguen la misma convención y todavía no.
+## Los esfuerzos sobre el modelo
+
+Elige un esfuerzo y el galpón entero se pinta con él: frío lo negativo, acento lo positivo, y
+el rótulo dice cuánto vale el máximo, en qué barra cae y con qué rampa se está leyendo. Sobre
+las barras que el filtro selecciona —aquí, el marco 3— se dibuja además el diagrama normal al
+eje, con la ordenada sobre el eje local que le corresponde al componente y con su signo tal
+cual, no sobre la cara traccionada.
+
+<rukan-visor src="galpon-grua.escena.json" caso="D" esfuerzo="Mz" filtro="RAF3_*,COL3A_*,COL3B_*" vista="transversal"></rukan-visor>
+
+Lo que se dibuja **no** es la recta entre las dos fuerzas de extremo. Entre los extremos de una
+barra cargada hay una parábola que la salida del elemento no reporta, y el visor la superpone:
+en el punto medio del primer tramo de rafter junto al alero el momento vale
+{{ r('galpon-grua', 'Mz_raf3', 2) }} kN·m, y a media altura del primer tramo de columna el
+axial vale {{ r('galpon-grua', 'N_col3', 2) }} kN — dos cifras que no están en ninguna de las
+doce fuerzas de extremo de esas barras. Al pasar el cursor por una barra, el visor da el valor
+en la estación exacta bajo el puntero.
+
+Con la malla del memo, dieciséis tramos por corte, cada barra es corta y esa parábola es una
+corrección pequeña: el diagrama se parece mucho a la poligonal por los nudos. La superposición
+manda donde un miembro **es** un solo elemento, que es adonde va el lote siguiente: la viga
+carrilera del eslabón 08, con sus dos ruedas sobre un vano de un tramo.
+
+## Límites
+
+Al pasar el cursor por una barra aparecen sus fuerzas de extremo con el signo del diagrama, y
+el diagrama a lo largo de la barra usa esa misma convención. Axial y momentos están verificados
+contra SAP2000 en la escalera de Rukan. El signo del **corte** no está contrastado contra otro
+programa, pero tampoco es una elección: con el momento anclado en sus dos extremos a una
+convención verificada, `dMz/dx = +Vy` y `dMy/dx = −Vz` lo determinan, y eso está probado en la
+nota 07 del laboratorio contra dos caminos independientes. La **torsión** es el único componente
+sin diagrama del cual derivarse: sigue la regla análoga a la axial y **espera SAP2000**. No
+firmes un `T` leído de aquí.
+
+El modelo tampoco tiene todavía los casos de grúa, nieve ni sismo estático: sus cuatro casos son
+tres empujes unitarios y el peso propio.
 
 ## Procedencia
 
