@@ -264,6 +264,34 @@ hashes y ya no lee nada fuera de su repo.
 `espectral` en el esquema v2; verificar corte y torsión de barra contra SAP2000
 (hoy solo axial y momentos, casos 6, 9 y 10).
 
+## ✅ El sitio — el repo de modelos con su narración en 3D (2026-09-05)
+
+La Fase 2 empezó por el visor y no por la GUI: el archivo de proyecto ya era el documento
+que un visor consume. `sitio/` es un sitio MkDocs Material dentro del repo, sin relación con
+struct_pad, donde cada entrada es un modelo que se corre: proyecto, resultados y escena
+versionados, y un visor 3D incrustado.
+
+- `src/rukan/escena.py` + `python -m rukan escena`: esquema `rukan/escena@1` (geometría,
+  modos normalizados, deformadas de todos los casos y combinaciones, reacciones, fuerzas de
+  extremo con `analysis.signo_diagrama`, la única definición del signo). Misma cabecera de
+  procedencia que los resultados (`io.cabecera`).
+- `sitio/docs/visor/rukan-visor.js`: web component sobre three.js 0.185.1 vendoreado
+  (`three.module.min.js` **importa `three.core.min.js`**, hay que vendorear los dos);
+  importmap en `sitio/overrides/main.html`. Cámara ortográfica encuadrada a la proyección de
+  la caja, vistas fijas iguales a las de `vista.py`, modos animados, deformada con la escala
+  en el rótulo, tooltip con `u`, reacciones y fuerzas de extremo.
+- `sitio/main.py`: macros `r`, `cociente`, `tabla_modos`, `procedencia`; las cifras de la
+  prosa salen de la corrida y el build falla por hash.
+- Primera entrada: `sitio/docs/modelos/galpon-grua/` (caso 11 con `D`, `H_alero`,
+  `H_alero_uno`, `H_riel`); el hallazgo del caso 11 se ve en las dos deformadas.
+- `tests/test_sitio.py`, `.github/workflows/sitio.yml` (GitHub Pages; activar Pages con
+  origen «GitHub Actions» una vez). Diseño: `docs/superpowers/specs/2026-09-05-sitio-rukan-design.md`.
+
+**Pendiente que abre:** `escena@2` con esfuerzos a lo largo de la barra (superposición de
+la carga distribuida sobre las fuerzas de extremo, la maquinaria de `lab/nota01`), verificados
+contra numpy y SAP2000, y con ellos color por esfuerzo y diagramas N/V/M en el visor;
+segundas entradas (galpón a dos aguas del caso 8, torre del caso 9).
+
 ---
 
 ## ▶ PRÓXIMA SESIÓN — candidatos
@@ -344,7 +372,8 @@ Notas de fenómenos de análisis contra referencia independiente. Backlog en
 
 ### Fase 2 — GUI
 - [ ] Constructor de modelo (empezar en 2D → galpón por marcos)
-- [ ] Visor de resultados (pyvista/VTK o webview three.js)
+- [x] Visor de resultados — v1 web: `rukan/escena@1` + `rukan-visor.js` (three.js) en `sitio/`
+- [ ] Visor v2: esfuerzos por barra (`escena@2`), color y diagramas N/V/M
 - [ ] PySide6
 
 ## Wedge 2 — Edificios de hormigón NCh433 (expansión, no MVP)

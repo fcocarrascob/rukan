@@ -20,6 +20,9 @@ Ningún ingeniero firma cálculos de una caja negra. Por eso Rukan:
 - Se construye por **Desarrollo Dirigido por Verificación**: cada capacidad
   nace de un caso que se contrasta contra cálculo a mano y/o SAP2000, y se
   publica como post en [struct_pad](https://fcocarrascob.github.io).
+- Publica sus modelos con su narración en 3D en
+  [el sitio de Rukan](https://fcocarrascob.github.io/rukan/): cada entrada es un
+  archivo de proyecto que se corre, y lo que se dibuja y se escribe sale de esa corrida.
 
 ## Instalación
 
@@ -34,6 +37,9 @@ pip install -e ".[dev]"
 ```bash
 pytest                                            # tests del núcleo
 python verification/case01_cantilever_column.py   # caso de verificación
+python -m rukan run    <p>.proyecto.json          # corre un archivo de proyecto
+python -m rukan escena <p>.proyecto.json          # y escribe la escena que dibuja el visor
+pip install -e ".[sitio]" && mkdocs serve -f sitio/mkdocs.yml   # el sitio en local
 ```
 
 ## Estructura
@@ -43,6 +49,7 @@ src/rukan/
   units.py    # capa de unidades (Pint en la frontera) + sistema interno
   model.py    # modelo de datos estructural (3D desde el día 1)
 verification/ # escalera de casos de verificación (test + artefacto de blog)
+sitio/        # el sitio: modelos con su narración y visor 3D (MkDocs + three.js)
 tests/        # tests unitarios
 ```
 

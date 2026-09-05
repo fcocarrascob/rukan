@@ -80,9 +80,29 @@ modo, a SVG y sin dependencias nuevas. **Sin eliminación de líneas ocultas**, 
 exista en el texto. `escena()` toma `filtro` — sin él, en una elevación las barras
 que comparten proyección se tapan y la que queda encima miente.
 
+**El sitio (2026-09-05) es el repo de modelos con su narración en 3D**, en `sitio/`,
+sin relación con struct_pad. Tres capas: el esquema `rukan/escena@1` (`escena.py`,
+`python -m rukan escena`: geometría, modos normalizados, deformadas de **todos** los casos y
+combinaciones, reacciones y fuerzas de extremo con el signo del diagrama, misma cabecera de
+procedencia que los resultados); el visor `sitio/docs/visor/rukan-visor.js` (web component
+sobre three.js **vendoreado** en `vendor/`, cámara ortográfica con órbita, vistas fijas,
+modos animados, deformada con escala declarada en el rótulo, tooltip); y MkDocs Material
+con `mkdocs-macros`, donde **ninguna cifra de la prosa se teclea**: `r()`, `cociente()` y
+`tabla_modos()` la leen de la corrida, y `procedencia()` rompe el build si el hash del
+proyecto no es el de los JSON. Cada entrada es `sitio/docs/modelos/<slug>/` con
+`_generar.py`, el proyecto, los resultados y la escena **versionados** (el build no
+necesita OpenSees). `tests/test_sitio.py` exige que el generador reproduzca byte a byte el
+proyecto versionado. Identidad del sitio: narra **el modelo y lo que el motor hace con él**;
+el cálculo normativo se cita al memo, la verificación del motor queda en struct_pad. Primera
+entrada: el galpón con puente grúa (caso 11, cuatro casos estáticos). **Esfuerzos a lo largo
+de la barra (color, diagramas N/V/M) quedan para `escena@2`**, con su verificación. Se
+despliega a GitHub Pages con `.github/workflows/sitio.yml` (hay que activar Pages con origen
+«GitHub Actions» una vez). Diseño: `docs/superpowers/specs/2026-09-05-sitio-rukan-design.md`.
+
 **Próximo paso:** la cascada 04→13 en el repo de memos con los períodos del 00, o
-**Fase 1** (chequeo de código AISC/NCh427), o el espectro vertical NCh2369 — ver
-`ROADMAP.md`. Diseño del puente: `docs/superpowers/specs/2026-09-05-puente-rukan-memos-design.md`.
+**Fase 1** (chequeo de código AISC/NCh427), o el espectro vertical NCh2369, o `escena@2`
+(esfuerzos por barra) — ver `ROADMAP.md`. Diseño del puente:
+`docs/superpowers/specs/2026-09-05-puente-rukan-memos-design.md`.
 
 ## Principios de arquitectura
 
@@ -171,6 +191,9 @@ python verification/case01_cantilever_column.py   # corre un caso de verificaci�
 python -m lab.nota01_eleload_empotramiento        # corre una nota del laboratorio
 python -m rukan validar <p>.proyecto.json         # valida el esquema sin correr nada
 python -m rukan run <p>.proyecto.json             # corre y escribe <p>.resultados.json
+python -m rukan escena <p>.proyecto.json          # corre todo y escribe <p>.escena.json (el visor)
+pip install -e ".[sitio]"                         # MkDocs Material + macros
+mkdocs serve -f sitio/mkdocs.yml                  # el sitio en local; `mkdocs build --strict` en CI
 ```
 
 ## Estructura
@@ -186,10 +209,14 @@ src/rukan/
   vista.py    # dibujo del modelo a SVG: planta, elevaciones, isométrica, deformada
   io.py       # el archivo de proyecto rukan/proyecto@1: (de)serialización, validación, unidades
   analysis.py # el runner: modal + casos + combinaciones + sondas -> {simbolo: valor}
-  __main__.py # CLI: `python -m rukan run|validar`
+  escena.py   # el esquema rukan/escena@1: lo que el visor dibuja, con procedencia
+  __main__.py # CLI: `python -m rukan run|validar|escena`
 verification/ # escalera de casos: test + artefacto de blog (vs SAP2000)
 lab/          # notas de análisis verificable (vs fórmula cerrada / numpy)
   _lib/       # report (tabla + assert), ref (numpy puro), svg, publish
   figs/       # SVG generados, se copian al blog
-tests/        # tests unitarios del núcleo + corrida de cada nota
+sitio/        # el sitio: MkDocs Material + macros (main.py) + visor three.js
+  docs/visor/ # rukan-visor.js y three.js vendoreado (vendor/VERSION)
+  docs/modelos/<slug>/  # _generar.py + proyecto + resultados + escena + index.md
+tests/        # tests unitarios del núcleo + corrida de cada nota + el sitio
 ```
