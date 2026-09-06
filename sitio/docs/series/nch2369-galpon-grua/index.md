@@ -7,21 +7,22 @@ concéntrico en dos de los cuatro vanos en la longitudinal, techo arriostrado. Z
 suelo C, Categoría II. Diseñado por NCh2369:2025 con AISC 360-22, AISC 341-22, NCh431,
 NCh3171, AIST TR-13 y CMAA 70 donde cada una manda.
 
-La serie lo recorre en trece eslabones, desde la clasificación de la norma hasta el
-arriostramiento de techo, y uno más al frente: **el modelo**, que corre el galpón entero y
-publica los períodos con que todo lo demás debería haber empezado. Nació como una serie de
-memos en el repositorio de guías y se muda aquí, eslabón por eslabón, con el modelo
-tridimensional en pantalla en el punto donde cada uno lo necesita. El modelo vive en
-[su ficha](../../modelos/galpon-grua/).
+La serie lo recorre en catorce eslabones, desde la clasificación de la norma hasta el anclaje,
+y uno de ellos va al frente: **el modelo**, que corre el galpón entero y publica los períodos
+con que todo lo demás debería haber empezado. Nació como una serie de memos en el repositorio
+de guías y se mudó aquí, eslabón por eslabón, con el modelo tridimensional en pantalla en el
+punto donde cada uno lo necesita. El modelo vive en [su ficha](../../modelos/galpon-grua/).
 
 ## Los eslabones
 
 {{ tabla_serie('nch2369-galpon-grua') }}
 
-Falta uno: **13 diagonales longitudinales y anclaje**, que todavía no se ha escrito en el
-repositorio de memos. El 12 le deja dos encargos —una cota inferior de rigidez para el panel
-longitudinal y el colector con la torsión adentro— y el 11 un tercero, la acumulación del
-Apéndice 6 sobre los cinco marcos.
+El **13** es distinto de los otros trece: **no existía en el repositorio de memos** y se
+escribió aquí, con el PDF de la norma abierto. Por eso es el único sin oráculo —no hay cifra
+previa que reproducir— y lo que sostiene sus números es la cadena, la hoja de valores del
+proyecto en Struct Harness y tres contrastes cruzados contra lo que el 11 y el 12 ya habían
+publicado. Cierra los tres encargos que aquéllos le dejaron: la cota inferior de rigidez del
+panel, el colector con la torsión adentro y la acumulación del Apéndice 6.
 
 ## La cadena
 
@@ -33,9 +34,15 @@ cada origen sea anterior a su consumidor.
 
 ## Dónde quedó
 
-- **Migrados**: 00 a 12, la serie escrita entera. Cada uno reproduce, a la precisión que el memo original publicó, las
+- **Migrados**: 00 a 12. Cada uno reproduce, a la precisión que el memo original publicó, las
   cifras de ese memo; un assert en su script lo garantiza, y desde el 07 el oráculo cubre además
-  las filas del `## Resumen` y no solo las salidas.
+  las filas del `## Resumen` y no solo las salidas. **Escrito aquí**: el 13.
+- **El 13 le devuelve algo al 12, y todavía no se aplicó.** Al dimensionar la diagonal del
+  panel, la rigidez `k_pan` se multiplica por 3,26 — y esa rigidez es una entrada del 12, de la
+  que cuelgan su razón torsional y su colector. Es la primera vez que la serie deja de ser una
+  cadena y se cierra sobre sí misma. Recorrer el 12 con el valor nuevo **mejoraría** la
+  torsión, pero cambia cifras que su oráculo ata al memo original, así que va junto con la
+  cascada y no por separado.
 - **La cascada pendiente.** El 00 publica períodos que el 04 todavía no hereda: el 04 usa
   los declarados (0,20 y 0,40 s). Cuando los tome, cambiará de rama en Y y de ahí bajan R₁,
   el amplificador de capacidad, la componente vertical del 06, los M_pe del 07 y el anclaje
