@@ -290,7 +290,7 @@ versionados, y un visor 3D incrustado.
 **Pendiente que abre:** segundas entradas (galpón a dos aguas del caso 8, torre del caso 9).
 Los esfuerzos a lo largo de la barra los cerró el lote C, más abajo.
 
-## ▶ Las series — la cadena `nch2369-galpon-grua` se muda al sitio (2026-09-05, lotes A y B cerrados)
+## ✅ Las series — la cadena `nch2369-galpon-grua` vive en el sitio (lotes A, B y D cerrados)
 
 Decisión: el sitio de Rukan es la casa de la serie; el repo de guías queda congelado como
 referencia. Lo que se conserva del régimen de memos: cada cifra nace en un paso o en un
@@ -317,9 +317,9 @@ frase. Lo que lo reemplaza: `_calculo.py` por eslabón (las cifras no se teclean
   tolerancia era relativa; los dos quedan anotados en los `## Límites` de su página.
 
 **Lotes que siguen** (spec `docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md`):
-D = 07–12 con esfuerzos en pantalla (el 12 pide un caso con la grúa en el tope); E = el 13
-nuevo, con el PDF abierto; F = la cascada 04→13 con los períodos del 00. El lote C está
-cerrado (abajo).
+**E** = el eslabón 13, que **no existe en el repo de memos** y hay que escribirlo con el PDF
+abierto —diagonales longitudinales y anclaje—; **F** = la cascada 04→13 con los períodos del
+00. Los lotes C y D están cerrados (abajo).
 
 ## ✅ El lote C — `escena@2`: los esfuerzos a lo largo de la barra (2026-09-06)
 
@@ -357,7 +357,78 @@ carga de vano, en los dos planos locales, más torsión pura.
 
 ---
 
+## ✅ El lote D — los eslabones 07 a 12, y la serie queda migrada entera (2026-09-06)
+
+Diseño: `docs/superpowers/specs/2026-09-06-lote-d-eslabones-07-12-design.md`. El spec del lote C
+había anunciado un bloqueo —«el proyecto no tiene ningún caso de grúa, de nieve ni de sismo»— y al
+leer los seis memos resultó ser otro: **ninguna cifra publicada por 07–12 sale de una corrida**.
+El 07 declara los resultados de un modelo plano que «describe y no ejecuta», el 08 es un vano
+simple, el 09 rangos `M/S` sobre esa sección, el 10 un ábaco de AIST, el 11 una forma cerrada de
+reparto y el 12 otra de torsión. Así que los casos nuevos no sirven a la **fidelidad**: sirven al
+**contraste**, que es la identidad declarada del sitio.
+
+- **Tres casos nuevos en `modelos/galpon-grua`**, todos `nodales`, sin tocar `io.py` ni
+  `analysis.py`: `H_riel_uno` (empuje en los dos nudos de riel del marco 3), `E_X` (sismo
+  longitudinal estático equivalente repartido como la masa) y `E_Y_tope` (lo mismo en Y, con la
+  grúa en `X_G_TOPE`; su resultante cae en 12,11692 m y su excentricidad en 2,88308, que es
+  exactamente el C3 del 12). El sismo es **estático equivalente**: `analisis.espectral` sigue
+  siendo del esquema v2. 29 salidas.
+- **Un modelo nuevo, `modelos/carrilera`**: la viga del 08 sobre su vano de 7,50 m, con las dos
+  ruedas como nudos —así la fórmula de `esfuerzos.py`, que sólo admite carga de vano uniforme,
+  vale exacta en cada barra y el diagrama es analítico—. **Estrena `combinaciones`**, que el
+  esquema soportaba y nadie había ejercido. Densidad equivalente para que el peso propio dé el
+  `w_carril` del memo (viga + riel), declarado como supuesto.
+- **Seis eslabones, un commit cada uno.** 07 marco de momento a dos aguas (43 `entra`, el punto
+  de inflexión visible en el diagrama), 08 viga carrilera (visor de la carrilera, `M_ux` del
+  modelo contra la aritmética del memo), 09 fatiga, 10 columna escalonada, 11 arriostramiento de
+  techo (`E_X` con el diagrama sobre la línea de puntales del alero: la escalera del colector,
+  +258/+413/−413/−258, que el memo describe y no calcula), 12 los dos vanos libres (`E_Y_tope` y
+  los cinco aleros).
+- **`sitio/serie.py` gana el oráculo del `## Resumen`** (`E.resumen()`), que desde el 07 cubre
+  todas las filas del memo y no sólo las salidas; y `sitio/main.py` el macro `razon(modelo, a, b)`,
+  compañero de `cociente`, para contrastar una razón adimensional sin teclear ninguna de las dos
+  cifras.
+- **Un `J` mal calculado en `carrilera_props()`** (lado largo tomado como espesor, 576× en el
+  término del alma) se corrigió porque el memo 08 publica un `J` contra el cual comprobarlo.
+  **El mismo defecto en `comp_props()` sigue ahí**, y se dejó a propósito: corregirlo mueve todos
+  los resultados del modelo entre 10⁻⁹ y 10⁻⁵ relativo —nada cambia de signo— pero **saca el
+  `Ux_star` del eslabón 00 de su tolerancia**, así que es un cambio de la clase de la cascada y va
+  con el lote F. Anotado en el `## Límites` del 10.
+
+**Lo que el lote D agregó a la regla del oráculo.** La sustitución de la cifra impresa ya era la
+norma; acá apareció su causa y su escala. **El memo 11 aporta dieciséis de sus 118 filas** que su
+propia aritmética sobre las cifras impresas no da, y hay un porqué: su `.check.js` compara los
+bloques D y E con **10⁻⁴ absoluto**, así que su quinto decimal nunca se verificó. El oráculo de
+acá es media unidad del último decimal publicado y lo delata. En total, el lote deja **veinte y
+tantos dígitos anotados** en los `## Límites` de sus páginas —ocho en el 07, el 08 y el 10, y
+dieciséis en el 11 y dos en el 12—; ninguno cambia una sección, una traza ni una conclusión, y el
+único que se propaga se consume con la cifra impresa.
+
+**Lo que este lote *no* hizo, y hay que decirlo:** la sonda `esfuerzo_extremo` —el máximo de una
+componente sobre un conjunto de barras, con su posición— **no entra**. Ningún símbolo de las seis
+tablas `## Sale` es un máximo sobre un conjunto, y rompería dos invariantes del runner: el máximo
+no es lineal (las combinaciones dejarían de serlo) y devuelve tres cosas donde `salidas` devuelve
+un `float`. Queda encolada junto a `analisis.espectral` y a las **cargas distribuidas
+declarables** (nieve, viento): el camino de estas últimas está identificado —`distribuidas[]` como
+vocabulario aditivo, tocando `_validar_casos`, la conversión de unidades de `from_dict` y
+**obligatoriamente `analysis.cargas_de_vano`**, que si se olvida hace desaparecer la parábola de
+las sondas y del visor sin ningún error.
+
+---
+
 ## ▶ PRÓXIMA SESIÓN — candidatos
+
+### Cerrar la serie: el lote E o el lote F
+
+Con la serie migrada entera quedan sus dos lotes finales, y son de naturaleza distinta.
+**El lote E es el eslabón 13** —diagonales longitudinales y anclaje—, que **no existe en el
+repo de memos**: hay que escribirlo, con el PDF de NCh2369 abierto y la regla no negociable de
+este repositorio. Llega con tres encargos ya cuantificados: la cota inferior de rigidez del
+panel del 12 (`kbr_lim`), el colector con la torsión adentro (`F_col_12`) y la acumulación del
+Apéndice 6 sobre los cinco marcos del 11 (`Pbr_acum`, y los 4 025,53 kN que aquel declaró
+inaplicables). **El lote F es la cascada 04→13** con los períodos que el 00 mide, y arrastra el
+`J` de `comp_props()` que el lote D dejó sin corregir a propósito: los dos cambian cifras ya
+publicadas, así que van juntos y declarados.
 
 ### Retomar el laboratorio (no necesita SAP2000 — sirve en el equipo personal)
 

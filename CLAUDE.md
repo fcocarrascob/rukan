@@ -111,16 +111,17 @@ primario vs derivado (el modelo emite δ, `k = H/δ` es un `paso`); el memo sust
 fórmulas la cifra **impresa**, así que cuando un paso no reproduce, primero se prueba con el
 valor redondeado a los decimales publicados (el 00 lo hizo con δ a 7 decimales). Macros en
 `main.py`: `v()` / `vt()` (LaTeX: `{,}` y `\,`), `ficha()`, `tabla_serie()`, `grafo_serie()`
-(mermaid), `figura()`. Figuras: `sitio/figuras.py` (helper SVG portado) y `_figuras.py` por
-eslabón con `cotas()` leídas del JSON. KaTeX vendoreado. `tests/test_series.py`: cadena
-(`verificar_cadena`), `_calculo.py` reproduce el JSON, cada `sale` aparece en `index.md`
-con `v(`/`vt(`, sin `\d.\d` dentro de `$$`, citas con página, cotas de SVG con respaldo. Un
-`heredan` hacia un eslabón no migrado es promesa, no hallazgo. Migrados: **00 a 06**
-(lotes A y B); el 07 al 12 siguen el pipeline del spec
+(mermaid), `figura()`, `razon()`. Figuras: `sitio/figuras.py` (helper SVG portado) y
+`_figuras.py` por eslabón con `cotas()` leídas del JSON. KaTeX vendoreado.
+`tests/test_series.py`: cadena (`verificar_cadena`), `_calculo.py` reproduce el JSON, cada
+`sale` aparece en `index.md` con `v(`/`vt(`, sin `\d.\d` dentro de `$$`, citas con página,
+cotas de SVG con respaldo. Un `heredan` hacia un eslabón no migrado es promesa, no hallazgo.
+**Migrados: 00 a 12, la serie escrita entera** (lotes A, B y D); falta el **13**, que no existe
+en el repo de memos y hay que escribirlo. El pipeline por eslabón
 (`docs/superpowers/specs/2026-09-05-series-sitio-rukan-design.md` § 6): leer memo y
-`.check.js` → `_calculo.py` con `publicado` → `_figuras.py` → `index.md` con el molde
-(narración por pasos, visores donde entra el modelo, ficha, referencias) → build estricto y
-captura → commit. **La tabla de Referencias se migra literal**, celda por celda. **Fidelidad
+`.check.js` → `_calculo.py` con `publicado` y `resumen` → `_figuras.py` → `index.md` con el
+molde (narración por pasos, visores donde entra el modelo, ficha, referencias) → build estricto
+y captura → commit. **La tabla de Referencias se migra literal**, celda por celda. **Fidelidad
 primero**: la cascada 04→13 con los períodos del 00 se aplica después de migrar todo. El
 modelo del sitio tiene la malla del memo (`nsub=16`, 1 000 kN por marco).
 
@@ -149,9 +150,33 @@ sobre las que `filtro` selecciona. Verificado en `lab/nota07` con tres caminos (
 equilibrio integrado en numpy, una malla ×16 en OpenSees), 34 magnitudes con error 0 %. Diseño:
 `docs/superpowers/specs/2026-09-06-escena2-esfuerzos-por-barra-design.md`.
 
-**Próximo paso:** los eslabones 07 a 12 (lote D), que además necesitan casos nuevos en el proyecto
-—ruedas de grúa, nieve, sismo estático, `x_grua = X_G_TOPE`—; o **Fase 1** (chequeo de código
-AISC/NCh427); ver `ROADMAP.md`.
+**El lote D (2026-09-06) migró los eslabones 07 a 12 y dejó la serie escrita entera en el
+sitio.** Su hallazgo de partida fue que **ninguna cifra publicada por esos seis memos sale de una
+corrida** —el 07 declara los resultados de un modelo plano que «describe y no ejecuta», el 08 es
+un vano simple, el 09 rangos M/S, el 10 un ábaco de AIST, el 11 y el 12 formas cerradas—, así que
+los casos nuevos del proyecto no sirven a la fidelidad sino al **contraste**. El galpón gana tres
+casos nodales (`H_riel_uno`, `E_X`, `E_Y_tope` con la grúa en `X_G_TOPE`) y el sitio un modelo
+nuevo, **`modelos/carrilera`**, que estrena `combinaciones`. `serie.py` gana el oráculo del
+`## Resumen` (`E.resumen()`, todas las filas del memo y no sólo las salidas) y `main.py` el macro
+`razon(modelo, a, b)`. El sismo es **estático equivalente**: `analisis.espectral` sigue siendo del
+esquema v2, y la sonda `esfuerzo_extremo` queda encolada con él porque el máximo sobre un conjunto
+no es lineal y devolvería tres cosas donde `salidas` devuelve un float.
+
+**Lo que el lote D agregó a la regla del oráculo:** la sustitución de la cifra impresa ya era la
+norma; acá apareció su causa. **El memo 11 aporta dieciséis de sus 118 filas** que su propia
+aritmética sobre las cifras impresas no da, porque su `.check.js` compara los bloques D y E con
+**1e-4 absoluto** y su quinto decimal nunca se verificó. Con el 07, el 08, el 10 y el 12 el lote
+deja veinte y tantos dígitos anotados en los `## Límites` de sus páginas; ninguno cambia una
+sección ni una conclusión. Y **un `J` mal calculado en `comp_props()`** (lado largo como espesor)
+se dejó **sin corregir a propósito**: mueve todos los resultados del modelo entre 1e-9 y 1e-5
+relativo y saca el `Ux_star` del 00 de su tolerancia, así que es de la clase de la cascada y va
+con el lote F. Diseño: `docs/superpowers/specs/2026-09-06-lote-d-eslabones-07-12-design.md`.
+
+**Próximo paso:** el **lote E** —el eslabón 13, diagonales longitudinales y anclaje, que **no
+existe en el repo de memos** y hay que escribirlo con el PDF abierto; llega con tres encargos ya
+cuantificados del 11 y del 12— o el **lote F**, la cascada 04→13 con los períodos del 00, que
+arrastra el `J` de `comp_props()`; o **Fase 1** (chequeo de código AISC/NCh427). Ver
+`ROADMAP.md`.
 
 ## Principios de arquitectura
 
@@ -271,6 +296,7 @@ sitio/        # el sitio: MkDocs Material + macros (main.py) + visor three.js
   docs/visor/ # rukan-visor.js, esfuerzos.js (gemelo de rukan/esfuerzos.py, sin imports),
               # three.js y KaTeX vendoreados (vendor/*/VERSION)
   docs/modelos/<slug>/  # _generar.py + proyecto + resultados + escena + index.md
+                        # galpon-grua (7 casos) y carrilera (la viga del 08, con combinacion)
   docs/series/<serie>/<NN-slug>/  # _calculo.py + valores.json + _figuras.py + figs/ + index.md
 tests/        # tests unitarios del núcleo + corrida de cada nota + el sitio
 ```
