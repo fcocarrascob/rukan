@@ -18,8 +18,10 @@ tridimensional en pantalla en el punto donde cada uno lo necesita. El modelo viv
 
 {{ tabla_serie('nch2369-galpon-grua') }}
 
-Los que faltan, en el orden en que se migran: 12 los dos vanos libres, y 13 diagonales
-longitudinales y anclaje, que todavía no se ha escrito.
+Falta uno: **13 diagonales longitudinales y anclaje**, que todavía no se ha escrito en el
+repositorio de memos. El 12 le deja dos encargos —una cota inferior de rigidez para el panel
+longitudinal y el colector con la torsión adentro— y el 11 un tercero, la acumulación del
+Apéndice 6 sobre los cinco marcos.
 
 ## La cadena
 
@@ -31,7 +33,7 @@ cada origen sea anterior a su consumidor.
 
 ## Dónde quedó
 
-- **Migrados**: 00 a 11. Cada uno reproduce, a la precisión que el memo original publicó, las
+- **Migrados**: 00 a 12, la serie escrita entera. Cada uno reproduce, a la precisión que el memo original publicó, las
   cifras de ese memo; un assert en su script lo garantiza, y desde el 07 el oráculo cubre además
   las filas del `## Resumen` y no solo las salidas.
 - **La cascada pendiente.** El 00 publica períodos que el 04 todavía no hereda: el 04 usa

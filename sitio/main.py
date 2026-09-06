@@ -89,6 +89,13 @@ def cociente(raiz: Path, modelo: str, numerador: float, simbolo: str,
     return fmt(numerador / valor(raiz, modelo, simbolo), cifras)
 
 
+def razon(raiz: Path, modelo: str, a: str, b: str,
+          cifras: int | None = None) -> str:
+    """El cociente entre dos salidas del mismo modelo. Es la forma de contrastar
+    una razón adimensional del memo sin teclear ninguna de las dos cifras."""
+    return fmt(valor(raiz, modelo, a) / valor(raiz, modelo, b), cifras)
+
+
 def tabla_modos(raiz: Path, modelo: str, n: int | None = None) -> str:
     esc = _leer(raiz, modelo, "escena")
     modos = esc["modos"][:n] if n else esc["modos"]
@@ -257,6 +264,8 @@ def define_env(env) -> None:
               r(raiz, modelo, simbolo, cifras, unidad, factor), "r")
     env.macro(lambda modelo, numerador, simbolo, cifras=None:
               cociente(raiz, modelo, numerador, simbolo, cifras), "cociente")
+    env.macro(lambda modelo, a, b, cifras=None: razon(raiz, modelo, a, b, cifras),
+              "razon")
     env.macro(lambda modelo, n=None: tabla_modos(raiz, modelo, n), "tabla_modos")
     env.macro(lambda modelo: procedencia(raiz, modelo), "procedencia")
     env.macro(lambda eslabon, simbolo, cifras=None, factor=1.0, unidad=False:
