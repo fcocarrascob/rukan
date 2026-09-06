@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 410" width="880" height="410" role="img" aria-label="El panel arriostrado con su diagonal de 8 620,07 mm sobre un vano de 7 500 y un panel de 4 249,18, el punto de cruce de la 8.8.3 con una diagonal continua, y las dos longitudes de pandeo a la misma escala: 4 310,04 mm en la diagonal contra 7 500 en el puntal, con las esbelteces de 87,90206 y 94,65151 y los radios de giro de 37,98693 y 66,10201 que el tope de 113,46099 pide" font-family="ui-monospace,'IBM Plex Mono',Menlo,Consolas,monospace" font-size="11">
+<title>El panel y las dos longitudes de pandeo</title>
+<rect width="880" height="410" fill="#fcfcfa"/>
+<text x="24.0" y="30.0" fill="#2b2a26" text-anchor="start" font-size="11.5" font-weight="600">El punto de cruce vale exactamente 2 en la diagonal y cero en el puntal</text>
+<text x="24.0" y="48.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">un panel arriostrado   ·   las dos longitudes de pandeo a la misma escala, contra el tope de esbeltez de 113,46099</text>
+<rect x="96.0" y="108.0" width="300.0" height="170.0" fill="none" stroke="#2b2a26" stroke-width="1.6"/>
+<line x1="96.0" y1="108.0" x2="396.0" y2="278.0" stroke="#a4442c" stroke-width="2.4"/>
+<line x1="96.0" y1="278.0" x2="396.0" y2="108.0" stroke="#a4442c" stroke-width="1.4" stroke-dasharray="6 4"/>
+<circle cx="246.0" cy="193.0" r="5.5" fill="#fcfcfa" stroke="#a4442c" stroke-width="1.8"/>
+<text x="276.0" y="159.0" fill="#a4442c" text-anchor="start" font-size="10" font-weight="600">cruce §8.8.3</text>
+<line x1="251.0" y1="188.0" x2="274.0" y2="163.0" stroke="#a4442c" stroke-width="0.9"/>
+<text x="276.0" y="172.0" fill="#a4442c" text-anchor="start" font-size="9.5" font-weight="normal">una diagonal continua</text>
+<line x1="96.0" y1="312.0" x2="396.0" y2="312.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="96.0,312.0 103.2,309.2 103.2,314.8" fill="#8a8578"/>
+<polygon points="396.0,312.0 388.8,314.8 388.8,309.2" fill="#8a8578"/>
+<text x="246.0" y="306.0" fill="#8a8578" text-anchor="middle" font-size="10" font-weight="normal">7 500</text>
+<line x1="426.0" y1="108.0" x2="426.0" y2="278.0" stroke="#8a8578" stroke-width="1"/>
+<polygon points="426.0,108.0 428.8,115.2 423.2,115.2" fill="#8a8578"/>
+<polygon points="426.0,278.0 423.2,270.8 428.8,270.8" fill="#8a8578"/>
+<text x="432.0" y="196.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">4 249,18</text>
+<text x="96.0" y="96.0" fill="#2b2a26" text-anchor="start" font-size="10" font-weight="600">diagonal 8 620,07</text>
+<text x="500.0" y="110.0" fill="#2b2a26" text-anchor="start" font-size="10.5" font-weight="600">diagonal 125 × 125 × 5</text>
+<line x1="500.0" y1="148.0" x2="800.0" y2="148.0" stroke="#c9c4b5" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="500.0" y="122.0" width="150.0" height="16.0" fill="#a4442c" stroke="#2b2a26" stroke-width="1.0"/>
+<text x="500.0" y="166.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">KL = 4 310,04</text>
+<text x="500.0" y="182.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">esbeltez 87,90206   ·   uso 0,77473</text>
+<text x="500.0" y="202.0" fill="#2b2a26" text-anchor="start" font-size="10.5" font-weight="600">puntal 200 × 200 × 6</text>
+<line x1="500.0" y1="240.0" x2="761.0" y2="240.0" stroke="#c9c4b5" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="500.0" y="214.0" width="261.0" height="16.0" fill="#2f5d7c" stroke="#2b2a26" stroke-width="1.0"/>
+<text x="500.0" y="258.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">KL = 7 500</text>
+<text x="500.0" y="274.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">esbeltez 94,65151   ·   uso 0,83422</text>
+<text x="500.0" y="320.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">el radio de giro que el tope pide</text>
+<text x="500.0" y="338.0" fill="#a4442c" text-anchor="start" font-size="10.5" font-weight="600">diagonal   r ≥ 37,98693 mm</text>
+<text x="500.0" y="356.0" fill="#2f5d7c" text-anchor="start" font-size="10.5" font-weight="600">puntal     r ≥ 66,10201 mm</text>
+<text x="24.0" y="384.0" fill="#8a8578" text-anchor="start" font-size="10" font-weight="normal">la linea de trazos bajo cada barra es el largo real del miembro y la barra es su longitud de pandeo</text>
+</svg>
